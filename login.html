@@ -172,7 +172,7 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            window.location.href = 'index.html';
+            window.location.href = 'dashboard.html';
         }
     });
 
@@ -184,7 +184,7 @@
         try {
             const result = await signInWithPopup(auth, provider);
             setStatus('✅ Welcome ' + result.user.displayName + '!', 'success');
-            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
         } catch (error) {
             console.error('Error:', error);
             let msg = '❌ ' + error.message;
