@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>AGLS - Login</title>
+    <title>AGLS - লগইন</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -112,26 +112,26 @@
     <div class="login-container">
         <div class="logo">AG</div>
         <h1>AGLS</h1>
-        <p class="subtitle">Arabic Grammar Life Support</p>
-        <p class="tagline">Learn • Share • Connect</p>
+        <p class="subtitle">আরবি ব্যাকরণ সহায়তা</p>
+        <p class="tagline">শিখুন • শেয়ার করুন • সংযুক্ত হোন</p>
 
         <button id="googleSignInBtn" class="google-btn">
-            <span class="btn-text"><i class="fab fa-google"></i> Sign in with Google</span>
+            <span class="btn-text"><i class="fab fa-google"></i> গুগল দিয়ে সাইন ইন করুন</span>
             <span class="spinner"></span>
         </button>
 
         <div id="status"></div>
 
-        <div class="divider">or</div>
+        <div class="divider">অথবা</div>
 
         <div class="features">
-            <p><i class="fas fa-check-circle"></i> Join our community of Arabic learners</p>
-            <p><i class="fas fa-check-circle"></i> Share knowledge and ask questions</p>
-            <p><i class="fas fa-check-circle"></i> Connect with fellow learners</p>
+            <p><i class="fas fa-check-circle"></i> আরবি শিক্ষার্থীদের কমিউনিটিতে যোগ দিন</p>
+            <p><i class="fas fa-check-circle"></i> জ্ঞান শেয়ার করুন এবং প্রশ্ন করুন</p>
+            <p><i class="fas fa-check-circle"></i> সহশিক্ষার্থীদের সাথে সংযুক্ত হোন</p>
         </div>
 
         <div class="footer">
-            By continuing, you agree to our <span class="highlight">Terms</span> and <span class="highlight">Privacy Policy</span>
+            চালিয়ে যাওয়ার মাধ্যমে, আপনি আমাদের <span class="highlight">শর্তাবলী</span> এবং <span class="highlight">গোপনীয়তা নীতি</span> মেনে নিচ্ছেন
         </div>
     </div>
 
@@ -139,7 +139,8 @@
     {
         "imports": {
             "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
-            "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
+            "firebase/database": "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"
         }
     }
     </script>
@@ -147,6 +148,7 @@
     <script type="module">
     import { initializeApp } from 'firebase/app';
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
+    import { getDatabase, ref, set, get, update } from 'firebase/database';
 
     const firebaseConfig = {
         apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
@@ -160,6 +162,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getDatabase(app);
     const provider = new GoogleAuthProvider();
 
     const signInBtn = document.getElementById('googleSignInBtn');
@@ -168,6 +171,31 @@
     function setStatus(msg, type = 'loading') {
         statusDiv.textContent = msg;
         statusDiv.className = type;
+    }
+
+    async function saveUserToDatabase(user) {
+        const userRef = ref(db, `users/${user.uid}`);
+        const snapshot = await get(userRef);
+        if (!snapshot.exists()) {
+            await set(userRef, {
+                uid: user.uid,
+                name: user.displayName || 'ব্যবহারকারী',
+                email: user.email,
+                photoURL: user.photoURL || '',
+                bio: '',
+                joinDate: new Date().toISOString(),
+                followers: 0,
+                following: 0,
+                posts: 0,
+                isAdmin: false
+            });
+        } else {
+            await update(userRef, {
+                name: user.displayName || snapshot.val().name,
+                photoURL: user.photoURL || snapshot.val().photoURL,
+                lastLogin: new Date().toISOString()
+            });
+        }
     }
 
     onAuthStateChanged(auth, (user) => {
@@ -179,21 +207,22 @@
     signInBtn.addEventListener('click', async () => {
         signInBtn.disabled = true;
         signInBtn.classList.add('loading');
-        setStatus('⏳ Connecting to Google...', 'loading');
+        setStatus('⏳ গুগলের সাথে সংযোগ হচ্ছে...', 'loading');
 
         try {
             const result = await signInWithPopup(auth, provider);
-            setStatus('✅ Welcome ' + result.user.displayName + '!', 'success');
+            await saveUserToDatabase(result.user);
+            setStatus('✅ স্বাগতম ' + result.user.displayName + '!', 'success');
             setTimeout(() => { window.location.href = 'index.html'; }, 1500);
         } catch (error) {
             console.error('Error:', error);
             let msg = '❌ ' + error.message;
             if (error.code === 'auth/popup-blocked') {
-                msg = '❌ Popup blocked! Please allow popups.';
+                msg = '❌ পপআপ ব্লক! ব্রাউজার সেটিংসে পপআপ অনুমতি দিন।';
             } else if (error.code === 'auth/unauthorized-domain') {
-                msg = '❌ Domain not authorized. Please contact admin.';
+                msg = '❌ ডোমেইন অনুমোদিত নয়। প্রশাসকের সাথে যোগাযোগ করুন।';
             } else if (error.code === 'auth/network-request-failed') {
-                msg = '❌ Network error! Check your internet connection.';
+                msg = '❌ নেটওয়ার্ক সমস্যা! আপনার ইন্টারনেট সংযোগ চেক করুন।';
             }
             setStatus(msg, 'error');
         } finally {
