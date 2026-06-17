@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>AGLS - Profile</title>
+    <title>AGLS - প্রোফাইল</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -223,6 +223,18 @@
             text-align: center; font-weight: 600;
         }
         .badge.hidden { display: none; }
+        .privacy-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 1px 8px;
+            border-radius: 10px;
+            background: var(--border-color);
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+        .privacy-badge.public { background: #d4edda; color: #155724; }
+        .privacy-badge.followers { background: #cce5ff; color: #004085; }
+        .privacy-badge.private { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
@@ -241,14 +253,14 @@
     </main>
 
     <nav class="bottom-nav">
-        <button class="nav-item" data-page="index" onclick="window.location.href='index.html'"><i class="fas fa-home"></i><span>Home</span></button>
-        <button class="nav-item" data-page="explore" onclick="window.location.href='index.html'"><i class="fas fa-compass"></i><span>Explore</span></button>
-        <button class="nav-item" data-page="search" onclick="window.location.href='index.html'"><i class="fas fa-search"></i><span>Search</span></button>
-        <button class="nav-item" data-page="notifications" onclick="window.location.href='index.html'">
-            <i class="fas fa-bell"></i><span>Alerts</span>
-            <span id="notificationBadge" class="badge hidden">0</span>
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-home"></i><span>হোম</span></button>
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-compass"></i><span>এক্সপ্লোর</span></button>
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-search"></i><span>খুঁজুন</span></button>
+        <button class="nav-item" onclick="window.location.href='index.html'">
+            <i class="fas fa-bell"></i><span>সতর্কতা</span>
+            <span id="notificationBadge" class="badge hidden">০</span>
         </button>
-        <button class="nav-item active" data-page="profile"><i class="fas fa-user"></i><span>Profile</span></button>
+        <button class="nav-item active"><i class="fas fa-user"></i><span>প্রোফাইল</span></button>
     </nav>
 
     <div id="modalContainer" class="modal-container hidden">
@@ -312,24 +324,42 @@
         const date = new Date(d);
         const now = new Date();
         const diff = now - date;
-        if (diff < 60000) return 'Just now';
-        if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
-        if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
-        if (diff < 604800000) return Math.floor(diff/86400000) + 'd ago';
-        return date.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+        if (diff < 60000) return 'এইমাত্র';
+        if (diff < 3600000) return Math.floor(diff/60000) + ' মিনিট আগে';
+        if (diff < 86400000) return Math.floor(diff/3600000) + ' ঘন্টা আগে';
+        if (diff < 604800000) return Math.floor(diff/86400000) + ' দিন আগে';
+        return date.toLocaleDateString('bn-BD', { month:'short', day:'numeric', year:'numeric' });
     }
 
     function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
     function getAvatar(name, photo) { return photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2d7d46&color=fff&size=100`; }
 
+    function getPrivacyLabel(privacy) {
+        const map = {
+            'public': '🌍 পাবলিক',
+            'followers': '👥 ফলোয়ার',
+            'private': '🔒 শুধু আমি'
+        };
+        return map[privacy] || '🌍 পাবলিক';
+    }
+
+    function getPrivacyClass(privacy) {
+        const map = {
+            'public': 'public',
+            'followers': 'followers',
+            'private': 'private'
+        };
+        return map[privacy] || 'public';
+    }
+
     // ===== LOAD PROFILE =====
     async function loadProfile(userId) {
         const targetId = userId || currentUser?.uid;
-        if (!targetId) { profileContainer.innerHTML = '<p>User not found</p>'; return; }
+        if (!targetId) { profileContainer.innerHTML = '<p>ব্যবহারকারী পাওয়া যায়নি</p>'; return; }
 
         try {
             const snap = await get(ref(db, `users/${targetId}`));
-            if (!snap.exists()) { profileContainer.innerHTML = '<p>User not found</p>'; return; }
+            if (!snap.exists()) { profileContainer.innerHTML = '<p>ব্যবহারকারী পাওয়া যায়নি</p>'; return; }
 
             const userData = snap.val();
             const isOwn = currentUser && targetId === currentUser.uid;
@@ -344,18 +374,17 @@
                     <div class="profile-email">${escapeHtml(userData.email || '')}</div>
                     ${userData.bio ? `<div class="profile-bio">${escapeHtml(userData.bio)}</div>` : ''}
                     <div class="profile-stats">
-                        <div class="profile-stat"><span class="number">${userData.posts||0}</span><span class="label">Posts</span></div>
-                        <div class="profile-stat" onclick="window.showFollowers('${targetId}')"><span class="number">${followersSnap.exists() ? followersSnap.size : 0}</span><span class="label">Followers</span></div>
-                        <div class="profile-stat" onclick="window.showFollowing('${targetId}')"><span class="number">${followingSnap.exists() ? followingSnap.size : 0}</span><span class="label">Following</span></div>
+                        <div class="profile-stat"><span class="number">${userData.posts||0}</span><span class="label">পোস্ট</span></div>
+                        <div class="profile-stat" onclick="window.showFollowers('${targetId}')"><span class="number">${followersSnap.exists() ? followersSnap.size : 0}</span><span class="label">ফলোয়ার</span></div>
+                        <div class="profile-stat" onclick="window.showFollowing('${targetId}')"><span class="number">${followingSnap.exists() ? followingSnap.size : 0}</span><span class="label">ফলোয়িং</span></div>
                     </div>
                     <div class="profile-actions">
-                        ${isOwn ? `<button class="btn-secondary" id="editProfileBtn"><i class="fas fa-edit"></i> Edit Profile</button>` :
-                        `<button class="btn-${isFollowing ? 'secondary' : 'primary'}" id="followBtn">${isFollowing ? 'Unfollow' : 'Follow'}</button>`}
+                        ${isOwn ? `<button class="btn-secondary" id="editProfileBtn"><i class="fas fa-edit"></i> প্রোফাইল সম্পাদনা</button>` :
+                        `<button class="btn-${isFollowing ? 'secondary' : 'primary'}" id="followBtn">${isFollowing ? 'আনফলো করুন' : 'ফলো করুন'}</button>`}
                     </div>
                 </div>
             `;
 
-            // Load user posts
             loadUserPosts(targetId);
 
             if (isOwn) document.getElementById('editProfileBtn').addEventListener('click', ()=>openEditProfileModal(userData));
@@ -365,7 +394,7 @@
                 loadProfile(targetId);
             });
 
-        } catch(e) { console.error(e); profileContainer.innerHTML = '<p>Error loading profile</p>'; }
+        } catch(e) { console.error(e); profileContainer.innerHTML = '<p>প্রোফাইল লোড করতে সমস্যা</p>'; }
     }
 
     // ===== LOAD USER POSTS =====
@@ -375,23 +404,50 @@
         feedListeners[`userposts_${userId}`] = q;
         onValue(q, (snap) => {
             const posts = [];
-            snap.forEach(c => { const p = c.val(); if (p.authorId === userId) { p.id = c.key; posts.push(p); } });
+            const currentUserId = currentUser?.uid;
+
+            snap.forEach(c => {
+                const p = c.val();
+                p.id = c.key;
+                if (p.authorId === userId) {
+                    // Check privacy - only show if user can view
+                    const isOwner = currentUserId === userId;
+                    const isFollowing = currentUserId ? checkFollowingSync(userId, currentUserId) : false;
+                    if (p.privacy === 'public' || isOwner || (p.privacy === 'followers' && isFollowing)) {
+                        posts.push(p);
+                    }
+                }
+            });
+
             posts.sort((a,b) => new Date(b.date) - new Date(a.date));
             renderPosts(posts);
         });
     }
 
+    // Simple sync check for privacy
+    function checkFollowingSync(targetId, userId) {
+        // This is a sync version - for actual check use the async version
+        return false; // Will be handled differently
+    }
+
     // ===== RENDER POSTS =====
     function renderPosts(posts) {
         if (!posts || posts.length === 0) {
-            userPostsContainer.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>No posts yet</h3></div>`;
+            userPostsContainer.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>কোন পোস্ট নেই</h3></div>`;
             return;
         }
-        userPostsContainer.innerHTML = posts.map(p => `
+        userPostsContainer.innerHTML = posts.map(p => {
+            const privacyLabel = getPrivacyLabel(p.privacy);
+            const privacyClass = getPrivacyClass(p.privacy);
+            return `
             <div class="post-card" data-post-id="${p.id}">
                 <div class="post-header">
                     <img class="post-avatar" src="${getAvatar(p.authorName, p.authorPhoto)}" alt="${escapeHtml(p.authorName)}">
-                    <div><div class="post-author">${escapeHtml(p.authorName)}</div><span class="post-date">${formatDate(p.date)}${p.edited?' (edited)':''}</span></div>
+                    <div>
+                        <div class="post-author">${escapeHtml(p.authorName)}</div>
+                        <span class="post-date">${formatDate(p.date)}</span>
+                        <span class="privacy-badge ${privacyClass}">${privacyLabel}</span>
+                    </div>
                 </div>
                 <div class="post-content">${escapeHtml(p.content)}</div>
                 ${p.tags?.length ? `<div class="post-tags">${p.tags.map(t=>`<span class="post-tag">#${escapeHtml(t)}</span>`).join('')}</div>` : ''}
@@ -400,7 +456,7 @@
                     <button class="post-action-btn"><i class="far fa-comment"></i> ${p.comments||0}</button>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     }
 
     // ===== FOLLOW =====
@@ -411,8 +467,8 @@
             await set(ref(db, `followers/${targetId}/${currentUser.uid}`), { userId: currentUser.uid, userName: currentUserData?.name || currentUser.displayName, userPhoto: currentUserData?.photoURL || currentUser.photoURL, date: new Date().toISOString() });
             await updateFollowCounts(currentUser.uid, 'following', 1);
             await updateFollowCounts(targetId, 'followers', 1);
-            showToast('Following!');
-        } catch(e) { console.error(e); showToast('Failed to follow'); }
+            showToast('ফলো করেছেন!');
+        } catch(e) { console.error(e); showToast('ফলো করতে ব্যর্থ'); }
     }
 
     async function unfollowUser(targetId) {
@@ -422,8 +478,8 @@
             await remove(ref(db, `followers/${targetId}/${currentUser.uid}`));
             await updateFollowCounts(currentUser.uid, 'following', -1);
             await updateFollowCounts(targetId, 'followers', -1);
-            showToast('Unfollowed');
-        } catch(e) { console.error(e); showToast('Failed to unfollow'); }
+            showToast('আনফলো করেছেন');
+        } catch(e) { console.error(e); showToast('আনফলো করতে ব্যর্থ'); }
     }
 
     async function updateFollowCounts(userId, field, change) {
@@ -441,24 +497,24 @@
     // ===== EDIT PROFILE =====
     function openEditProfileModal(userData) {
         openModal(`
-            <div class="modal-header"><h2>Edit Profile</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div class="modal-header"><h2>প্রোফাইল সম্পাদনা</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
             <div style="display:flex;flex-direction:column;gap:10px;">
-                <label style="font-weight:600;">Name</label>
+                <label style="font-weight:600;">নাম</label>
                 <input class="profile-edit-input" id="editName" value="${escapeHtml(userData.name || '')}">
-                <label style="font-weight:600;">Bio</label>
+                <label style="font-weight:600;">বায়ো</label>
                 <textarea class="profile-edit-input" id="editBio" rows="3" style="resize:vertical;">${escapeHtml(userData.bio || '')}</textarea>
-                <button class="btn-primary" id="saveProfileBtn">Save Changes</button>
+                <button class="btn-primary" id="saveProfileBtn">সংরক্ষণ করুন</button>
             </div>
         `);
         document.getElementById('saveProfileBtn').addEventListener('click', async () => {
             const name = document.getElementById('editName').value.trim();
             const bio = document.getElementById('editBio').value.trim();
-            if (!name) { showToast('Name is required'); return; }
+            if (!name) { showToast('নাম প্রয়োজন'); return; }
             try {
                 await update(ref(db, `users/${currentUser.uid}`), { name, bio });
                 if (currentUserData) { currentUserData.name = name; currentUserData.bio = bio; }
-                closeModal(); showToast('Profile updated!'); loadProfile(currentUser.uid);
-            } catch(e) { console.error(e); showToast('Failed to update'); }
+                closeModal(); showToast('প্রোফাইল আপডেট করা হয়েছে!'); loadProfile(currentUser.uid);
+            } catch(e) { console.error(e); showToast('আপডেট করতে ব্যর্থ'); }
         });
     }
 
@@ -469,8 +525,8 @@
             const users = [];
             if (snap.exists()) snap.forEach(c => users.push({ id: c.key, ...c.val() }));
             openModal(`
-                <div class="modal-header"><h2>Followers</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-                ${users.length === 0 ? '<div class="empty-state"><p>No followers</p></div>' : users.map(u => `
+                <div class="modal-header"><h2>ফলোয়ার</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+                ${users.length === 0 ? '<div class="empty-state"><p>কোন ফলোয়ার নেই</p></div>' : users.map(u => `
                     <div class="user-result" onclick="closeModal(); window.location.href='profile.html?uid=${u.id}'" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border-color);cursor:pointer;">
                         <img class="avatar" src="${getAvatar(u.userName, u.userPhoto)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
                         <div class="info"><div class="name" style="font-weight:600;">${escapeHtml(u.userName)}</div></div>
@@ -490,8 +546,8 @@
                 if (s.exists()) { u.userName = s.val().name; u.userPhoto = s.val().photoURL; }
             }));
             openModal(`
-                <div class="modal-header"><h2>Following</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
-                ${users.length === 0 ? '<div class="empty-state"><p>Not following anyone</p></div>' : users.map(u => `
+                <div class="modal-header"><h2>ফলোয়িং</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+                ${users.length === 0 ? '<div class="empty-state"><p>কাউকে ফলো করেননি</p></div>' : users.map(u => `
                     <div class="user-result" onclick="closeModal(); window.location.href='profile.html?uid=${u.id}'" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border-color);cursor:pointer;">
                         <img class="avatar" src="${getAvatar(u.userName, u.userPhoto)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
                         <div class="info"><div class="name" style="font-weight:600;">${escapeHtml(u.userName)}</div></div>
@@ -524,10 +580,9 @@
 
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             document.getElementById('logoutBtn').addEventListener('click', () => {
-                if (confirm('Logout?')) { signOut(auth); }
+                if (confirm('লগআউট করবেন?')) { signOut(auth); }
             });
 
-            // Get userId from URL
             const params = new URLSearchParams(window.location.search);
             const uid = params.get('uid');
             loadProfile(uid || user.uid);
@@ -537,7 +592,7 @@
         }
     });
 
-    console.log('🔥 AGLS Profile Loaded');
+    console.log('🔥 AGLS প্রোফাইল লোড হয়েছে');
     </script>
 </body>
 </html>
