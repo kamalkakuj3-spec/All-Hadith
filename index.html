@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>All Hadith</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: #f5f3f0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 12px 8px 80px 8px;
+    }
+    .app-container {
+      max-width: 480px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 28px 28px 20px 20px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+      overflow: hidden;
+      padding: 20px 16px 30px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    /* Header */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eae6e0;
+    }
+    .app-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e3c4f;
+      letter-spacing: -0.3px;
+    }
+    .app-header h1 i {
+      color: #b98b5e;
+      margin-right: 8px;
+    }
+    .header-icons i {
+      font-size: 20px;
+      color: #5e6f7e;
+      margin-left: 14px;
+      opacity: 0.7;
+      transition: 0.2s;
+    }
+    .header-icons i:hover {
+      opacity: 1;
+    }
+    /* Search & Filter */
+    .search-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #f2efeb;
+      border-radius: 40px;
+      padding: 4px 16px 4px 18px;
+      border: 1px solid #e3ddd6;
+    }
+    .search-box i {
+      color: #8e7a6a;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    .search-box input {
+      border: none;
+      background: transparent;
+      padding: 12px 0;
+      font-size: 15px;
+      width: 100%;
+      outline: none;
+      color: #1e2c3a;
+    }
+    .search-box input::placeholder {
+      color: #a49788;
+      font-weight: 400;
+    }
+    .filter-btn {
+      background: #e7dfd8;
+      border: none;
+      border-radius: 40px;
+      padding: 0 18px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #2d4050;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #d6cdc4;
+    }
+    .filter-btn i {
+      font-size: 14px;
+      color: #6f5b4b;
+    }
+    .filter-btn:active {
+      background: #d5cbc1;
+      transform: scale(0.96);
+    }
+    /* Category Pills */
+    .category-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      margin-bottom: 8px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+    }
+    .category-scroll::-webkit-scrollbar {
+      height: 3px;
+      background: #e2dbd4;
+      border-radius: 10px;
+    }
+    .category-scroll::-webkit-scrollbar-thumb {
+      background: #b7a697;
+      border-radius: 10px;
+    }
+    .cat-pill {
+      background: #ede8e2;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #3c4d5a;
+      border: 1px solid #ddd6ce;
+      cursor: pointer;
+      transition: 0.15s;
+      flex-shrink: 0;
+      letter-spacing: 0.2px;
+    }
+    .cat-pill.active {
+      background: #1e3c4f;
+      color: white;
+      border-color: #1e3c4f;
+      box-shadow: 0 4px 10px rgba(30, 60, 79, 0.2);
+    }
+    .cat-pill:active {
+      transform: scale(0.94);
+    }
+    /* Hadith Cards */
+    .hadith-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 6px;
+    }
+    .hadith-card {
+      background: #fcfaf8;
+      border-radius: 20px;
+      padding: 18px 16px 16px 16px;
+      border: 1px solid #e7e0d9;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: 0.2s;
+      border-left: 6px solid #b98b5e;
+    }
+    .hadith-card:active {
+      background: #f6f1ec;
+      transform: scale(0.99);
+    }
+    .hadith-book {
+      font-size: 12px;
+      font-weight: 600;
+      color: #9b866f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hadith-book span {
+      background: #ede7e0;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 11px;
+      color: #4d3e30;
+    }
+    .hadith-text {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #1f2c38;
+      font-weight: 400;
+      margin: 8px 0 6px;
+      padding-right: 4px;
+    }
+    .hadith-text i {
+      color: #b5967a;
+      font-size: 14px;
+      margin-right: 4px;
+    }
+    .hadith-ref {
+      font-size: 13px;
+      color: #7a6b5c;
+      margin-top: 8px;
+      border-top: 1px dashed #e1d8d0;
+      padding-top: 10px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hadith-ref i {
+      margin-right: 4px;
+      color: #b18763;
+      width: 16px;
+    }
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: #827466;
+    }
+    .empty-state i {
+      font-size: 48px;
+      color: #d5c8bc;
+      margin-bottom: 16px;
+    }
+    .empty-state p {
+      font-size: 16px;
+    }
+    /* Loading shimmer */
+    .loader {
+      display: flex;
+      justify-content: center;
+      padding: 30px 0;
+    }
+    .loader i {
+      font-size: 28px;
+      color: #b98b5e;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* footer note */
+    .app-footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: #b0a294;
+      border-top: 1px solid #ece5de;
+      padding-top: 18px;
+      letter-spacing: 0.3px;
+    }
+    .app-footer i {
+      color: #b18763;
+      margin: 0 4px;
+    }
+    /* responsive fine-tune */
+    @media (max-width: 400px) {
+      .app-container { padding: 16px 12px; }
+      .hadith-text { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <!-- Header -->
+  <div class="app-header">
+    <h1><i class="fas fa-book-quran"></i> All Hadith</h1>
+    <div class="header-icons">
+      <i class="fas fa-sync-alt" id="refreshBtn" title="পুনরায় লোড"></i>
+    </div>
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="search-section">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="হাদিস বা গ্রন্থ খুঁজুন..." />
+    </div>
+    <button class="filter-btn" id="filterToggleBtn"><i class="fas fa-sliders-h"></i> ফিল্টার</button>
+  </div>
+
+  <!-- Category Pills -->
+  <div class="category-scroll" id="categoryContainer">
+    <span class="cat-pill active" data-cat="all">সব</span>
+    <!-- dynamic category will be injected here via JS -->
+  </div>
+
+  <!-- Hadith List -->
+  <div id="hadithListContainer" class="hadith-list">
+    <!-- Loading -->
+    <div class="loader" id="loaderIndicator"><i class="fas fa-spinner"></i></div>
+  </div>
+
+  <div class="app-footer">
+    <i class="fas fa-database"></i> রিয়েল টাইম ডেটাবেস · <i class="fas fa-code"></i> GitHub
+  </div>
+</div>
+
+<script>
+  (function() {
+    // -------------------- FIREBASE CONFIG --------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
+      authDomain: "all-hadith-a68fa.firebaseapp.com",
+      databaseURL: "https://all-hadith-a68fa-default-rtdb.firebaseio.com",
+      projectId: "all-hadith-a68fa",
+      storageBucket: "all-hadith-a68fa.firebasestorage.app",
+      messagingSenderId: "124928027736",
+      appId: "1:124928027736:web:7f0e8e0a771f244eca2e2d",
+      measurementId: "G-RF51PW2PLD"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // -------------------- DOM refs --------------------
+    const hadithContainer = document.getElementById('hadithListContainer');
+    const loader = document.getElementById('loaderIndicator');
+    const searchInput = document.getElementById('searchInput');
+    const categoryContainer = document.getElementById('categoryContainer');
+    const filterToggleBtn = document.getElementById('filterToggleBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    // state
+    let allHadiths = [];          // raw data from firebase
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    // -------------------- Helper Functions --------------------
+    function showLoader(show) {
+      if (show) {
+        loader.style.display = 'flex';
+      } else {
+        loader.style.display = 'none';
+      }
+    }
+
+    // render hadith cards based on current filter + search
+    function renderHadiths() {
+      // filter by category & search
+      let filtered = allHadiths;
+
+      // category filter
+      if (currentCategory !== 'all') {
+        filtered = filtered.filter(h => h.category === currentCategory);
+      }
+
+      // search filter (book name or text)
+      if (searchQuery.trim() !== '') {
+        const q = searchQuery.trim().toLowerCase();
+        filtered = filtered.filter(h => 
+          (h.book && h.book.toLowerCase().includes(q)) || 
+          (h.text && h.text.toLowerCase().includes(q)) ||
+          (h.reference && h.reference.toLowerCase().includes(q))
+        );
+      }
+
+      // if empty -> show empty state
+      if (filtered.length === 0) {
+        hadithContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <p>কোন হাদিস খুঁজে পাওয়া যায়নি</p>
+            <p style="font-size:14px; margin-top:6px; color:#b09b8a;">অন্য কিওয়ার্ড দিয়ে চেষ্টা করুন</p>
+          </div>
+        `;
+        return;
+      }
+
+      // build cards
+      let html = '';
+      filtered.forEach((hadith, index) => {
+        // fallback values
+        const book = hadith.book || 'গ্রন্থ';
+        const text = hadith.text || 'হাদিসের পাঠ্য';
+        const ref = hadith.reference || '';
+        const category = hadith.category || 'সাধারণ';
+        const narrator = hadith.narrator || '';
+
+        html += `
+          <div class="hadith-card" data-index="${index}">
+            <div class="hadith-book">
+              <span><i class="fas fa-scroll"></i> ${book}</span>
+              <span>${category}</span>
+            </div>
+            <div class="hadith-text">
+              <i class="fas fa-quote-right"></i> ${text}
+            </div>
+            <div class="hadith-ref">
+              ${ref ? `<span><i class="fas fa-hashtag"></i> ${ref}</span>` : ''}
+              ${narrator ? `<span><i class="fas fa-user"></i> ${narrator}</span>` : ''}
+            </div>
+          </div>
+        `;
+      });
+
+      hadithContainer.innerHTML = html;
+    }
+
+    // load categories dynamically and update pills
+    function updateCategories() {
+      const categories = new Set();
+      allHadiths.forEach(h => {
+        if (h.category) categories.add(h.category);
+      });
+      
+      // keep "all" button, then add others
+      let pillsHTML = `<span class="cat-pill active" data-cat="all">সব</span>`;
+      const sorted = Array.from(categories).sort();
+      sorted.forEach(cat => {
+        const isActive = (currentCategory === cat) ? 'active' : '';
+        pillsHTML += `<span class="cat-pill ${isActive}" data-cat="${cat}">${cat}</span>`;
+      });
+      
+      // replace child nodes but keep the container
+      categoryContainer.innerHTML = pillsHTML;
+
+      // attach click listeners to pills
+      document.querySelectorAll('.cat-pill').forEach(pill => {
+        pill.addEventListener('click', function(e) {
+          const cat = this.dataset.cat;
+          // update active class
+          document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+          this.classList.add('active');
+          currentCategory = cat;
+          renderHadiths();
+        });
+      });
+    }
+
+    // fetch data from Firebase Realtime Database
+    function loadDataFromFirebase() {
+      showLoader(true);
+      const hadithRef = database.ref('hadiths');  // assuming data stored under 'hadiths' node
+
+      hadithRef.once('value').then((snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          // convert object to array
+          const hadithArray = Object.keys(data).map(key => {
+            return { id: key, ...data[key] };
+          });
+          allHadiths = hadithArray;
+        } else {
+          // if no data, use demo data (to show something meaningful)
+          allHadiths = getDemoHadiths();
+        }
+
+        // update categories, render
+        updateCategories();
+        renderHadiths();
+        showLoader(false);
+      }).catch((error) => {
+        console.error('Firebase read error:', error);
+        // fallback: use demo data
+        allHadiths = getDemoHadiths();
+        updateCategories();
+        renderHadiths();
+        showLoader(false);
+        // show a toast or something? we'll keep silent.
+      });
+    }
+
+    // -------------------- DEMO DATA (for fallback / initial) --------------------
+    function getDemoHadiths() {
+      return [
+        { book: 'সহীহ বুখারী', text: 'নিশ্চয় কাজগুলো নিয়তের উপর নির্ভরশীল।', reference: 'হাদিস: ১', category: 'ঈমান', narrator: 'উমর ইবনুল খাত্তাব' },
+        { book: 'সহীহ মুসলিম', text: 'যে ব্যক্তি আল্লাহ ও শেষ দিনের প্রতি ঈমান রাখে, সে যেন তার প্রতিবেশীকে কষ্ট না দেয়।', reference: 'হাদিস: ৪৫', category: 'আখলাক', narrator: 'আবু হুরায়রা' },
+        { book: 'তিরমিজি', text: 'তোমাদের মধ্যে সেই উত্তম যে তার পরিবারের প্রতি উত্তম।', reference: 'হাদিস: ৩৮৯৫', category: 'পরিবার', narrator: 'আয়েশা (রা.)' },
+        { book: 'আবু দাউদ', text: 'যে ব্যক্তি দুনিয়াতে কারো কষ্ট দূর করে, আল্লাহ কিয়ামতের দিন তার কষ্ট দূর করবেন।', reference: 'হাদিস: ৪৯৪৬', category: 'সেবা', narrator: 'আবু হুরায়রা' },
+        { book: 'ইবনে মাজাহ', text: 'প্রত্যেকটি ভালো কাজই সদকা।', reference: 'হাদিস: ৩৯৭০', category: 'সদকা', narrator: 'জাবির (রা.)' },
+        { book: 'মুয়াত্তা মালিক', text: 'যে ব্যক্তি আল্লাহর পথে একটি দিন রোজা রাখে, আল্লাহ তাকে জাহান্নামের আগুন থেকে দূরে রাখেন।', reference: 'হাদিস: ৬৫৩', category: 'রোজা', narrator: 'আবু সাঈদ খুদরী' },
+        { book: 'মুসনাদ আহমদ', text: 'ক্ষমা করা ব্যক্তির মর্যাদা বৃদ্ধি পায়।', reference: 'হাদিস: ৭৬৩২', category: 'ক্ষমা', narrator: 'আব্দুল্লাহ ইবনে মাসউদ' },
+        { book: 'সহীহ বুখারী', text: 'তোমরা পরস্পর হিংসা করো না, ধোকা দিও না, শত্রুতা করো না।', reference: 'হাদিস: ৬০৬৪', category: 'আখলাক', narrator: 'আনাস (রা.)' },
+      ];
+    }
+
+    // -------------------- Event Listeners --------------------
+    // Search input
+    searchInput.addEventListener('input', function(e) {
+      searchQuery = this.value;
+      renderHadiths();
+    });
+
+    // Filter toggle: just a dummy action for demonstration (scrolling to category)
+    filterToggleBtn.addEventListener('click', function() {
+      categoryContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // subtle feedback
+      this.style.background = '#d5cbc1';
+      setTimeout(() => { this.style.background = '#e7dfd8'; }, 200);
+    });
+
+    // Refresh button
+    refreshBtn.addEventListener('click', function() {
+      // reset search and category
+      searchInput.value = '';
+      searchQuery = '';
+      currentCategory = 'all';
+      // reset active pill
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      const allPill = document.querySelector('.cat-pill[data-cat="all"]');
+      if (allPill) allPill.classList.add('active');
+      
+      // reload data from firebase
+      loadDataFromFirebase();
+      // feedback
+      this.style.transform = 'rotate(60deg)';
+      setTimeout(() => { this.style.transform = 'rotate(0deg)'; }, 300);
+    });
+
+    // -------------------- INITIAL LOAD --------------------
+    loadDataFromFirebase();
+
+    // optional: if any error, but we already handle
+  })();
+</script>
+</body>
+</html>
