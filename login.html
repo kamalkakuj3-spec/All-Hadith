@@ -2,17 +2,11 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGLS - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: #f0f2f5;
@@ -22,7 +16,6 @@
             min-height: 100vh;
             padding: 20px;
         }
-
         .login-container {
             background: white;
             padding: 30px 24px;
@@ -32,10 +25,8 @@
             max-width: 400px;
             text-align: center;
         }
-
         .logo {
-            width: 72px;
-            height: 72px;
+            width: 72px; height: 72px;
             background: #2d7d46;
             border-radius: 50%;
             display: flex;
@@ -46,26 +37,9 @@
             color: white;
             font-weight: 700;
         }
-
-        h1 {
-            color: #2d7d46;
-            font-size: 26px;
-            margin-bottom: 4px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .tagline {
-            color: #999;
-            font-size: 13px;
-            margin-bottom: 24px;
-        }
-
-        /* 🔥 মোবাইলের জন্য বড় বাটন */
+        h1 { color: #2d7d46; font-size: 26px; margin-bottom: 4px; }
+        .subtitle { color: #666; font-size: 15px; }
+        .tagline { color: #999; font-size: 13px; margin-bottom: 24px; }
         .google-btn {
             width: 100%;
             padding: 16px;
@@ -80,21 +54,10 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.2s;
             min-height: 56px;
-            -webkit-tap-highlight-color: transparent;
         }
-
-        .google-btn:active {
-            transform: scale(0.97);
-            background: #357abd;
-        }
-
-        .google-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
+        .google-btn:active { transform: scale(0.97); }
+        .google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .divider {
             display: flex;
             align-items: center;
@@ -103,20 +66,13 @@
             color: #999;
             font-size: 13px;
         }
-
-        .divider::before,
-        .divider::after {
+        .divider::before, .divider::after {
             content: '';
             flex: 1;
             height: 1px;
             background: #ddd;
         }
-
-        .features {
-            text-align: left;
-            margin: 16px 0;
-        }
-
+        .features { text-align: left; margin: 16px 0; }
         .features p {
             color: #555;
             font-size: 14px;
@@ -125,182 +81,130 @@
             align-items: center;
             gap: 8px;
         }
-
-        .features i {
-            color: #2d7d46;
-            width: 18px;
-            font-size: 14px;
-        }
-
+        .features i { color: #2d7d46; width: 18px; }
         #status {
             margin-top: 12px;
             padding: 12px;
             border-radius: 8px;
             font-size: 14px;
             display: none;
-            text-align: center;
         }
-
-        #status.success {
-            display: block;
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        #status.error {
-            display: block;
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        #status.loading {
-            display: block;
-            background: #e3f2fd;
-            color: #0d47a1;
-        }
-
-        .footer {
-            color: #999;
-            font-size: 12px;
-            margin-top: 16px;
-        }
-
-        .footer .highlight {
-            color: #2d7d46;
-            font-weight: 600;
-        }
-
-        /* লোডিং স্পিনার */
+        #status.success { display: block; background: #e8f5e9; color: #2e7d32; }
+        #status.error { display: block; background: #ffebee; color: #c62828; }
+        #status.loading { display: block; background: #e3f2fd; color: #0d47a1; }
+        .footer { color: #999; font-size: 12px; margin-top: 16px; }
+        .footer .highlight { color: #2d7d46; font-weight: 600; }
         .spinner {
             display: none;
-            width: 22px;
-            height: 22px;
+            width: 22px; height: 22px;
             border: 3px solid rgba(255,255,255,0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-
-        .google-btn.loading .spinner {
-            display: inline-block;
-        }
-        .google-btn.loading .btn-text {
-            display: none;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        .google-btn.loading .spinner { display: inline-block; }
+        .google-btn.loading .btn-text { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+    <div class="login-container">
+        <div class="logo">AG</div>
+        <h1>AGLS</h1>
+        <p class="subtitle">Arabic Grammar Life Support</p>
+        <p class="tagline">Learn • Share • Connect</p>
 
-<div class="login-container">
-    <div class="logo">AG</div>
-    <h1>AGLS</h1>
-    <p class="subtitle">Arabic Grammar Life Support</p>
-    <p class="tagline">Learn • Share • Connect</p>
+        <button id="googleSignInBtn" class="google-btn">
+            <span class="btn-text"><i class="fab fa-google"></i> Sign in with Google</span>
+            <span class="spinner"></span>
+        </button>
 
-    <button id="googleSignInBtn" class="google-btn">
-        <span class="btn-text"><i class="fab fa-google"></i> Sign in with Google</span>
-        <span class="spinner"></span>
-    </button>
+        <div id="status"></div>
 
-    <div id="status"></div>
+        <div class="divider">or</div>
 
-    <div class="divider">or</div>
+        <div class="features">
+            <p><i class="fas fa-check-circle"></i> Join our community of Arabic learners</p>
+            <p><i class="fas fa-check-circle"></i> Share knowledge and ask questions</p>
+            <p><i class="fas fa-check-circle"></i> Connect with fellow learners</p>
+        </div>
 
-    <div class="features">
-        <p><i class="fas fa-check-circle"></i> Join our community of Arabic learners</p>
-        <p><i class="fas fa-check-circle"></i> Share knowledge and ask questions</p>
-        <p><i class="fas fa-check-circle"></i> Connect with fellow learners</p>
+        <div class="footer">
+            By continuing, you agree to our <span class="highlight">Terms</span> and <span class="highlight">Privacy Policy</span>
+        </div>
     </div>
 
-    <div class="footer">
-        By continuing, you agree to our <span class="highlight">Terms</span> and <span class="highlight">Privacy Policy</span>
-    </div>
-</div>
-
-<!-- Firebase SDK -->
-<script type="importmap">
-{
-    "imports": {
-        "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
-        "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"
-    }
-}
-</script>
-
-<script type="module">
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
-    authDomain: "all-hadith-a68fa.firebaseapp.com",
-    databaseURL: "https://all-hadith-a68fa-default-rtdb.firebaseio.com",
-    projectId: "all-hadith-a68fa",
-    storageBucket: "all-hadith-a68fa.firebasestorage.app",
-    messagingSenderId: "124928027736",
-    appId: "1:124928027736:web:7f0e8e0a771f244eca2e2d"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-const signInBtn = document.getElementById('googleSignInBtn');
-const statusDiv = document.getElementById('status');
-
-function setStatus(message, type = 'loading') {
-    statusDiv.textContent = message;
-    statusDiv.className = type;
-}
-
-signInBtn.addEventListener('click', async () => {
-    signInBtn.disabled = true;
-    signInBtn.classList.add('loading');
-    setStatus('⏳ Connecting to Google...', 'loading');
-
-    try {
-        const result = await signInWithPopup(auth, provider);
-        setStatus('✅ Welcome ' + result.user.displayName + '!', 'success');
-        console.log('User:', result.user);
-        
-        // 2 সেকেন্ড পর ড্যাশবোর্ডে যান
-        setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 2000);
-        
-    } catch (error) {
-        console.error('Error:', error);
-        
-        let msg = '❌ ' + error.message;
-        if (error.code === 'auth/popup-blocked') {
-            msg = '❌ Popup blocked! Please allow popups in your browser settings.';
-        } else if (error.code === 'auth/unauthorized-domain') {
-            msg = '❌ Domain not authorized. Please contact admin.';
-        } else if (error.code === 'auth/network-request-failed') {
-            msg = '❌ Network error! Check your internet connection.';
+    <script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"
         }
-        
-        setStatus(msg, 'error');
-    } finally {
-        signInBtn.disabled = false;
-        signInBtn.classList.remove('loading');
     }
-});
+    </script>
 
-// Check if already logged in
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        setStatus('✅ Already logged in as ' + user.email, 'success');
-        setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 1500);
+    <script type="module">
+    import { initializeApp } from 'firebase/app';
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
+        authDomain: "all-hadith-a68fa.firebaseapp.com",
+        databaseURL: "https://all-hadith-a68fa-default-rtdb.firebaseio.com",
+        projectId: "all-hadith-a68fa",
+        storageBucket: "all-hadith-a68fa.firebasestorage.app",
+        messagingSenderId: "124928027736",
+        appId: "1:124928027736:web:7f0e8e0a771f244eca2e2d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    const signInBtn = document.getElementById('googleSignInBtn');
+    const statusDiv = document.getElementById('status');
+
+    function setStatus(msg, type = 'loading') {
+        statusDiv.textContent = msg;
+        statusDiv.className = type;
     }
-});
-</script>
 
+    // 🔥 চেক করুন ইউজার ইতিমধ্যে লগইন আছে কিনা
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // লগইন থাকলে ড্যাশবোর্ডে পাঠান
+            window.location.href = 'index.html';
+        }
+    });
+
+    signInBtn.addEventListener('click', async () => {
+        signInBtn.disabled = true;
+        signInBtn.classList.add('loading');
+        setStatus('⏳ Connecting to Google...', 'loading');
+
+        try {
+            const result = await signInWithPopup(auth, provider);
+            setStatus('✅ Welcome ' + result.user.displayName + '!', 'success');
+            // 1.5 সেকেন্ড পর ড্যাশবোর্ডে যান
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        } catch (error) {
+            console.error('Error:', error);
+            let msg = '❌ ' + error.message;
+            if (error.code === 'auth/popup-blocked') {
+                msg = '❌ Popup blocked! Please allow popups in your browser settings.';
+            } else if (error.code === 'auth/unauthorized-domain') {
+                msg = '❌ Domain not authorized. Please contact admin.';
+            } else if (error.code === 'auth/network-request-failed') {
+                msg = '❌ Network error! Check your internet connection.';
+            }
+            setStatus(msg, 'error');
+        } finally {
+            signInBtn.disabled = false;
+            signInBtn.classList.remove('loading');
+        }
+    });
+    </script>
 </body>
 </html>
