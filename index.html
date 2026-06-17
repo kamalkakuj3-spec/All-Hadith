@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>AGLS - Home</title>
+    <title>AGLS - হোম</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ===== CSS Variables ===== */
         :root {
             --primary: #2d7d46;
             --primary-dark: #1e5a32;
@@ -24,7 +23,6 @@
             --nav-height: 64px;
             --header-height: 56px;
         }
-
         [data-theme="dark"] {
             --bg-primary: #121212;
             --bg-secondary: #1e1e1e;
@@ -34,7 +32,6 @@
             --text-muted: #777777;
             --border-color: #333333;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
@@ -43,8 +40,6 @@
             transition: background var(--transition), color var(--transition);
             padding-bottom: 80px;
         }
-
-        /* ===== হেডার ===== */
         .app-header {
             position: sticky; top: 0; z-index: 100;
             background: var(--bg-secondary);
@@ -55,7 +50,7 @@
             justify-content: space-between;
             border-bottom: 1px solid var(--border-color);
         }
-        .header-left h1 { font-size: 1.3rem; color: var(--primary); font-weight: 700; }
+        .header-left h1 { font-size: 1.3rem; color: var(--primary); font-weight: 700; cursor: pointer; }
         .header-right { display: flex; gap: 8px; }
         .icon-btn {
             width: 40px; height: 40px;
@@ -69,14 +64,10 @@
         }
         .icon-btn:hover { background: var(--border-color); }
         .icon-btn:active { transform: scale(0.92); }
-
-        /* ===== মেইন কন্টেন্ট ===== */
         .main-content {
             max-width: 480px; margin: 0 auto;
             padding: 16px; padding-bottom: calc(var(--nav-height) + 20px);
         }
-
-        /* ===== নিচের নেভিগেশন ===== */
         .bottom-nav {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 480px; height: var(--nav-height);
@@ -103,8 +94,6 @@
             text-align: center; font-weight: 600;
         }
         .badge.hidden { display: none; }
-
-        /* ===== স্ট্যাট কার্ড ===== */
         .stats-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;
         }
@@ -115,8 +104,6 @@
         }
         .stat-card .number { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
         .stat-card .label { font-size: 0.65rem; color: var(--text-muted); }
-
-        /* ===== ক্রিয়েট পোস্ট ===== */
         .create-post-area {
             background: var(--bg-card); border-radius: var(--radius);
             padding: 14px; margin-bottom: 16px;
@@ -129,21 +116,19 @@
             color: var(--text-primary); font-family: inherit; outline: none;
         }
         .create-post-footer {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-top: 8px; padding-top: 8px;
+            display: flex; flex-wrap: wrap; gap: 8px;
+            margin-top: 8px; padding-top: 8px;
             border-top: 1px solid var(--border-color);
-            flex-wrap: wrap; gap: 8px;
         }
-        .create-post-footer input {
+        .create-post-footer input, .create-post-footer select {
             flex: 1; padding: 6px 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             font-size: 0.8rem; background: var(--bg-primary);
-            color: var(--text-primary); min-width: 100px;
+            color: var(--text-primary); min-width: 80px;
         }
-        .create-post-footer input:focus { outline: none; border-color: var(--primary); }
-
-        /* ===== বাটন ===== */
+        .create-post-footer select { flex: 0.5; }
+        .create-post-footer input:focus, .create-post-footer select:focus { outline: none; border-color: var(--primary); }
         .btn-primary {
             padding: 8px 18px; background: var(--primary); color: white;
             border: none; border-radius: var(--radius-sm);
@@ -160,8 +145,6 @@
             padding: 6px 14px; background: #e74c3c; color: white;
             border: none; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.8rem;
         }
-
-        /* ===== পোস্ট ===== */
         .post-card {
             background: var(--bg-card); border-radius: var(--radius);
             padding: 14px; margin-bottom: 12px;
@@ -177,6 +160,11 @@
         .post-author { font-weight: 600; font-size: 0.9rem; cursor: pointer; }
         .post-author:hover { color: var(--primary); }
         .post-date { color: var(--text-muted); font-size: 0.7rem; }
+        .post-privacy {
+            font-size: 0.65rem; color: var(--text-muted);
+            background: var(--border-color); padding: 1px 8px;
+            border-radius: 10px; margin-left: 4px;
+        }
         .post-content {
             color: var(--text-secondary); font-size: 0.9rem;
             margin-bottom: 8px; word-wrap: break-word; white-space: pre-wrap;
@@ -200,8 +188,6 @@
         }
         .post-action-btn:hover { background: var(--border-color); }
         .post-action-btn.liked { color: #e74c3c; }
-
-        /* ===== কমেন্ট ===== */
         .comment-item {
             display: flex; gap: 10px; padding: 6px 0;
             border-bottom: 1px solid var(--border-color);
@@ -228,8 +214,6 @@
             border: none; border-radius: var(--radius-sm);
             cursor: pointer; font-weight: 600; font-size: 0.75rem;
         }
-
-        /* ===== মডাল ===== */
         .modal-container {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             z-index: 1000; display: flex; align-items: center;
@@ -258,8 +242,6 @@
             background: none; border: none; font-size: 1.5rem;
             color: var(--text-muted); cursor: pointer; padding: 0 6px;
         }
-
-        /* ===== টোস্ট ===== */
         .toast {
             position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
             background: var(--bg-card); color: var(--text-primary);
@@ -269,15 +251,11 @@
             font-size: 0.85rem; animation: slideUp 0.3s ease;
         }
         .toast.hidden { display: none; }
-
-        /* ===== খালি স্টেট ===== */
         .empty-state {
             text-align: center; padding: 30px 20px; color: var(--text-muted);
         }
         .empty-state i { font-size: 2.5rem; margin-bottom: 8px; opacity: 0.5; }
         .empty-state h3 { color: var(--text-secondary); font-size: 1rem; }
-
-        /* ===== ইউটিলিটি ===== */
         .hidden { display: none !important; }
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -289,15 +267,26 @@
         }
         .page { display: none; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
+        .privacy-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 1px 8px;
+            border-radius: 10px;
+            background: var(--border-color);
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+        .privacy-badge.public { background: #d4edda; color: #155724; }
+        .privacy-badge.followers { background: #cce5ff; color: #004085; }
+        .privacy-badge.private { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
 
-    <!-- ===== হেডার ===== -->
     <header class="app-header">
-        <div class="header-left"><h1>AGLS</h1></div>
+        <div class="header-left"><h1 onclick="window.location.href='index.html'">AGLS</h1></div>
         <div class="header-right">
-            <button id="adminBtn" class="icon-btn hidden" title="Admin Panel">
+            <button id="adminBtn" class="icon-btn hidden" title="এডমিন প্যানেল">
                 <i class="fas fa-user-shield"></i>
             </button>
             <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
@@ -305,52 +294,49 @@
         </div>
     </header>
 
-    <!-- ===== মেইন কন্টেন্ট ===== -->
     <main class="main-content" id="mainContent">
         <div class="page active">
-            <!-- স্ট্যাটস -->
             <div class="stats-grid" id="dashboardStats">
-                <div class="stat-card"><span class="number" id="dashPosts">0</span><span class="label">My Posts</span></div>
-                <div class="stat-card"><span class="number" id="dashFollowers">0</span><span class="label">Followers</span></div>
-                <div class="stat-card"><span class="number" id="dashFollowing">0</span><span class="label">Following</span></div>
+                <div class="stat-card"><span class="number" id="dashPosts">০</span><span class="label">আমার পোস্ট</span></div>
+                <div class="stat-card"><span class="number" id="dashFollowers">০</span><span class="label">ফলোয়ার</span></div>
+                <div class="stat-card"><span class="number" id="dashFollowing">০</span><span class="label">ফলোয়িং</span></div>
             </div>
 
-            <!-- ক্রিয়েট পোস্ট -->
             <div class="create-post-area">
-                <textarea id="postContent" placeholder="Share your Arabic grammar knowledge..." maxlength="5000"></textarea>
+                <textarea id="postContent" placeholder="আপনার আরবি ব্যাকরণ জ্ঞান শেয়ার করুন..." maxlength="5000"></textarea>
                 <div class="create-post-footer">
-                    <input type="text" id="postTags" placeholder="Tags (comma separated)">
-                    <button id="submitPostBtn" class="btn-primary">Post</button>
+                    <input type="text" id="postTags" placeholder="ট্যাগ (কমা দিয়ে আলাদা)">
+                    <select id="postPrivacy">
+                        <option value="public">🌍 পাবলিক</option>
+                        <option value="followers">👥 শুধু ফলোয়ার</option>
+                        <option value="private">🔒 শুধু আমি</option>
+                    </select>
+                    <button id="submitPostBtn" class="btn-primary">পোস্ট</button>
                 </div>
             </div>
 
-            <!-- ফিড -->
             <div id="postsContainer"></div>
         </div>
     </main>
 
-    <!-- ===== নিচের নেভিগেশন ===== -->
     <nav class="bottom-nav">
-        <button class="nav-item active" data-page="index"><i class="fas fa-home"></i><span>Home</span></button>
-        <button class="nav-item" data-page="explore"><i class="fas fa-compass"></i><span>Explore</span></button>
-        <button class="nav-item" data-page="search"><i class="fas fa-search"></i><span>Search</span></button>
+        <button class="nav-item active" data-page="index"><i class="fas fa-home"></i><span>হোম</span></button>
+        <button class="nav-item" data-page="explore"><i class="fas fa-compass"></i><span>এক্সপ্লোর</span></button>
+        <button class="nav-item" data-page="search"><i class="fas fa-search"></i><span>খুঁজুন</span></button>
         <button class="nav-item" data-page="notifications">
-            <i class="fas fa-bell"></i><span>Alerts</span>
-            <span id="notificationBadge" class="badge hidden">0</span>
+            <i class="fas fa-bell"></i><span>সতর্কতা</span>
+            <span id="notificationBadge" class="badge hidden">০</span>
         </button>
-        <button class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>Profile</span></button>
+        <button class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>প্রোফাইল</span></button>
     </nav>
 
-    <!-- ===== মডাল ===== -->
     <div id="modalContainer" class="modal-container hidden">
         <div class="modal-overlay"></div>
         <div class="modal-content" id="modalContent"></div>
     </div>
 
-    <!-- ===== টোস্ট ===== -->
     <div id="toast" class="toast hidden"></div>
 
-    <!-- ===== Firebase ===== -->
     <script type="importmap">
     {
         "imports": {
@@ -412,15 +398,42 @@
         const date = new Date(d);
         const now = new Date();
         const diff = now - date;
-        if (diff < 60000) return 'Just now';
-        if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
-        if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
-        if (diff < 604800000) return Math.floor(diff/86400000) + 'd ago';
-        return date.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+        if (diff < 60000) return 'এইমাত্র';
+        if (diff < 3600000) return Math.floor(diff/60000) + ' মিনিট আগে';
+        if (diff < 86400000) return Math.floor(diff/3600000) + ' ঘন্টা আগে';
+        if (diff < 604800000) return Math.floor(diff/86400000) + ' দিন আগে';
+        return date.toLocaleDateString('bn-BD', { month:'short', day:'numeric', year:'numeric' });
     }
 
     function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
     function getAvatar(name, photo) { return photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2d7d46&color=fff&size=100`; }
+
+    function getPrivacyLabel(privacy) {
+        const map = {
+            'public': '🌍 পাবলিক',
+            'followers': '👥 ফলোয়ার',
+            'private': '🔒 শুধু আমি'
+        };
+        return map[privacy] || '🌍 পাবলিক';
+    }
+
+    function getPrivacyClass(privacy) {
+        const map = {
+            'public': 'public',
+            'followers': 'followers',
+            'private': 'private'
+        };
+        return map[privacy] || 'public';
+    }
+
+    // ===== PRIVACY CHECK =====
+    function canViewPost(post, userId, isFollowing) {
+        if (!userId) return false;
+        if (post.authorId === userId) return true;
+        if (post.privacy === 'public') return true;
+        if (post.privacy === 'followers' && isFollowing) return true;
+        return false;
+    }
 
     // ===== NAVIGATION =====
     function navigateTo(page) {
@@ -429,7 +442,6 @@
         else if (page === 'admin') window.location.href = 'admin.html';
         else if (page === 'index') window.location.href = 'index.html';
         else {
-            // Explore, Search, Notifications - ইন-পেজ
             renderPage(page);
         }
     }
@@ -443,7 +455,6 @@
 
     // ===== DASHBOARD =====
     function renderDashboard() {
-        // Already rendered
         loadDashboardStats();
         loadFeed('postsContainer');
     }
@@ -464,7 +475,7 @@
     // ===== EXPLORE =====
     function renderExplore() {
         mainContent.innerHTML = `
-            <div class="page active"><h2 style="margin-bottom:12px;">Explore</h2><div id="exploreContainer"></div></div>
+            <div class="page active"><h2 style="margin-bottom:12px;">এক্সপ্লোর</h2><div id="exploreContainer"></div></div>
         `;
         loadPopularPosts('exploreContainer');
     }
@@ -474,12 +485,12 @@
         mainContent.innerHTML = `
             <div class="page active">
                 <div class="search-bar" style="display:flex;gap:8px;margin-bottom:12px;">
-                    <input type="text" id="searchInput" placeholder="Search users or posts..." style="flex:1;padding:8px 14px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-size:0.9rem;">
+                    <input type="text" id="searchInput" placeholder="ব্যবহারকারী বা পোস্ট খুঁজুন..." style="flex:1;padding:8px 14px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-size:0.9rem;">
                     <button id="searchBtn" class="btn-primary"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="search-tabs" style="display:flex;gap:0;margin-bottom:12px;border-radius:8px;overflow:hidden;border:1px solid var(--border-color);">
-                    <button class="search-tab active" data-search="users" style="flex:1;padding:8px;background:var(--bg-secondary);border:none;color:var(--text-secondary);font-weight:500;cursor:pointer;font-size:0.8rem;transition:all 0.3s;">Users</button>
-                    <button class="search-tab" data-search="posts" style="flex:1;padding:8px;background:var(--bg-secondary);border:none;color:var(--text-secondary);font-weight:500;cursor:pointer;font-size:0.8rem;transition:all 0.3s;">Posts</button>
+                    <button class="search-tab active" data-search="users" style="flex:1;padding:8px;background:var(--bg-secondary);border:none;color:var(--text-secondary);font-weight:500;cursor:pointer;font-size:0.8rem;transition:all 0.3s;">ব্যবহারকারী</button>
+                    <button class="search-tab" data-search="posts" style="flex:1;padding:8px;background:var(--bg-secondary);border:none;color:var(--text-secondary);font-weight:500;cursor:pointer;font-size:0.8rem;transition:all 0.3s;">পোস্ট</button>
                 </div>
                 <div id="searchResults"></div>
             </div>
@@ -489,19 +500,20 @@
 
     // ===== NOTIFICATIONS =====
     function renderNotifications() {
-        mainContent.innerHTML = `<div class="page active"><h2 style="margin-bottom:12px;">Notifications</h2><div id="notificationsContainer"></div></div>`;
+        mainContent.innerHTML = `<div class="page active"><h2 style="margin-bottom:12px;">সতর্কতা</h2><div id="notificationsContainer"></div></div>`;
         loadNotifications('notificationsContainer');
     }
 
     // ===== POSTS =====
-    async function createPost(content, tags) {
-        if (!currentUser) { showToast('Please login'); return; }
+    async function createPost(content, tags, privacy) {
+        if (!currentUser) { showToast('দয়া করে লগইন করুন'); return; }
         const postData = {
             authorId: currentUser.uid,
-            authorName: currentUserData?.name || currentUser.displayName || 'User',
+            authorName: currentUserData?.name || currentUser.displayName || 'ব্যবহারকারী',
             authorPhoto: currentUserData?.photoURL || currentUser.photoURL || '',
             content: content.trim(),
             tags: tags || [],
+            privacy: privacy || 'public',
             date: new Date().toISOString(),
             likes: 0, comments: 0
         };
@@ -510,8 +522,8 @@
             await set(newRef, postData);
             const userSnap = await get(ref(db, `users/${currentUser.uid}`));
             if (userSnap.exists()) await update(ref(db, `users/${currentUser.uid}`), { posts: (userSnap.val().posts||0)+1 });
-            showToast('Post published!');
-        } catch(e) { console.error(e); showToast('Failed to create post'); }
+            showToast('পোস্ট প্রকাশিত হয়েছে!');
+        } catch(e) { console.error(e); showToast('পোস্ট তৈরি ব্যর্থ'); }
     }
 
     async function deletePost(postId) {
@@ -520,7 +532,7 @@
             const postSnap = await get(ref(db, `posts/${postId}`));
             if (!postSnap.exists()) return;
             const postData = postSnap.val();
-            if (postData.authorId !== currentUser.uid && !isAdmin) { showToast('Not your post'); return; }
+            if (postData.authorId !== currentUser.uid && !isAdmin) { showToast('এটি আপনার পোস্ট নয়'); return; }
             await remove(ref(db, `posts/${postId}`));
             if (postData.authorId === currentUser.uid) {
                 const userSnap = await get(ref(db, `users/${currentUser.uid}`));
@@ -528,8 +540,8 @@
             }
             await remove(ref(db, `comments/${postId}`));
             await remove(ref(db, `likes/${postId}`));
-            showToast('Post deleted');
-        } catch(e) { console.error(e); showToast('Failed to delete'); }
+            showToast('পোস্ট মুছে ফেলা হয়েছে');
+        } catch(e) { console.error(e); showToast('মুছতে ব্যর্থ'); }
     }
 
     function loadFeed(containerId) {
@@ -538,12 +550,33 @@
         if (feedListeners.feed) { feedListeners.feed.off(); delete feedListeners.feed; }
         const q = query(ref(db, 'posts'), orderByChild('date'), limitToLast(50));
         feedListeners.feed = q;
-        onValue(q, (snap) => {
+        onValue(q, async (snap) => {
             const posts = [];
-            snap.forEach(c => { const p = c.val(); p.id = c.key; posts.push(p); });
+            const userId = currentUser?.uid;
+            const followingList = await getFollowingList(userId);
+
+            snap.forEach(c => {
+                const p = c.val();
+                p.id = c.key;
+                const isFollowing = followingList.includes(p.authorId);
+                if (canViewPost(p, userId, isFollowing)) {
+                    posts.push(p);
+                }
+            });
+
             posts.sort((a,b) => new Date(b.date) - new Date(a.date));
             renderPosts(posts, container);
         });
+    }
+
+    async function getFollowingList(userId) {
+        if (!userId) return [];
+        try {
+            const snap = await get(ref(db, `following/${userId}`));
+            const list = [];
+            if (snap.exists()) snap.forEach(c => list.push(c.key));
+            return list;
+        } catch(e) { return []; }
     }
 
     function loadPopularPosts(containerId) {
@@ -552,9 +585,20 @@
         if (feedListeners.popular) { feedListeners.popular.off(); delete feedListeners.popular; }
         const q = query(ref(db, 'posts'), orderByChild('likes'), limitToLast(20));
         feedListeners.popular = q;
-        onValue(q, (snap) => {
+        onValue(q, async (snap) => {
             const posts = [];
-            snap.forEach(c => { const p = c.val(); p.id = c.key; posts.push(p); });
+            const userId = currentUser?.uid;
+            const followingList = await getFollowingList(userId);
+
+            snap.forEach(c => {
+                const p = c.val();
+                p.id = c.key;
+                const isFollowing = followingList.includes(p.authorId);
+                if (canViewPost(p, userId, isFollowing)) {
+                    posts.push(p);
+                }
+            });
+
             posts.sort((a,b) => b.likes - a.likes);
             renderPosts(posts, container);
         });
@@ -562,7 +606,7 @@
 
     function renderPosts(posts, container) {
         if (!posts || posts.length === 0) {
-            container.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>No posts yet</h3></div>`;
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>কোন পোস্ট নেই</h3><p>প্রথম পোস্টটি আপনিই করুন!</p></div>`;
             return;
         }
         container.innerHTML = posts.map(p => createPostHTML(p)).join('');
@@ -573,7 +617,7 @@
             const commentBtn = card.querySelector('.comment-btn');
             if (commentBtn) commentBtn.addEventListener('click', ()=>openCommentModal(pid));
             const deleteBtn = card.querySelector('.delete-btn');
-            if (deleteBtn) deleteBtn.addEventListener('click', async ()=>{ if(confirm('Delete?')) { await deletePost(pid); loadFeed('postsContainer'); loadDashboardStats(); } });
+            if (deleteBtn) deleteBtn.addEventListener('click', async ()=>{ if(confirm('পোস্টটি মুছবেন?')) { await deletePost(pid); loadFeed('postsContainer'); loadDashboardStats(); } });
             const editBtn = card.querySelector('.edit-btn');
             if (editBtn) editBtn.addEventListener('click', ()=>{ const c = card.querySelector('.post-content').textContent; const t = posts.find(p=>p.id===pid)?.tags||[]; openEditModal(pid, c, t.join(', ')); });
             const author = card.querySelector('.post-author');
@@ -584,19 +628,27 @@
     function createPostHTML(post) {
         const isOwner = currentUser && post.authorId === currentUser.uid;
         const canDelete = isOwner || isAdmin;
+        const privacyLabel = getPrivacyLabel(post.privacy);
+        const privacyClass = getPrivacyClass(post.privacy);
+
         return `
             <div class="post-card" data-post-id="${post.id}">
                 <div class="post-header">
                     <img class="post-avatar" src="${getAvatar(post.authorName, post.authorPhoto)}" alt="${escapeHtml(post.authorName)}">
-                    <div><div class="post-author">${escapeHtml(post.authorName)}</div><span class="post-date">${formatDate(post.date)}${post.edited?' (edited)':''}</span></div>
+                    <div>
+                        <div class="post-author">${escapeHtml(post.authorName)}</div>
+                        <span class="post-date">${formatDate(post.date)}</span>
+                        <span class="privacy-badge ${privacyClass}">${privacyLabel}</span>
+                        ${post.edited ? '<span class="post-date"> (সম্পাদিত)</span>' : ''}
+                    </div>
                 </div>
                 <div class="post-content">${escapeHtml(post.content)}</div>
                 ${post.tags?.length ? `<div class="post-tags">${post.tags.map(t=>`<span class="post-tag">#${escapeHtml(t)}</span>`).join('')}</div>` : ''}
                 <div class="post-actions">
                     <button class="post-action-btn like-btn"><i class="far fa-heart"></i> <span class="count">${post.likes||0}</span></button>
                     <button class="post-action-btn comment-btn"><i class="far fa-comment"></i> <span class="count">${post.comments||0}</span></button>
-                    ${isOwner ? `<button class="post-action-btn edit-btn"><i class="fas fa-edit"></i></button>` : ''}
-                    ${canDelete ? `<button class="post-action-btn delete-btn"><i class="fas fa-trash"></i></button>` : ''}
+                    ${isOwner ? `<button class="post-action-btn edit-btn"><i class="fas fa-edit"></i> সম্পাদনা</button>` : ''}
+                    ${canDelete ? `<button class="post-action-btn delete-btn"><i class="fas fa-trash"></i> মুছুন</button>` : ''}
                 </div>
             </div>
         `;
@@ -604,7 +656,7 @@
 
     // ===== LIKES =====
     async function handleLike(postId, btn) {
-        if (!currentUser) { showToast('Please login'); return; }
+        if (!currentUser) { showToast('দয়া করে লগইন করুন'); return; }
         const isLiked = btn.classList.contains('liked');
         const countEl = btn.querySelector('.count');
         const current = parseInt(countEl.textContent) || 0;
@@ -641,7 +693,7 @@
 
     // ===== COMMENTS =====
     async function addComment(postId, content) {
-        if (!currentUser) { showToast('Please login'); return; }
+        if (!currentUser) { showToast('দয়া করে লগইন করুন'); return; }
         if (!content.trim()) return;
         try {
             const newRef = push(ref(db, `comments/${postId}`));
@@ -653,8 +705,8 @@
                     await sendNotification(postSnap.val().authorId, 'comment', { postId, fromUserId: currentUser.uid, fromUserName: currentUserData?.name || currentUser.displayName, fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL, comment: content.trim().substring(0,50) });
                 }
             }
-            showToast('Comment added');
-        } catch(e) { console.error(e); showToast('Failed to add comment'); }
+            showToast('মন্তব্য যোগ করা হয়েছে');
+        } catch(e) { console.error(e); showToast('মন্তব্য যোগ করতে ব্যর্থ'); }
     }
 
     async function deleteComment(postId, commentId) {
@@ -662,7 +714,7 @@
         try {
             const snap = await get(ref(db, `comments/${postId}/${commentId}`));
             if (!snap.exists()) return;
-            if (snap.val().authorId !== currentUser.uid && !isAdmin) { showToast('Not your comment'); return; }
+            if (snap.val().authorId !== currentUser.uid && !isAdmin) { showToast('এটি আপনার মন্তব্য নয়'); return; }
             await remove(ref(db, `comments/${postId}/${commentId}`));
             const postSnap = await get(ref(db, `posts/${postId}`));
             if (postSnap.exists()) await update(ref(db, `posts/${postId}`), { comments: Math.max(0, (postSnap.val().comments||0)-1) });
@@ -685,7 +737,7 @@
 
     function renderComments(comments, container, postId) {
         if (!comments || comments.length === 0) {
-            container.innerHTML = `<div class="empty-state" style="padding:12px;"><p style="font-size:0.85rem;">No comments yet</p></div>`;
+            container.innerHTML = `<div class="empty-state" style="padding:12px;"><p style="font-size:0.85rem;">কোন মন্তব্য নেই</p></div>`;
             return;
         }
         container.innerHTML = comments.map(c => `
@@ -696,14 +748,14 @@
                     <div class="comment-text">${escapeHtml(c.content)}</div>
                     <div class="comment-actions">
                         <span class="comment-date">${formatDate(c.date)}</span>
-                        ${(currentUser && (c.authorId === currentUser.uid || isAdmin)) ? `<button class="delete-comment" data-post="${postId}" data-comment="${c.id}" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.7rem;">Delete</button>` : ''}
+                        ${(currentUser && (c.authorId === currentUser.uid || isAdmin)) ? `<button class="delete-comment" data-post="${postId}" data-comment="${c.id}" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.7rem;">মুছুন</button>` : ''}
                     </div>
                 </div>
             </div>
         `).join('');
         container.querySelectorAll('.delete-comment').forEach(btn => {
             btn.addEventListener('click', async () => {
-                if (confirm('Delete this comment?')) {
+                if (confirm('মন্তব্যটি মুছবেন?')) {
                     await deleteComment(btn.dataset.post, btn.dataset.comment);
                     loadComments(btn.dataset.post, container.id);
                 }
@@ -713,11 +765,11 @@
 
     function openCommentModal(postId) {
         openModal(`
-            <div class="modal-header"><h2>Comments</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div class="modal-header"><h2>মন্তব্য</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
             <div id="commentList" data-post="${postId}"></div>
             <div class="comment-input-area">
-                <input type="text" id="commentInput" placeholder="Write a comment...">
-                <button id="submitComment">Post</button>
+                <input type="text" id="commentInput" placeholder="মন্তব্য লিখুন...">
+                <button id="submitComment">পোস্ট</button>
             </div>
         `);
         loadComments(postId, 'commentList');
@@ -730,27 +782,39 @@
 
     function openEditModal(postId, content, tags) {
         openModal(`
-            <div class="modal-header"><h2>Edit Post</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div class="modal-header"><h2>পোস্ট সম্পাদনা</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
             <textarea id="editPostContent" style="width:100%;min-height:100px;padding:10px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-family:inherit;font-size:0.9rem;resize:vertical;">${escapeHtml(content)}</textarea>
             <input type="text" id="editPostTags" value="${escapeHtml(tags)}" style="width:100%;padding:6px 12px;margin-top:8px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);">
-            <button class="btn-primary" id="saveEditPost" style="margin-top:10px;width:100%;">Save Changes</button>
+            <select id="editPostPrivacy" style="width:100%;padding:6px 12px;margin-top:8px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);">
+                <option value="public">🌍 পাবলিক</option>
+                <option value="followers">👥 শুধু ফলোয়ার</option>
+                <option value="private">🔒 শুধু আমি</option>
+            </select>
+            <button class="btn-primary" id="saveEditPost" style="margin-top:10px;width:100%;">সংরক্ষণ করুন</button>
         `);
         document.getElementById('saveEditPost').addEventListener('click', async () => {
             const nc = document.getElementById('editPostContent').value.trim();
             const nt = document.getElementById('editPostTags').value.split(',').map(t=>t.trim()).filter(t=>t);
-            if (nc) { await editPost(postId, nc, nt); closeModal(); loadFeed('postsContainer'); }
+            const np = document.getElementById('editPostPrivacy').value;
+            if (nc) { await editPost(postId, nc, nt, np); closeModal(); loadFeed('postsContainer'); }
         });
     }
 
-    async function editPost(postId, newContent, newTags) {
+    async function editPost(postId, newContent, newTags, newPrivacy) {
         if (!currentUser) return;
         try {
             const snap = await get(ref(db, `posts/${postId}`));
             if (!snap.exists()) return;
-            if (snap.val().authorId !== currentUser.uid) { showToast('Not your post'); return; }
-            await update(ref(db, `posts/${postId}`), { content: newContent.trim(), tags: newTags || [], edited: true, editedDate: new Date().toISOString() });
-            showToast('Post updated');
-        } catch(e) { console.error(e); showToast('Failed to edit'); }
+            if (snap.val().authorId !== currentUser.uid) { showToast('এটি আপনার পোস্ট নয়'); return; }
+            await update(ref(db, `posts/${postId}`), {
+                content: newContent.trim(),
+                tags: newTags || [],
+                privacy: newPrivacy || 'public',
+                edited: true,
+                editedDate: new Date().toISOString()
+            });
+            showToast('পোস্ট আপডেট করা হয়েছে');
+        } catch(e) { console.error(e); showToast('সম্পাদনা ব্যর্থ'); }
     }
 
     // ===== NOTIFICATIONS =====
@@ -772,21 +836,21 @@
             snap.forEach(c => { const n = c.val(); n.id = c.key; notifs.push(n); if (!n.read) unread++; });
             notifs.sort((a,b) => new Date(b.date) - new Date(a.date));
             renderNotificationsList(notifs, container);
-            if (unread > 0) { notificationBadge.textContent = unread > 9 ? '9+' : unread; notificationBadge.classList.remove('hidden'); }
+            if (unread > 0) { notificationBadge.textContent = unread > 9 ? '৯+' : unread; notificationBadge.classList.remove('hidden'); }
             else { notificationBadge.classList.add('hidden'); }
         });
     }
 
     function renderNotificationsList(notifs, container) {
         if (!notifs || notifs.length === 0) {
-            container.innerHTML = `<div class="empty-state"><i class="fas fa-bell"></i><h3>No notifications</h3></div>`;
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-bell"></i><h3>কোন সতর্কতা নেই</h3></div>`;
             return;
         }
         container.innerHTML = notifs.map(n => `
             <div class="notification-item ${n.read ? '' : 'unread'}" data-notif="${n.id}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-card);border-radius:8px;margin-bottom:6px;border-left:3px solid var(--primary);cursor:pointer;">
                 <img class="avatar" src="${getAvatar(n.fromUserName, n.fromUserPhoto)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
                 <div class="content" style="flex:1;">
-                    <div class="text" style="font-size:0.85rem;color:var(--text-secondary);"><strong>${escapeHtml(n.fromUserName)}</strong> ${n.type === 'follow' ? 'started following you' : n.type === 'like' ? 'liked your post' : n.type === 'comment' ? `commented: "${escapeHtml(n.comment)}${n.comment?.length > 40 ? '...' : ''}"` : ''}</div>
+                    <div class="text" style="font-size:0.85rem;color:var(--text-secondary);"><strong>${escapeHtml(n.fromUserName)}</strong> ${n.type === 'follow' ? 'আপনাকে ফলো করেছেন' : n.type === 'like' ? 'আপনার পোস্ট লাইক করেছেন' : n.type === 'comment' ? `মন্তব্য করেছেন: "${escapeHtml(n.comment)}${n.comment?.length > 40 ? '...' : ''}"` : ''}</div>
                     <div class="time" style="font-size:0.65rem;color:var(--text-muted);">${formatDate(n.date)}</div>
                 </div>
             </div>
@@ -810,7 +874,7 @@
         const doSearch = () => {
             const q = input.value.trim();
             if (q.length >= 2) { currentTab === 'users' ? searchUsers(q) : searchPosts(q); }
-            else { document.getElementById('searchResults').innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>Type at least 2 characters</h3></div>`; }
+            else { document.getElementById('searchResults').innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>অন্তত ২টি অক্ষর লিখুন</h3></div>`; }
         };
         btn.addEventListener('click', doSearch);
         input.addEventListener('keypress', e => { if (e.key === 'Enter') doSearch(); });
@@ -830,17 +894,17 @@
             const snap = await get(ref(db, 'users'));
             const results = [];
             snap.forEach(c => { const u = c.val(); u.id = c.key; if (u.name?.toLowerCase().includes(query.toLowerCase())) results.push(u); });
-            if (results.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><h3>No users found</h3></div>`; return; }
+            if (results.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><h3>কোন ব্যবহারকারী পাওয়া যায়নি</h3></div>`; return; }
             const html = await Promise.all(results.map(async u => {
                 const isFollowing = await checkFollowing(u.id);
                 return `<div class="user-result" onclick="window.location.href='profile.html?uid=${u.id}'" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border-color);cursor:pointer;">
                     <img class="avatar" src="${getAvatar(u.name, u.photoURL)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
                     <div class="info" style="flex:1;"><div class="name" style="font-weight:600;font-size:0.9rem;">${escapeHtml(u.name)}</div><div class="email" style="font-size:0.75rem;color:var(--text-muted);">${escapeHtml(u.email||'')}</div></div>
-                    ${currentUser && u.id !== currentUser.uid ? `<button class="follow-btn ${isFollowing ? 'following' : 'not-following'}" onclick="event.stopPropagation(); window.toggleFollow('${u.id}')" style="padding:3px 12px;border-radius:12px;border:none;font-size:0.7rem;font-weight:600;cursor:pointer;background:${isFollowing ? 'var(--border-color)' : 'var(--primary)'};color:${isFollowing ? 'var(--text-secondary)' : 'white'};">${isFollowing ? 'Following' : 'Follow'}</button>` : ''}
+                    ${currentUser && u.id !== currentUser.uid ? `<button class="follow-btn ${isFollowing ? 'following' : 'not-following'}" onclick="event.stopPropagation(); window.toggleFollow('${u.id}')" style="padding:3px 12px;border-radius:12px;border:none;font-size:0.7rem;font-weight:600;cursor:pointer;background:${isFollowing ? 'var(--border-color)' : 'var(--primary)'};color:${isFollowing ? 'var(--text-secondary)' : 'white'};">${isFollowing ? 'ফলো করছেন' : 'ফলো করুন'}</button>` : ''}
                 </div>`;
             }));
             container.innerHTML = html.join('');
-        } catch(e) { console.error(e); container.innerHTML = '<p>Error searching users</p>'; }
+        } catch(e) { console.error(e); container.innerHTML = '<p>ব্যবহারকারী খুঁজতে সমস্যা</p>'; }
     }
 
     async function searchPosts(query) {
@@ -848,11 +912,22 @@
         try {
             const snap = await get(ref(db, 'posts'));
             const results = [];
-            snap.forEach(c => { const p = c.val(); p.id = c.key; if (p.content?.toLowerCase().includes(query.toLowerCase())) results.push(p); });
+            const userId = currentUser?.uid;
+            const followingList = await getFollowingList(userId);
+
+            snap.forEach(c => {
+                const p = c.val();
+                p.id = c.key;
+                const isFollowing = followingList.includes(p.authorId);
+                if (p.content?.toLowerCase().includes(query.toLowerCase()) && canViewPost(p, userId, isFollowing)) {
+                    results.push(p);
+                }
+            });
+
             results.sort((a,b) => new Date(b.date) - new Date(a.date));
-            if (results.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>No posts found</h3></div>`; return; }
+            if (results.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>কোন পোস্ট পাওয়া যায়নি</h3></div>`; return; }
             renderPosts(results, container);
-        } catch(e) { console.error(e); container.innerHTML = '<p>Error searching posts</p>'; }
+        } catch(e) { console.error(e); container.innerHTML = '<p>পোস্ট খুঁজতে সমস্যা</p>'; }
     }
 
     // ===== FOLLOW =====
@@ -864,8 +939,8 @@
             await updateFollowCounts(currentUser.uid, 'following', 1);
             await updateFollowCounts(targetId, 'followers', 1);
             await sendNotification(targetId, 'follow', { fromUserId: currentUser.uid, fromUserName: currentUserData?.name || currentUser.displayName, fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL });
-            showToast('Following!'); loadDashboardStats();
-        } catch(e) { console.error(e); showToast('Failed to follow'); }
+            showToast('ফলো করেছেন!'); loadDashboardStats();
+        } catch(e) { console.error(e); showToast('ফলো করতে ব্যর্থ'); }
     }
 
     async function unfollowUser(targetId) {
@@ -875,8 +950,8 @@
             await remove(ref(db, `followers/${targetId}/${currentUser.uid}`));
             await updateFollowCounts(currentUser.uid, 'following', -1);
             await updateFollowCounts(targetId, 'followers', -1);
-            showToast('Unfollowed'); loadDashboardStats();
-        } catch(e) { console.error(e); showToast('Failed to unfollow'); }
+            showToast('আনফলো করেছেন'); loadDashboardStats();
+        } catch(e) { console.error(e); showToast('আনফলো করতে ব্যর্থ'); }
     }
 
     async function updateFollowCounts(userId, field, change) {
@@ -939,22 +1014,22 @@
     function setupApp() {
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Logout?')) { signOut(auth); }
+            if (confirm('লগআউট করবেন?')) { signOut(auth); }
         });
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => navigateTo(item.dataset.page));
         });
         document.getElementById('adminBtn').addEventListener('click', () => {
             if (isAdmin) window.location.href = 'admin.html';
-            else showToast('Access denied');
+            else showToast('অ্যাক্সেস অস্বীকৃত');
         });
 
-        // Submit post
         document.getElementById('submitPostBtn').addEventListener('click', async () => {
             const content = document.getElementById('postContent').value.trim();
             const tags = document.getElementById('postTags').value.split(',').map(t=>t.trim()).filter(t=>t);
+            const privacy = document.getElementById('postPrivacy').value;
             if (content) {
-                await createPost(content, tags);
+                await createPost(content, tags, privacy);
                 document.getElementById('postContent').value = '';
                 document.getElementById('postTags').value = '';
                 loadFeed('postsContainer');
@@ -963,7 +1038,7 @@
         });
     }
 
-    console.log('🔥 AGLS Index Loaded');
+    console.log('🔥 AGLS বাংলা ভার্সন লোড হয়েছে');
     </script>
 </body>
 </html>
