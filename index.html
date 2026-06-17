@@ -1,22 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>AGLS - Arabic Grammar Life Support</title>
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
     <style>
-        /* ============================================
-                   CSS VARIABLES
-                   ============================================ */
+        /* ===== CSS Variables ===== */
         :root {
             --primary: #2d7d46;
             --primary-dark: #1e5a32;
-            --primary-light: #3a9b5a;
-            --secondary: #c8a86a;
             --bg-primary: #f5f3f0;
             --bg-secondary: #ffffff;
             --bg-card: #ffffff;
@@ -25,7 +18,6 @@
             --text-muted: #888888;
             --border-color: #e0ddd8;
             --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --shadow-hover: 0 4px 20px rgba(0,0,0,0.12);
             --radius: 12px;
             --radius-sm: 8px;
             --transition: 0.3s ease;
@@ -33,7 +25,6 @@
             --header-height: 56px;
         }
 
-        /* Dark Mode */
         [data-theme="dark"] {
             --bg-primary: #121212;
             --bg-secondary: #1e1e1e;
@@ -42,242 +33,41 @@
             --text-secondary: #b0b0b0;
             --text-muted: #777777;
             --border-color: #333333;
-            --shadow: 0 2px 12px rgba(0,0,0,0.3);
-            --shadow-hover: 0 4px 20px rgba(0,0,0,0.4);
         }
 
-        /* ============================================
-                   RESET & BASE
-                   ============================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            font-size: 16px;
-            -webkit-text-size-adjust: 100%;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
             transition: background var(--transition), color var(--transition);
+            padding-bottom: 80px;
         }
 
-        /* ============================================
-                   LOADING SCREEN
-                   ============================================ */
+        /* ===== লোডিং ===== */
         #loadingScreen {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: var(--bg-primary);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s;
         }
-
-        #loadingScreen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
+        #loadingScreen.hidden { opacity: 0; pointer-events: none; }
         .loader {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             border: 3px solid var(--border-color);
             border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        #loadingScreen p {
-            margin-top: 16px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ============================================
-                   LOGIN PANEL
-                   ============================================ */
-        .auth-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-primary);
-            padding: 20px;
-            z-index: 1000;
-        }
-
-        .auth-container.hidden {
-            display: none;
-        }
-
-        .auth-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 40px 32px;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: var(--shadow);
-            text-align: center;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .auth-logo {
-            width: 80px;
-            height: 80px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 2rem;
-            color: white;
-            font-weight: 700;
-        }
-
-        .auth-header h1 {
-            font-size: 2rem;
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .auth-header .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-        }
-
-        .auth-header .tagline {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-bottom: 24px;
-        }
-
-        .auth-divider {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin: 20px 0;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .auth-divider::before,
-        .auth-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .auth-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .auth-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-
-        .auth-btn:active {
-            transform: scale(0.97);
-        }
-
-        .google-btn {
-            background: #4285f4;
-            color: white;
-        }
-
-        .google-btn:hover {
-            background: #357abd;
-        }
-
-        .auth-footer {
-            margin-top: 20px;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .auth-footer .highlight {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .auth-features {
-            text-align: left;
-            margin-bottom: 16px;
-        }
-
-        .auth-features p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-
-        .auth-features i {
-            color: var(--primary);
-            width: 20px;
-        }
-
-        /* ============================================
-                   APP CONTAINER
-                   ============================================ */
-        .app-container {
-            max-width: 480px;
-            margin: 0 auto;
-            min-height: 100vh;
-            background: var(--bg-secondary);
-            position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.05);
-        }
-
-        .app-container.hidden {
-            display: none;
-        }
-
-        /* ============================================
-                   HEADER
-                   ============================================ */
+        /* ===== হেডার ===== */
         .app-header {
             position: sticky;
             top: 0;
@@ -290,27 +80,17 @@
             justify-content: space-between;
             border-bottom: 1px solid var(--border-color);
         }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
         .header-left h1 {
             font-size: 1.3rem;
             color: var(--primary);
             font-weight: 700;
         }
-
         .header-right {
             display: flex;
             gap: 8px;
         }
-
         .icon-btn {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             border: none;
             border-radius: 50%;
             background: transparent;
@@ -323,19 +103,11 @@
             justify-content: center;
             position: relative;
         }
-
-        .icon-btn:hover {
-            background: var(--border-color);
-        }
-
-        .icon-btn:active {
-            transform: scale(0.92);
-        }
-
+        .icon-btn:hover { background: var(--border-color); }
+        .icon-btn:active { transform: scale(0.92); }
         .admin-badge {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: -2px; right: -2px;
             background: #e74c3c;
             color: white;
             font-size: 0.5rem;
@@ -344,17 +116,15 @@
             font-weight: 700;
         }
 
-        /* ============================================
-                   MAIN CONTENT
-                   ============================================ */
+        /* ===== মেইন কন্টেন্ট ===== */
         .main-content {
-            padding-bottom: calc(var(--nav-height) + 16px);
-            min-height: calc(100vh - var(--header-height));
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+            padding-bottom: calc(var(--nav-height) + 20px);
         }
 
-        /* ============================================
-                   BOTTOM NAVIGATION
-                   ============================================ */
+        /* ===== নিচের নেভিগেশন ===== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -369,11 +139,9 @@
             align-items: center;
             justify-content: space-around;
             z-index: 100;
-            padding: 0 4px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
-
         .nav-item {
             flex: 1;
             display: flex;
@@ -384,229 +152,132 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.65rem;
-            padding: 6px 0;
+            font-size: 0.6rem;
+            padding: 4px 0;
             cursor: pointer;
             transition: all var(--transition);
             position: relative;
         }
-
-        .nav-item i {
-            font-size: 1.3rem;
-            transition: all var(--transition);
-        }
-
-        .nav-item span {
-            font-weight: 500;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        .nav-item.active i {
-            transform: scale(1.05);
-        }
-
+        .nav-item i { font-size: 1.2rem; }
+        .nav-item.active { color: var(--primary); }
         .badge {
             position: absolute;
-            top: 4px;
+            top: 2px;
             right: 50%;
             transform: translateX(calc(50% + 12px));
             background: #e74c3c;
             color: white;
-            font-size: 0.6rem;
+            font-size: 0.5rem;
             padding: 1px 6px;
             border-radius: 10px;
-            min-width: 18px;
+            min-width: 16px;
             text-align: center;
             font-weight: 600;
         }
+        .badge.hidden { display: none; }
 
-        .badge.hidden {
-            display: none;
-        }
-
-        /* ============================================
-                   PAGE STYLES
-                   ============================================ */
-        .page {
-            display: none;
-            padding: 16px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .page.active {
-            display: block;
-        }
-
+        /* ===== পেজ ===== */
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ============================================
-                   DASHBOARD / POST STYLES
-                   ============================================ */
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            padding: 16px;
-            border-radius: var(--radius-sm);
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .stat-card .number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-card .label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
+        /* ===== পোস্ট ===== */
         .post-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 16px;
+            padding: 14px;
             margin-bottom: 12px;
             box-shadow: var(--shadow);
-            transition: all var(--transition);
             border: 1px solid var(--border-color);
         }
-
-        .post-card:hover {
-            box-shadow: var(--shadow-hover);
-        }
-
         .post-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 10px;
+            margin-bottom: 8px;
         }
-
         .post-avatar {
-            width: 44px;
-            height: 44px;
+            width: 40px; height: 40px;
             border-radius: 50%;
             object-fit: cover;
-            background: var(--border-color);
-            flex-shrink: 0;
             cursor: pointer;
         }
-
         .post-author {
             font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
         }
-
-        .post-author:hover {
-            color: var(--primary);
-        }
-
+        .post-author:hover { color: var(--primary); }
         .post-date {
             color: var(--text-muted);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
-
         .post-content {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
             word-wrap: break-word;
             white-space: pre-wrap;
         }
-
         .post-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 4px;
+            margin-bottom: 8px;
         }
-
         .post-tag {
             background: var(--border-color);
             padding: 2px 10px;
             border-radius: 12px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
         }
-
         .post-actions {
             display: flex;
-            gap: 16px;
-            padding-top: 10px;
+            gap: 12px;
+            padding-top: 8px;
             border-top: 1px solid var(--border-color);
             flex-wrap: wrap;
         }
-
         .post-action-btn {
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             padding: 4px 8px;
             border-radius: var(--radius-sm);
             transition: all var(--transition);
         }
+        .post-action-btn:hover { background: var(--border-color); }
+        .post-action-btn.liked { color: #e74c3c; }
 
-        .post-action-btn:hover {
-            background: var(--border-color);
-        }
-
-        .post-action-btn.liked {
-            color: #e74c3c;
-        }
-
-        .post-action-btn .count {
-            font-size: 0.75rem;
-        }
-
-        /* ============================================
-                   CREATE POST
-                   ============================================ */
+        /* ===== ক্রিয়েট পোস্ট ===== */
         .create-post-area {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 16px;
+            padding: 14px;
             margin-bottom: 16px;
-            box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
         }
-
         .create-post-area textarea {
             width: 100%;
             border: none;
             resize: vertical;
-            min-height: 80px;
-            padding: 8px 0;
-            font-size: 0.95rem;
+            min-height: 70px;
+            padding: 6px 0;
+            font-size: 0.9rem;
             background: transparent;
             color: var(--text-primary);
             font-family: inherit;
             outline: none;
         }
-
-        .create-post-area textarea::placeholder {
-            color: var(--text-muted);
-        }
-
         .create-post-footer {
             display: flex;
             justify-content: space-between;
@@ -617,7 +288,6 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-
         .create-post-footer input {
             flex: 1;
             padding: 6px 12px;
@@ -626,19 +296,13 @@
             font-size: 0.8rem;
             background: var(--bg-primary);
             color: var(--text-primary);
-            min-width: 120px;
+            min-width: 100px;
         }
+        .create-post-footer input:focus { outline: none; border-color: var(--primary); }
 
-        .create-post-footer input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* ============================================
-                   BUTTONS
-                   ============================================ */
+        /* ===== বাটন ===== */
         .btn-primary {
-            padding: 8px 20px;
+            padding: 8px 18px;
             background: var(--primary);
             color: white;
             border: none;
@@ -646,610 +310,308 @@
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             white-space: nowrap;
         }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .btn-primary:active {
-            transform: scale(0.96);
-        }
-
+        .btn-primary:active { transform: scale(0.96); }
         .btn-secondary {
-            padding: 8px 16px;
+            padding: 6px 14px;
             background: transparent;
             color: var(--text-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all var(--transition);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
-
-        .btn-secondary:hover {
-            background: var(--border-color);
-        }
-
         .btn-danger {
-            padding: 8px 16px;
+            padding: 6px 14px;
             background: #e74c3c;
             color: white;
             border: none;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all var(--transition);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
-
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-
         .btn-success {
-            padding: 8px 16px;
+            padding: 6px 14px;
             background: #27ae60;
             color: white;
             border: none;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all var(--transition);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
-        .btn-success:hover {
-            background: #219a52;
-        }
-
-        /* ============================================
-                   COMMENTS
-                   ============================================ */
+        /* ===== কমেন্ট ===== */
         .comment-item {
             display: flex;
             gap: 10px;
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid var(--border-color);
         }
-
-        .comment-item:last-child {
-            border-bottom: none;
-        }
-
+        .comment-item:last-child { border-bottom: none; }
         .comment-avatar {
-            width: 32px;
-            height: 32px;
+            width: 28px; height: 28px;
             border-radius: 50%;
             object-fit: cover;
-            flex-shrink: 0;
         }
-
-        .comment-body {
-            flex: 1;
-        }
-
-        .comment-author {
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .comment-text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin: 2px 0;
-        }
-
-        .comment-date {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-        }
-
-        .comment-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .comment-actions button {
-            background: none;
-            border: none;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 2px 6px;
-        }
-
-        .comment-actions button:hover {
-            color: var(--primary);
-        }
-
+        .comment-body { flex: 1; }
+        .comment-author { font-weight: 600; font-size: 0.8rem; }
+        .comment-text { font-size: 0.85rem; color: var(--text-secondary); }
+        .comment-date { font-size: 0.6rem; color: var(--text-muted); }
         .comment-input-area {
             display: flex;
             gap: 8px;
             margin-top: 8px;
         }
-
         .comment-input-area input {
             flex: 1;
-            padding: 8px 12px;
+            padding: 6px 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             background: var(--bg-primary);
             color: var(--text-primary);
         }
-
-        .comment-input-area input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
         .comment-input-area button {
-            padding: 8px 16px;
+            padding: 6px 14px;
             background: var(--primary);
             color: white;
             border: none;
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
-        /* ============================================
-                   PROFILE
-                   ============================================ */
+        /* ===== প্রোফাইল ===== */
         .profile-header {
             text-align: center;
-            padding: 20px 0;
+            padding: 16px 0;
         }
-
         .profile-avatar {
-            width: 100px;
-            height: 100px;
+            width: 80px; height: 80px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--primary);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
-
-        .profile-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .profile-email {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .profile-bio {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin: 4px 0;
-        }
-
+        .profile-name { font-size: 1.2rem; font-weight: 700; }
+        .profile-email { color: var(--text-muted); font-size: 0.8rem; }
+        .profile-bio { color: var(--text-secondary); font-size: 0.85rem; margin: 4px 0; }
         .profile-stats {
             display: flex;
             justify-content: center;
-            gap: 32px;
-            margin: 12px 0 16px;
+            gap: 24px;
+            margin: 10px 0 14px;
         }
-
-        .profile-stat {
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .profile-stat .number {
-            font-weight: 700;
-            font-size: 1.1rem;
-            display: block;
-        }
-
-        .profile-stat .label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
+        .profile-stat { text-align: center; cursor: pointer; }
+        .profile-stat .number { font-weight: 700; font-size: 1rem; display: block; }
+        .profile-stat .label { font-size: 0.7rem; color: var(--text-muted); }
         .profile-actions {
             display: flex;
             gap: 8px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
-
         .profile-edit-input {
             width: 100%;
-            max-width: 300px;
-            padding: 8px 12px;
+            max-width: 280px;
+            padding: 6px 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             background: var(--bg-primary);
             color: var(--text-primary);
             margin: 4px auto;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        .profile-edit-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* ============================================
-                   SEARCH
-                   ============================================ */
+        /* ===== সার্চ ===== */
         .search-bar {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
-
         .search-bar input {
             flex: 1;
-            padding: 10px 16px;
+            padding: 8px 14px;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             background: var(--bg-primary);
             color: var(--text-primary);
         }
-
-        .search-bar input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .search-bar button {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
         .search-tabs {
             display: flex;
             gap: 0;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             border-radius: var(--radius-sm);
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
-
         .search-tab {
             flex: 1;
-            padding: 10px;
+            padding: 8px;
             background: var(--bg-secondary);
             border: none;
             color: var(--text-secondary);
             font-weight: 500;
             cursor: pointer;
+            font-size: 0.8rem;
             transition: all var(--transition);
-            font-size: 0.85rem;
         }
+        .search-tab.active { background: var(--primary); color: white; }
 
-        .search-tab.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .search-tab:hover:not(.active) {
-            background: var(--border-color);
-        }
-
-        /* ============================================
-                   NOTIFICATIONS
-                   ============================================ */
+        /* ===== নোটিফিকেশন ===== */
         .notification-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
+            gap: 10px;
+            padding: 10px 14px;
             background: var(--bg-card);
             border-radius: var(--radius-sm);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             border-left: 3px solid var(--primary);
             cursor: pointer;
-            transition: all var(--transition);
         }
-
-        .notification-item:hover {
-            background: var(--border-color);
-        }
-
+        .notification-item.unread { border-left-color: #e74c3c; background: var(--bg-primary); }
         .notification-item .avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px; height: 36px;
             border-radius: 50%;
             object-fit: cover;
-            flex-shrink: 0;
         }
+        .notification-item .content { flex: 1; }
+        .notification-item .content .text { font-size: 0.85rem; color: var(--text-secondary); }
+        .notification-item .content .time { font-size: 0.65rem; color: var(--text-muted); }
 
-        .notification-item .content {
-            flex: 1;
+        /* ===== ইউজার রেজাল্ট ===== */
+        .user-result {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
         }
-
-        .notification-item .content .text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .user-result:hover { background: var(--border-color); }
+        .user-result .avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
         }
-
-        .notification-item .content .text strong {
-            color: var(--text-primary);
-        }
-
-        .notification-item .content .time {
+        .user-result .info { flex: 1; }
+        .user-result .info .name { font-weight: 600; font-size: 0.9rem; }
+        .user-result .info .email { font-size: 0.75rem; color: var(--text-muted); }
+        .user-result .follow-btn {
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: none;
             font-size: 0.7rem;
-            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
         }
+        .user-result .follow-btn.following { background: var(--border-color); color: var(--text-secondary); }
+        .user-result .follow-btn.not-following { background: var(--primary); color: white; }
 
-        .notification-item.unread {
-            border-left-color: #e74c3c;
-            background: var(--bg-primary);
+        /* ===== অ্যাডমিন ===== */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
         }
+        .admin-stat-card {
+            background: var(--bg-card);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        .admin-stat-card .number { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .admin-stat-card .label { font-size: 0.65rem; color: var(--text-muted); }
+        .admin-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .admin-tab {
+            padding: 6px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            transition: all var(--transition);
+        }
+        .admin-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .admin-user-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .admin-user-item .avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .admin-user-item .info { flex: 1; }
+        .admin-user-item .info .name { font-weight: 600; font-size: 0.85rem; }
+        .admin-user-item .info .email { font-size: 0.7rem; color: var(--text-muted); }
 
-        /* ============================================
-                   MODAL
-                   ============================================ */
+        /* ===== মডাল ===== */
         .modal-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-
-        .modal-container.hidden {
-            display: none;
-        }
-
+        .modal-container.hidden { display: none; }
         .modal-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.5);
             backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
         }
-
         .modal-content {
             position: relative;
             background: var(--bg-secondary);
             border-radius: var(--radius);
-            padding: 24px;
-            max-width: 480px;
+            padding: 20px;
+            max-width: 460px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             z-index: 1;
             animation: modalSlideUp 0.3s ease;
         }
-
         @keyframes modalSlideUp {
             from { opacity: 0; transform: translateY(20px) scale(0.96); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
-
-        .modal-header h2 {
-            font-size: 1.2rem;
-        }
-
         .modal-close {
             background: none;
             border: none;
             font-size: 1.5rem;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 0 6px;
         }
 
-        /* ============================================
-                   USER SEARCH RESULT
-                   ============================================ */
-        .user-result {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all var(--transition);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .user-result:hover {
-            background: var(--border-color);
-        }
-
-        .user-result .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .user-result .info {
-            flex: 1;
-        }
-
-        .user-result .info .name {
-            font-weight: 600;
-        }
-
-        .user-result .info .email {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .user-result .follow-btn {
-            padding: 4px 14px;
-            border-radius: 12px;
-            border: none;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .user-result .follow-btn.following {
-            background: var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        .user-result .follow-btn.not-following {
-            background: var(--primary);
-            color: white;
-        }
-
-        .user-result .follow-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* ============================================
-                   ADMIN PANEL
-                   ============================================ */
-        .admin-panel {
-            padding: 16px 0;
-        }
-
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .admin-stat-card {
-            background: var(--bg-card);
-            padding: 16px;
-            border-radius: var(--radius-sm);
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .admin-stat-card .number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .admin-stat-card .label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        .admin-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .admin-tab {
-            padding: 8px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            transition: all var(--transition);
-        }
-
-        .admin-tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .admin-tab:hover:not(.active) {
-            background: var(--border-color);
-        }
-
-        .admin-user-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .admin-user-item .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .admin-user-item .info {
-            flex: 1;
-        }
-
-        .admin-user-item .info .name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .admin-user-item .info .email {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .admin-user-item .actions {
-            display: flex;
-            gap: 4px;
-        }
-
-        .admin-user-item .actions button {
-            padding: 4px 10px;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            cursor: pointer;
-        }
-
-        .admin-post-item {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .admin-post-item .content {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .admin-post-item .meta {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .admin-post-item .actions {
-            margin-top: 8px;
-        }
-
-        /* ============================================
-                   TOAST
-                   ============================================ */
+        /* ===== টোস্ট ===== */
         .toast {
             position: fixed;
             bottom: 80px;
@@ -1257,2051 +619,987 @@
             transform: translateX(-50%);
             background: var(--bg-card);
             color: var(--text-primary);
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-hover);
+            box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             z-index: 999;
-            animation: slideUp 0.3s ease;
             max-width: 90%;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            animation: slideUp 0.3s ease;
         }
+        .toast.hidden { display: none; }
 
-        .toast.hidden {
-            display: none;
-        }
-
-        /* ============================================
-                   EMPTY STATE
-                   ============================================ */
+        /* ===== খালি স্টেট ===== */
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
             color: var(--text-muted);
         }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 8px; opacity: 0.5; }
+        .empty-state h3 { color: var(--text-secondary); font-size: 1rem; }
 
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        /* ============================================
-                   RESPONSIVE
-                   ============================================ */
-        @media (max-width: 480px) {
-            .auth-card {
-                padding: 32px 20px;
-            }
-            
-            .post-card {
-                padding: 14px;
-            }
-            
-            .profile-stats {
-                gap: 20px;
-            }
-            
-            .profile-avatar {
-                width: 80px;
-                height: 80px;
-            }
-
-            .admin-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .dashboard-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 481px) {
-            .app-container {
-                border-left: 1px solid var(--border-color);
-                border-right: 1px solid var(--border-color);
-            }
-        }
-
-        /* ============================================
-                   UTILITIES
-                   ============================================ */
-        .hidden {
-            display: none !important;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-muted {
-            color: var(--text-muted);
-        }
-
+        /* ===== ইউটিলিটি ===== */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-muted); }
         .mt-8 { margin-top: 8px; }
-        .mt-16 { margin-top: 16px; }
         .mb-8 { margin-bottom: 8px; }
-        .mb-16 { margin-bottom: 16px; }
-
-        .flex-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         .gap-8 { gap: 8px; }
-        .gap-12 { gap: 12px; }
-
-        /* ============================================
-                   SCROLLBAR
-                   ============================================ */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 2px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
     </style>
 </head>
 <body>
 
-    <!-- ============================================
-    LOADING SCREEN
-    ============================================ -->
+    <!-- ===== লোডিং ===== -->
     <div id="loadingScreen">
         <div class="loader"></div>
-        <p>Loading AGLS...</p>
+        <p style="margin-top:12px;color:var(--text-secondary);">Loading AGLS...</p>
     </div>
 
-    <!-- ============================================
-    LOGIN PANEL
-    ============================================ -->
-    <div id="authContainer" class="auth-container">
-        <div class="auth-card">
-            <div class="auth-logo">AG</div>
-            <div class="auth-header">
-                <h1>AGLS</h1>
-                <p class="subtitle">Arabic Grammar Life Support</p>
-                <p class="tagline">Learn • Share • Connect</p>
-            </div>
-            
-            <button id="googleSignInBtn" class="auth-btn google-btn">
-                <i class="fab fa-google"></i>
-                Sign in with Google
-            </button>
-            
-            <div class="auth-divider">or</div>
-            
-            <div class="auth-features">
-                <p><i class="fas fa-check-circle"></i> Join our community of Arabic learners</p>
-                <p><i class="fas fa-check-circle"></i> Share knowledge and ask questions</p>
-                <p><i class="fas fa-check-circle"></i> Connect with fellow learners</p>
-            </div>
-            
-            <div class="auth-footer">
-                <p>By continuing, you agree to our <span class="highlight">Terms</span> and <span class="highlight">Privacy Policy</span></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================
-    MAIN APP CONTAINER
-    ============================================ -->
-    <div id="appContainer" class="app-container hidden">
-        
-        <!-- Header -->
+    <!-- ===== মেইন অ্যাপ ===== -->
+    <div id="appContainer">
+        <!-- হেডার -->
         <header class="app-header">
-            <div class="header-left">
-                <h1>AGLS</h1>
-            </div>
+            <div class="header-left"><h1>AGLS</h1></div>
             <div class="header-right">
                 <button id="adminPanelBtn" class="icon-btn hidden" title="Admin Panel">
                     <i class="fas fa-user-shield"></i>
                     <span class="admin-badge">Admin</span>
                 </button>
-                <button id="themeToggle" class="icon-btn">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button id="logoutBtn" class="icon-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+                <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
+                <button id="logoutBtn" class="icon-btn"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main id="mainContent" class="main-content">
-            <!-- Pages will be rendered here -->
-        </main>
+        <!-- মেইন কন্টেন্ট -->
+        <main class="main-content" id="mainContent"></main>
 
-        <!-- Bottom Navigation -->
+        <!-- নিচের নেভিগেশন -->
         <nav class="bottom-nav">
-            <button class="nav-item active" data-page="dashboard">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </button>
-            <button class="nav-item" data-page="explore">
-                <i class="fas fa-compass"></i>
-                <span>Explore</span>
-            </button>
-            <button class="nav-item" data-page="search">
-                <i class="fas fa-search"></i>
-                <span>Search</span>
-            </button>
+            <button class="nav-item active" data-page="dashboard"><i class="fas fa-home"></i><span>Home</span></button>
+            <button class="nav-item" data-page="explore"><i class="fas fa-compass"></i><span>Explore</span></button>
+            <button class="nav-item" data-page="search"><i class="fas fa-search"></i><span>Search</span></button>
             <button class="nav-item" data-page="notifications">
-                <i class="fas fa-bell"></i>
-                <span>Alerts</span>
+                <i class="fas fa-bell"></i><span>Alerts</span>
                 <span id="notificationBadge" class="badge hidden">0</span>
             </button>
-            <button class="nav-item" data-page="profile">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </button>
+            <button class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>Profile</span></button>
         </nav>
     </div>
 
-    <!-- ============================================
-    MODAL
-    ============================================ -->
+    <!-- ===== মডাল ===== -->
     <div id="modalContainer" class="modal-container hidden">
         <div class="modal-overlay"></div>
-        <div class="modal-content" id="modalContent">
-            <!-- Dynamic modal content -->
-        </div>
+        <div class="modal-content" id="modalContent"></div>
     </div>
 
-    <!-- ============================================
-    TOAST
-    ============================================ -->
+    <!-- ===== টোস্ট ===== -->
     <div id="toast" class="toast hidden"></div>
 
-    <!-- ============================================
-    FIREBASE SDK
-    ============================================ -->
+    <!-- ===== Firebase ===== -->
     <script type="importmap">
-        {
-            "imports": {
-                "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
-                "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
-                "firebase/database": "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"
-            }
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
+            "firebase/database": "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"
         }
+    }
     </script>
 
-    <!-- ============================================
-    MAIN APPLICATION
-    ============================================ -->
     <script type="module">
-        // ============================================
-        // IMPORTS
-        // ============================================
-        import { initializeApp } from 'firebase/app';
-        import { 
-            getAuth, 
-            signInWithPopup, 
-            GoogleAuthProvider, 
-            onAuthStateChanged,
-            signOut 
-        } from 'firebase/auth';
-        import { 
-            getDatabase, 
-            ref, 
-            push, 
-            set, 
-            get, 
-            update, 
-            remove, 
-            onValue, 
-            query, 
-            orderByChild, 
-            limitToLast 
-        } from 'firebase/database';
+    // ============================================
+    // IMPORTS
+    // ============================================
+    import { initializeApp } from 'firebase/app';
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
+    import { getDatabase, ref, push, set, get, update, remove, onValue, query, orderByChild, limitToLast } from 'firebase/database';
 
-        // ============================================
-        // FIREBASE CONFIG
-        // ============================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
-            authDomain: "all-hadith-a68fa.firebaseapp.com",
-            databaseURL: "https://all-hadith-a68fa-default-rtdb.firebaseio.com",
-            projectId: "all-hadith-a68fa",
-            storageBucket: "all-hadith-a68fa.firebasestorage.app",
-            messagingSenderId: "124928027736",
-            appId: "1:124928027736:web:7f0e8e0a771f244eca2e2d",
-            measurementId: "G-RF51PW2PLD"
+    // ============================================
+    // FIREBASE CONFIG
+    // ============================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
+        authDomain: "all-hadith-a68fa.firebaseapp.com",
+        databaseURL: "https://all-hadith-a68fa-default-rtdb.firebaseio.com",
+        projectId: "all-hadith-a68fa",
+        storageBucket: "all-hadith-a68fa.firebasestorage.app",
+        messagingSenderId: "124928027736",
+        appId: "1:124928027736:web:7f0e8e0a771f244eca2e2d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+
+    // ============================================
+    // STATE
+    // ============================================
+    let currentUser = null;
+    let currentUserData = null;
+    let isAdmin = false;
+    let feedListeners = {};
+    let notificationListeners = {};
+
+    // ============================================
+    // DOM
+    // ============================================
+    const loadingScreen = document.getElementById('loadingScreen');
+    const mainContent = document.getElementById('mainContent');
+    const modalContainer = document.getElementById('modalContainer');
+    const modalContent = document.getElementById('modalContent');
+    const toast = document.getElementById('toast');
+    const notificationBadge = document.getElementById('notificationBadge');
+    const adminPanelBtn = document.getElementById('adminPanelBtn');
+
+    // ============================================
+    // HELPERS
+    // ============================================
+    function showToast(msg, duration = 3000) {
+        toast.textContent = msg;
+        toast.classList.remove('hidden');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => toast.classList.add('hidden'), duration);
+    }
+
+    function openModal(html) { modalContent.innerHTML = html; modalContainer.classList.remove('hidden'); }
+    function closeModal() { modalContainer.classList.add('hidden'); }
+    document.querySelector('.modal-overlay')?.addEventListener('click', closeModal);
+
+    function formatDate(d) {
+        const date = new Date(d);
+        const now = new Date();
+        const diff = now - date;
+        if (diff < 60000) return 'Just now';
+        if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+        if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+        if (diff < 604800000) return Math.floor(diff/86400000) + 'd ago';
+        return date.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    }
+
+    function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function getAvatar(name, photo) { return photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2d7d46&color=fff&size=100`; }
+
+    // ============================================
+    // NAVIGATION
+    // ============================================
+    function navigateTo(page, params = null) {
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
+        renderPage(page, params);
+    }
+
+    function renderPage(page, params) {
+        switch(page) {
+            case 'dashboard': renderDashboard(); break;
+            case 'explore': renderExplore(); break;
+            case 'search': renderSearch(); break;
+            case 'notifications': renderNotifications(); break;
+            case 'profile': renderProfile(params?.userId || currentUser?.uid); break;
+            case 'admin': renderAdminPanel(); break;
+            default: renderDashboard();
+        }
+    }
+
+    // ============================================
+    // DASHBOARD
+    // ============================================
+    function renderDashboard() {
+        mainContent.innerHTML = `
+            <div class="page active">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
+                    <div class="admin-stat-card"><span class="number" id="dashPosts">0</span><span class="label">My Posts</span></div>
+                    <div class="admin-stat-card"><span class="number" id="dashFollowers">0</span><span class="label">Followers</span></div>
+                    <div class="admin-stat-card"><span class="number" id="dashFollowing">0</span><span class="label">Following</span></div>
+                </div>
+                <div class="create-post-area">
+                    <textarea id="postContent" placeholder="Share your Arabic grammar knowledge..." maxlength="5000"></textarea>
+                    <div class="create-post-footer">
+                        <input type="text" id="postTags" placeholder="Tags (comma separated)">
+                        <button id="submitPostBtn" class="btn-primary">Post</button>
+                    </div>
+                </div>
+                <div id="postsContainer"></div>
+            </div>
+        `;
+        loadDashboardStats();
+        loadFeed('postsContainer');
+        document.getElementById('submitPostBtn').addEventListener('click', async () => {
+            const content = document.getElementById('postContent').value.trim();
+            const tags = document.getElementById('postTags').value.split(',').map(t=>t.trim()).filter(t=>t);
+            if (content) { await createPost(content, tags); document.getElementById('postContent').value = ''; document.getElementById('postTags').value = ''; loadFeed('postsContainer'); loadDashboardStats(); }
+        });
+    }
+
+    async function loadDashboardStats() {
+        if (!currentUser) return;
+        try {
+            const snap = await get(ref(db, `users/${currentUser.uid}`));
+            if (snap.exists()) {
+                const d = snap.val();
+                document.getElementById('dashPosts').textContent = d.posts || 0;
+                document.getElementById('dashFollowers').textContent = d.followers || 0;
+                document.getElementById('dashFollowing').textContent = d.following || 0;
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    // ============================================
+    // EXPLORE
+    // ============================================
+    function renderExplore() {
+        mainContent.innerHTML = `<div class="page active"><h2 style="margin-bottom:12px;">Explore</h2><div id="exploreContainer"></div></div>`;
+        loadPopularPosts('exploreContainer');
+    }
+
+    // ============================================
+    // SEARCH
+    // ============================================
+    function renderSearch() {
+        mainContent.innerHTML = `
+            <div class="page active">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search users or posts..." autocomplete="off">
+                    <button id="searchBtn" class="btn-primary"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="search-tabs">
+                    <button class="search-tab active" data-search="users">Users</button>
+                    <button class="search-tab" data-search="posts">Posts</button>
+                </div>
+                <div id="searchResults"></div>
+            </div>
+        `;
+        setupSearch();
+    }
+
+    // ============================================
+    // NOTIFICATIONS
+    // ============================================
+    function renderNotifications() {
+        mainContent.innerHTML = `<div class="page active"><h2 style="margin-bottom:12px;">Notifications</h2><div id="notificationsContainer"></div></div>`;
+        loadNotifications('notificationsContainer');
+    }
+
+    // ============================================
+    // PROFILE
+    // ============================================
+    async function renderProfile(userId) {
+        mainContent.innerHTML = `<div class="page active"><div id="profileContainer"></div></div>`;
+        await loadProfile('profileContainer', userId);
+    }
+
+    // ============================================
+    // ADMIN PANEL
+    // ============================================
+    async function renderAdminPanel() {
+        if (!isAdmin) { showToast('Access denied'); navigateTo('dashboard'); return; }
+        mainContent.innerHTML = `
+            <div class="page active">
+                <div class="admin-panel">
+                    <h2 style="margin-bottom:12px;">Admin Panel</h2>
+                    <div class="admin-stats">
+                        <div class="admin-stat-card"><span class="number" id="statUsers">0</span><span class="label">Users</span></div>
+                        <div class="admin-stat-card"><span class="number" id="statPosts">0</span><span class="label">Posts</span></div>
+                        <div class="admin-stat-card"><span class="number" id="statComments">0</span><span class="label">Comments</span></div>
+                    </div>
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" data-admin="users">Users</button>
+                        <button class="admin-tab" data-admin="posts">Posts</button>
+                        <button class="admin-tab" data-admin="reports">Reports</button>
+                    </div>
+                    <div id="adminContent"></div>
+                </div>
+            </div>
+        `;
+        await loadAdminStats();
+        await loadAdminUsers();
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', async () => {
+                document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+                tab.classList.add('active');
+                const name = tab.dataset.admin;
+                if (name === 'users') await loadAdminUsers();
+                else if (name === 'posts') await loadAdminPosts();
+                else if (name === 'reports') await loadAdminReports();
+            });
+        });
+    }
+
+    // ============================================
+    // POSTS
+    // ============================================
+    async function createPost(content, tags) {
+        if (!currentUser) { showToast('Please login'); return; }
+        const postData = {
+            authorId: currentUser.uid,
+            authorName: currentUserData?.name || currentUser.displayName || 'User',
+            authorPhoto: currentUserData?.photoURL || currentUser.photoURL || '',
+            content: content.trim(),
+            tags: tags || [],
+            date: new Date().toISOString(),
+            likes: 0, comments: 0
         };
+        try {
+            const newRef = push(ref(db, 'posts'));
+            await set(newRef, postData);
+            const userSnap = await get(ref(db, `users/${currentUser.uid}`));
+            if (userSnap.exists()) await update(ref(db, `users/${currentUser.uid}`), { posts: (userSnap.val().posts||0)+1 });
+            showToast('Post published!');
+        } catch(e) { console.error(e); showToast('Failed to create post'); }
+    }
 
-        // ============================================
-        // INIT FIREBASE
-        // ============================================
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
-        const provider = new GoogleAuthProvider();
-
-        // ============================================
-        // APP STATE
-        // ============================================
-        let currentUser = null;
-        let currentUserData = null;
-        let currentPage = 'dashboard';
-        let isAdmin = false;
-        let feedListeners = {};
-        let notificationListeners = {};
-
-        // ============================================
-        // DOM ELEMENTS
-        // ============================================
-        const loadingScreen = document.getElementById('loadingScreen');
-        const authContainer = document.getElementById('authContainer');
-        const appContainer = document.getElementById('appContainer');
-        const mainContent = document.getElementById('mainContent');
-        const modalContainer = document.getElementById('modalContainer');
-        const modalContent = document.getElementById('modalContent');
-        const toast = document.getElementById('toast');
-        const notificationBadge = document.getElementById('notificationBadge');
-        const adminPanelBtn = document.getElementById('adminPanelBtn');
-
-        // ============================================
-        // TOAST
-        // ============================================
-        function showToast(message, duration = 3000) {
-            toast.textContent = message;
-            toast.classList.remove('hidden');
-            clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => {
-                toast.classList.add('hidden');
-            }, duration);
-        }
-
-        // ============================================
-        // MODAL
-        // ============================================
-        function openModal(html) {
-            modalContent.innerHTML = html;
-            modalContainer.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            modalContainer.classList.add('hidden');
-        }
-
-        document.querySelector('.modal-overlay').addEventListener('click', closeModal);
-
-        // ============================================
-        // HELPERS
-        // ============================================
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diff = now - date;
-            
-            if (diff < 60000) return 'Just now';
-            if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
-            if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
-            if (diff < 604800000) return Math.floor(diff / 86400000) + 'd ago';
-            
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function getAvatarUrl(name, photoURL) {
-            return photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2d7d46&color=fff&size=100`;
-        }
-
-        // ============================================
-        // AUTH
-        // ============================================
-        async function signInWithGoogle() {
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                await saveUserToDatabase(user);
-                showToast('Welcome to AGLS!');
-                return user;
-            } catch (error) {
-                console.error('Google Sign In Error:', error);
-                showToast('Sign in failed. Please try again.');
-                throw error;
+    async function deletePost(postId) {
+        if (!currentUser) return;
+        try {
+            const postSnap = await get(ref(db, `posts/${postId}`));
+            if (!postSnap.exists()) return;
+            const postData = postSnap.val();
+            if (postData.authorId !== currentUser.uid && !isAdmin) { showToast('Not your post'); return; }
+            await remove(ref(db, `posts/${postId}`));
+            if (postData.authorId === currentUser.uid) {
+                const userSnap = await get(ref(db, `users/${currentUser.uid}`));
+                if (userSnap.exists()) await update(ref(db, `users/${currentUser.uid}`), { posts: Math.max(0, (userSnap.val().posts||0)-1) });
             }
-        }
+            await remove(ref(db, `comments/${postId}`));
+            await remove(ref(db, `likes/${postId}`));
+            showToast('Post deleted');
+        } catch(e) { console.error(e); showToast('Failed to delete'); }
+    }
 
-        async function saveUserToDatabase(user) {
-            const userRef = ref(db, `users/${user.uid}`);
-            const snapshot = await get(userRef);
-            
-            if (!snapshot.exists()) {
-                await set(userRef, {
-                    uid: user.uid,
-                    name: user.displayName || 'User',
-                    email: user.email,
-                    photoURL: user.photoURL || '',
-                    bio: '',
-                    joinDate: new Date().toISOString(),
-                    followers: 0,
-                    following: 0,
-                    posts: 0,
-                    isAdmin: false
-                });
+    function loadFeed(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (feedListeners.feed) { feedListeners.feed.off(); delete feedListeners.feed; }
+        const q = query(ref(db, 'posts'), orderByChild('date'), limitToLast(50));
+        feedListeners.feed = q;
+        onValue(q, (snap) => {
+            const posts = [];
+            snap.forEach(c => { const p = c.val(); p.id = c.key; posts.push(p); });
+            posts.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderPosts(posts, container);
+        });
+    }
+
+    function loadPopularPosts(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (feedListeners.popular) { feedListeners.popular.off(); delete feedListeners.popular; }
+        const q = query(ref(db, 'posts'), orderByChild('likes'), limitToLast(20));
+        feedListeners.popular = q;
+        onValue(q, (snap) => {
+            const posts = [];
+            snap.forEach(c => { const p = c.val(); p.id = c.key; posts.push(p); });
+            posts.sort((a,b) => b.likes - a.likes);
+            renderPosts(posts, container);
+        });
+    }
+
+    function renderPosts(posts, container) {
+        if (!posts || posts.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>No posts yet</h3></div>`;
+            return;
+        }
+        container.innerHTML = posts.map(p => createPostHTML(p)).join('');
+        container.querySelectorAll('.post-card').forEach(card => {
+            const pid = card.dataset.postId;
+            const likeBtn = card.querySelector('.like-btn');
+            if (likeBtn) { likeBtn.addEventListener('click', ()=>handleLike(pid, likeBtn)); checkLikeStatus(pid, likeBtn); }
+            const commentBtn = card.querySelector('.comment-btn');
+            if (commentBtn) commentBtn.addEventListener('click', ()=>openCommentModal(pid));
+            const deleteBtn = card.querySelector('.delete-btn');
+            if (deleteBtn) deleteBtn.addEventListener('click', async ()=>{ if(confirm('Delete?')) { await deletePost(pid); loadFeed('postsContainer'); loadDashboardStats(); } });
+            const editBtn = card.querySelector('.edit-btn');
+            if (editBtn) editBtn.addEventListener('click', ()=>{ const c = card.querySelector('.post-content').textContent; const t = posts.find(p=>p.id===pid)?.tags||[]; openEditModal(pid, c, t.join(', ')); });
+            const author = card.querySelector('.post-author');
+            if (author) author.addEventListener('click', ()=>{ const aid = posts.find(p=>p.id===pid)?.authorId; if(aid) navigateTo('profile',{userId:aid}); });
+        });
+    }
+
+    function createPostHTML(post) {
+        const isOwner = currentUser && post.authorId === currentUser.uid;
+        const canDelete = isOwner || isAdmin;
+        return `
+            <div class="post-card" data-post-id="${post.id}">
+                <div class="post-header">
+                    <img class="post-avatar" src="${getAvatar(post.authorName, post.authorPhoto)}" alt="${escapeHtml(post.authorName)}">
+                    <div><div class="post-author">${escapeHtml(post.authorName)}</div><span class="post-date">${formatDate(post.date)}${post.edited?' (edited)':''}</span></div>
+                </div>
+                <div class="post-content">${escapeHtml(post.content)}</div>
+                ${post.tags?.length ? `<div class="post-tags">${post.tags.map(t=>`<span class="post-tag">#${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+                <div class="post-actions">
+                    <button class="post-action-btn like-btn"><i class="far fa-heart"></i> <span class="count">${post.likes||0}</span></button>
+                    <button class="post-action-btn comment-btn"><i class="far fa-comment"></i> <span class="count">${post.comments||0}</span></button>
+                    ${isOwner ? `<button class="post-action-btn edit-btn"><i class="fas fa-edit"></i></button>` : ''}
+                    ${canDelete ? `<button class="post-action-btn delete-btn"><i class="fas fa-trash"></i></button>` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    // ============================================
+    // LIKES
+    // ============================================
+    async function handleLike(postId, btn) {
+        if (!currentUser) { showToast('Please login'); return; }
+        const isLiked = btn.classList.contains('liked');
+        const countEl = btn.querySelector('.count');
+        const current = parseInt(countEl.textContent) || 0;
+        try {
+            const likeRef = ref(db, `likes/${postId}/${currentUser.uid}`);
+            const postRef = ref(db, `posts/${postId}`);
+            if (isLiked) {
+                await remove(likeRef);
+                await update(postRef, { likes: current - 1 });
+                btn.classList.remove('liked');
+                btn.querySelector('i').className = 'far fa-heart';
+                countEl.textContent = current - 1;
             } else {
-                const data = snapshot.val();
-                await update(userRef, {
-                    name: user.displayName || data.name,
-                    photoURL: user.photoURL || data.photoURL,
-                    lastLogin: new Date().toISOString()
-                });
-            }
-        }
-
-        async function logoutUser() {
-            try {
-                await signOut(auth);
-                showToast('Logged out successfully');
-            } catch (error) {
-                console.error('Logout Error:', error);
-            }
-        }
-
-        // ============================================
-        // NAVIGATION
-        // ============================================
-        function navigateTo(page, params = null) {
-            currentPage = page;
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.toggle('active', item.dataset.page === page);
-            });
-            
-            renderPage(page, params);
-        }
-
-        function renderPage(page, params) {
-            switch(page) {
-                case 'dashboard':
-                    renderDashboard();
-                    break;
-                case 'explore':
-                    renderExplore();
-                    break;
-                case 'search':
-                    renderSearch();
-                    break;
-                case 'notifications':
-                    renderNotifications();
-                    break;
-                case 'profile':
-                    renderProfile(params?.userId || currentUser?.uid);
-                    break;
-                case 'admin':
-                    renderAdminPanel();
-                    break;
-                default:
-                    renderDashboard();
-            }
-        }
-
-        // ============================================
-        // DASHBOARD
-        // ============================================
-        function renderDashboard() {
-            mainContent.innerHTML = `
-                <div class="page active">
-                    <div class="dashboard-stats" id="dashboardStats">
-                        <div class="stat-card">
-                            <span class="number" id="dashPosts">0</span>
-                            <span class="label">My Posts</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="number" id="dashFollowers">0</span>
-                            <span class="label">Followers</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="number" id="dashFollowing">0</span>
-                            <span class="label">Following</span>
-                        </div>
-                    </div>
-                    
-                    <div class="create-post-area" id="createPostArea">
-                        <textarea id="postContent" placeholder="Share your Arabic grammar knowledge..." maxlength="5000"></textarea>
-                        <div class="create-post-footer">
-                            <input type="text" id="postTags" placeholder="Add tags (comma separated)">
-                            <button id="submitPostBtn" class="btn-primary">Post</button>
-                        </div>
-                    </div>
-                    <div id="postsContainer"></div>
-                </div>
-            `;
-            
-            loadDashboardStats();
-            loadFeed('postsContainer');
-            
-            document.getElementById('submitPostBtn').addEventListener('click', async () => {
-                const content = document.getElementById('postContent').value.trim();
-                const tags = document.getElementById('postTags').value.split(',').map(t => t.trim()).filter(t => t);
-                if (content) {
-                    await createPost(content, tags);
-                    document.getElementById('postContent').value = '';
-                    document.getElementById('postTags').value = '';
-                    loadFeed('postsContainer');
-                    loadDashboardStats();
-                }
-            });
-        }
-
-        async function loadDashboardStats() {
-            if (!currentUser) return;
-            
-            try {
-                const userRef = ref(db, `users/${currentUser.uid}`);
-                const userSnap = await get(userRef);
-                if (userSnap.exists()) {
-                    const data = userSnap.val();
-                    document.getElementById('dashPosts').textContent = data.posts || 0;
-                    document.getElementById('dashFollowers').textContent = data.followers || 0;
-                    document.getElementById('dashFollowing').textContent = data.following || 0;
-                }
-            } catch (error) {
-                console.error('Load Dashboard Stats Error:', error);
-            }
-        }
-
-        // ============================================
-        // EXPLORE
-        // ============================================
-        function renderExplore() {
-            mainContent.innerHTML = `
-                <div class="page active">
-                    <h2 style="margin-bottom:12px;">Explore</h2>
-                    <div id="exploreContainer"></div>
-                </div>
-            `;
-            loadPopularPosts('exploreContainer');
-        }
-
-        // ============================================
-        // SEARCH
-        // ============================================
-        function renderSearch() {
-            mainContent.innerHTML = `
-                <div class="page active">
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Search users or posts..." autocomplete="off">
-                        <button id="searchBtn"><i class="fas fa-search"></i></button>
-                    </div>
-                    <div class="search-tabs">
-                        <button class="search-tab active" data-search="users">Users</button>
-                        <button class="search-tab" data-search="posts">Posts</button>
-                    </div>
-                    <div id="searchResults"></div>
-                </div>
-            `;
-            
-            setupSearch();
-        }
-
-        // ============================================
-        // NOTIFICATIONS
-        // ============================================
-        function renderNotifications() {
-            mainContent.innerHTML = `
-                <div class="page active">
-                    <h2 style="margin-bottom:12px;">Notifications</h2>
-                    <div id="notificationsContainer"></div>
-                </div>
-            `;
-            loadNotifications('notificationsContainer');
-        }
-
-        // ============================================
-        // PROFILE
-        // ============================================
-        async function renderProfile(userId) {
-            mainContent.innerHTML = `
-                <div class="page active">
-                    <div id="profileContainer"></div>
-                </div>
-            `;
-            await loadProfile('profileContainer', userId);
-        }
-
-        // ============================================
-        // ADMIN PANEL
-        // ============================================
-        async function renderAdminPanel() {
-            if (!isAdmin) {
-                showToast('Access denied. Admin only.');
-                navigateTo('dashboard');
-                return;
-            }
-            
-            mainContent.innerHTML = `
-                <div class="page active">
-                    <div class="admin-panel">
-                        <h2 style="margin-bottom:16px;">Admin Panel</h2>
-                        
-                        <div class="admin-stats" id="adminStats">
-                            <div class="admin-stat-card">
-                                <span class="number" id="statUsers">0</span>
-                                <span class="label">Total Users</span>
-                            </div>
-                            <div class="admin-stat-card">
-                                <span class="number" id="statPosts">0</span>
-                                <span class="label">Total Posts</span>
-                            </div>
-                            <div class="admin-stat-card">
-                                <span class="number" id="statComments">0</span>
-                                <span class="label">Total Comments</span>
-                            </div>
-                        </div>
-                        
-                        <div class="admin-tabs">
-                            <button class="admin-tab active" data-admin="users">Users</button>
-                            <button class="admin-tab" data-admin="posts">Posts</button>
-                            <button class="admin-tab" data-admin="reports">Reports</button>
-                        </div>
-                        
-                        <div id="adminContent"></div>
-                    </div>
-                </div>
-            `;
-            
-            await loadAdminStats();
-            await loadAdminUsers();
-            
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.addEventListener('click', async () => {
-                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    
-                    const tabName = tab.dataset.admin;
-                    if (tabName === 'users') await loadAdminUsers();
-                    else if (tabName === 'posts') await loadAdminPosts();
-                    else if (tabName === 'reports') await loadAdminReports();
-                });
-            });
-        }
-
-        // ============================================
-        // POSTS
-        // ============================================
-        async function createPost(content, tags) {
-            if (!currentUser) {
-                showToast('Please login to post');
-                return;
-            }
-            
-            const postData = {
-                authorId: currentUser.uid,
-                authorName: currentUserData?.name || currentUser.displayName || 'User',
-                authorPhoto: currentUserData?.photoURL || currentUser.photoURL || '',
-                content: content.trim(),
-                tags: tags || [],
-                date: new Date().toISOString(),
-                likes: 0,
-                comments: 0
-            };
-            
-            try {
-                const postsRef = ref(db, 'posts');
-                const newPostRef = push(postsRef);
-                await set(newPostRef, postData);
-                
-                const userRef = ref(db, `users/${currentUser.uid}`);
-                const userSnap = await get(userRef);
-                if (userSnap.exists()) {
-                    const currentPosts = userSnap.val().posts || 0;
-                    await update(userRef, { posts: currentPosts + 1 });
-                }
-                
-                showToast('Post published successfully!');
-                return newPostRef.key;
-            } catch (error) {
-                console.error('Create Post Error:', error);
-                showToast('Failed to create post');
-            }
-        }
-
-        async function deletePost(postId) {
-            if (!currentUser) return;
-            
-            try {
-                const postRef = ref(db, `posts/${postId}`);
+                await set(likeRef, { userId: currentUser.uid, userName: currentUserData?.name || currentUser.displayName, date: new Date().toISOString() });
+                await update(postRef, { likes: current + 1 });
+                btn.classList.add('liked');
+                btn.querySelector('i').className = 'fas fa-heart';
+                countEl.textContent = current + 1;
                 const postSnap = await get(postRef);
-                
-                if (!postSnap.exists()) return;
-                
-                const postData = postSnap.val();
-                
-                if (postData.authorId !== currentUser.uid && !isAdmin) {
-                    showToast('You can only delete your own posts');
-                    return;
+                if (postSnap.exists() && postSnap.val().authorId !== currentUser.uid) {
+                    await sendNotification(postSnap.val().authorId, 'like', { postId, fromUserId: currentUser.uid, fromUserName: currentUserData?.name || currentUser.displayName, fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL });
                 }
-                
-                await remove(postRef);
-                
-                if (postData.authorId === currentUser.uid) {
-                    const userRef = ref(db, `users/${currentUser.uid}`);
-                    const userSnap = await get(userRef);
-                    if (userSnap.exists()) {
-                        const currentPosts = userSnap.val().posts || 0;
-                        await update(userRef, { posts: Math.max(0, currentPosts - 1) });
-                    }
-                }
-                
-                await remove(ref(db, `comments/${postId}`));
-                await remove(ref(db, `likes/${postId}`));
-                
-                showToast('Post deleted');
-                return true;
-            } catch (error) {
-                console.error('Delete Post Error:', error);
-                showToast('Failed to delete post');
             }
-        }
+        } catch(e) { console.error(e); }
+    }
 
-        async function editPost(postId, newContent, newTags) {
-            if (!currentUser) return;
-            
-            try {
-                const postRef = ref(db, `posts/${postId}`);
-                const postSnap = await get(postRef);
-                
-                if (!postSnap.exists()) return;
-                
-                const postData = postSnap.val();
-                
-                if (postData.authorId !== currentUser.uid) {
-                    showToast('You can only edit your own posts');
-                    return;
+    async function checkLikeStatus(postId, btn) {
+        if (!currentUser) return;
+        try {
+            const snap = await get(ref(db, `likes/${postId}/${currentUser.uid}`));
+            if (snap.exists()) { btn.classList.add('liked'); btn.querySelector('i').className = 'fas fa-heart'; }
+        } catch(e) {}
+    }
+
+    // ============================================
+    // COMMENTS
+    // ============================================
+    async function addComment(postId, content) {
+        if (!currentUser) { showToast('Please login'); return; }
+        if (!content.trim()) return;
+        try {
+            const newRef = push(ref(db, `comments/${postId}`));
+            await set(newRef, { authorId: currentUser.uid, authorName: currentUserData?.name || currentUser.displayName, authorPhoto: currentUserData?.photoURL || currentUser.photoURL, content: content.trim(), date: new Date().toISOString() });
+            const postSnap = await get(ref(db, `posts/${postId}`));
+            if (postSnap.exists()) {
+                await update(ref(db, `posts/${postId}`), { comments: (postSnap.val().comments||0) + 1 });
+                if (postSnap.val().authorId !== currentUser.uid) {
+                    await sendNotification(postSnap.val().authorId, 'comment', { postId, fromUserId: currentUser.uid, fromUserName: currentUserData?.name || currentUser.displayName, fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL, comment: content.trim().substring(0,50) });
                 }
-                
-                await update(postRef, {
-                    content: newContent.trim(),
-                    tags: newTags || [],
-                    edited: true,
-                    editedDate: new Date().toISOString()
-                });
-                
-                showToast('Post updated');
-                return true;
-            } catch (error) {
-                console.error('Edit Post Error:', error);
-                showToast('Failed to edit post');
             }
-        }
+            showToast('Comment added');
+        } catch(e) { console.error(e); showToast('Failed to add comment'); }
+    }
 
-        function loadFeed(containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            if (feedListeners.feed) {
-                feedListeners.feed.off();
-                delete feedListeners.feed;
-            }
-            
-            const postsRef = ref(db, 'posts');
-            const postsQuery = query(postsRef, orderByChild('date'), limitToLast(50));
-            
-            feedListeners.feed = postsQuery;
-            
-            onValue(postsQuery, (snapshot) => {
-                const posts = [];
-                snapshot.forEach((childSnapshot) => {
-                    const post = childSnapshot.val();
-                    post.id = childSnapshot.key;
-                    posts.push(post);
-                });
-                
-                posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-                renderPosts(posts, container);
-            }, (error) => {
-                console.error('Load Feed Error:', error);
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><h3>Error loading posts</h3><p>Please try again later</p></div>`;
-            });
-        }
+    async function deleteComment(postId, commentId) {
+        if (!currentUser) return;
+        try {
+            const snap = await get(ref(db, `comments/${postId}/${commentId}`));
+            if (!snap.exists()) return;
+            if (snap.val().authorId !== currentUser.uid && !isAdmin) { showToast('Not your comment'); return; }
+            await remove(ref(db, `comments/${postId}/${commentId}`));
+            const postSnap = await get(ref(db, `posts/${postId}`));
+            if (postSnap.exists()) await update(ref(db, `posts/${postId}`), { comments: Math.max(0, (postSnap.val().comments||0)-1) });
+        } catch(e) { console.error(e); }
+    }
 
-        function loadPopularPosts(containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            if (feedListeners.popular) {
-                feedListeners.popular.off();
-                delete feedListeners.popular;
-            }
-            
-            const postsRef = ref(db, 'posts');
-            const postsQuery = query(postsRef, orderByChild('likes'), limitToLast(20));
-            
-            feedListeners.popular = postsQuery;
-            
-            onValue(postsQuery, (snapshot) => {
-                const posts = [];
-                snapshot.forEach((childSnapshot) => {
-                    const post = childSnapshot.val();
-                    post.id = childSnapshot.key;
-                    posts.push(post);
-                });
-                
-                posts.sort((a, b) => b.likes - a.likes);
-                renderPosts(posts, container);
-            });
-        }
+    function loadComments(postId, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (feedListeners[`comments_${postId}`]) { feedListeners[`comments_${postId}`].off(); delete feedListeners[`comments_${postId}`]; }
+        const commentsRef = ref(db, `comments/${postId}`);
+        feedListeners[`comments_${postId}`] = commentsRef;
+        onValue(commentsRef, (snap) => {
+            const comments = [];
+            snap.forEach(c => { const cm = c.val(); cm.id = c.key; comments.push(cm); });
+            comments.sort((a,b) => new Date(a.date) - new Date(b.date));
+            renderComments(comments, container, postId);
+        });
+    }
 
-        function renderPosts(posts, container) {
-            if (!posts || posts.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-file-alt"></i>
-                        <h3>No posts yet</h3>
-                        <p>Be the first to share your knowledge!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const html = posts.map(post => createPostHTML(post)).join('');
-            container.innerHTML = html;
-            
-            container.querySelectorAll('.post-card').forEach(card => {
-                const postId = card.dataset.postId;
-                
-                const likeBtn = card.querySelector('.like-btn');
-                if (likeBtn) {
-                    likeBtn.addEventListener('click', () => handleLike(postId, likeBtn));
-                    checkLikeStatus(postId, likeBtn);
-                }
-                
-                const commentBtn = card.querySelector('.comment-btn');
-                if (commentBtn) {
-                    commentBtn.addEventListener('click', () => openCommentModal(postId));
-                }
-                
-                const deleteBtn = card.querySelector('.delete-btn');
-                if (deleteBtn) {
-                    deleteBtn.addEventListener('click', async () => {
-                        if (confirm('Delete this post?')) {
-                            await deletePost(postId);
-                            loadFeed('postsContainer');
-                            loadDashboardStats();
-                        }
-                    });
-                }
-                
-                const editBtn = card.querySelector('.edit-btn');
-                if (editBtn) {
-                    editBtn.addEventListener('click', () => {
-                        const content = card.querySelector('.post-content').textContent;
-                        const tags = posts.find(p => p.id === postId)?.tags || [];
-                        openEditModal(postId, content, tags.join(', '));
-                    });
-                }
-                
-                const authorEl = card.querySelector('.post-author');
-                if (authorEl) {
-                    authorEl.addEventListener('click', () => {
-                        const authorId = posts.find(p => p.id === postId)?.authorId;
-                        if (authorId) navigateTo('profile', { userId: authorId });
-                    });
-                }
-                
-                const avatarEl = card.querySelector('.post-avatar');
-                if (avatarEl) {
-                    avatarEl.addEventListener('click', () => {
-                        const authorId = posts.find(p => p.id === postId)?.authorId;
-                        if (authorId) navigateTo('profile', { userId: authorId });
-                    });
-                }
-            });
+    function renderComments(comments, container, postId) {
+        if (!comments || comments.length === 0) {
+            container.innerHTML = `<div class="empty-state" style="padding:12px;"><p style="font-size:0.85rem;">No comments yet</p></div>`;
+            return;
         }
-
-        function createPostHTML(post) {
-            const isOwner = currentUser && post.authorId === currentUser.uid;
-            const canDelete = isOwner || isAdmin;
-            
-            return `
-                <div class="post-card" data-post-id="${post.id}">
-                    <div class="post-header">
-                        <img class="post-avatar" src="${getAvatarUrl(post.authorName, post.authorPhoto)}" alt="${escapeHtml(post.authorName)}">
-                        <div>
-                            <div class="post-author">${escapeHtml(post.authorName)}</div>
-                            <span class="post-date">${formatDate(post.date)}${post.edited ? ' (edited)' : ''}</span>
-                        </div>
-                    </div>
-                    <div class="post-content">${escapeHtml(post.content)}</div>
-                    ${post.tags && post.tags.length > 0 ? `
-                        <div class="post-tags">
-                            ${post.tags.map(tag => `<span class="post-tag">#${escapeHtml(tag)}</span>`).join('')}
-                        </div>
-                    ` : ''}
-                    <div class="post-actions">
-                        <button class="post-action-btn like-btn" data-post="${post.id}">
-                            <i class="far fa-heart"></i>
-                            <span class="count">${post.likes || 0}</span>
-                        </button>
-                        <button class="post-action-btn comment-btn" data-post="${post.id}">
-                            <i class="far fa-comment"></i>
-                            <span class="count">${post.comments || 0}</span>
-                        </button>
-                        ${isOwner ? `
-                            <button class="post-action-btn edit-btn" data-post="${post.id}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        ` : ''}
-                        ${canDelete ? `
-                            <button class="post-action-btn delete-btn" data-post="${post.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        ` : ''}
+        container.innerHTML = comments.map(c => `
+            <div class="comment-item" data-comment="${c.id}">
+                <img class="comment-avatar" src="${getAvatar(c.authorName, c.authorPhoto)}">
+                <div class="comment-body">
+                    <span class="comment-author">${escapeHtml(c.authorName)}</span>
+                    <div class="comment-text">${escapeHtml(c.content)}</div>
+                    <div class="comment-actions">
+                        <span class="comment-date">${formatDate(c.date)}</span>
+                        ${(currentUser && (c.authorId === currentUser.uid || isAdmin)) ? `<button class="delete-comment" data-post="${postId}" data-comment="${c.id}" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.7rem;">Delete</button>` : ''}
                     </div>
                 </div>
-            `;
-        }
-
-        // ============================================
-        // LIKES
-        // ============================================
-        async function handleLike(postId, btnElement) {
-            if (!currentUser) {
-                showToast('Please login to like posts');
-                return;
-            }
-            
-            const isLiked = btnElement.classList.contains('liked');
-            const countEl = btnElement.querySelector('.count');
-            const currentCount = parseInt(countEl.textContent) || 0;
-            
-            try {
-                const likeRef = ref(db, `likes/${postId}/${currentUser.uid}`);
-                const postRef = ref(db, `posts/${postId}`);
-                
-                if (isLiked) {
-                    await remove(likeRef);
-                    await update(postRef, { likes: currentCount - 1 });
-                    btnElement.classList.remove('liked');
-                    btnElement.querySelector('i').className = 'far fa-heart';
-                    countEl.textContent = currentCount - 1;
-                } else {
-                    await set(likeRef, {
-                        userId: currentUser.uid,
-                        userName: currentUserData?.name || currentUser.displayName || 'User',
-                        date: new Date().toISOString()
-                    });
-                    await update(postRef, { likes: currentCount + 1 });
-                    btnElement.classList.add('liked');
-                    btnElement.querySelector('i').className = 'fas fa-heart';
-                    countEl.textContent = currentCount + 1;
-                    
-                    const postSnap = await get(postRef);
-                    if (postSnap.exists()) {
-                        const postData = postSnap.val();
-                        if (postData.authorId !== currentUser.uid) {
-                            await sendNotification(postData.authorId, 'like', {
-                                postId: postId,
-                                fromUserId: currentUser.uid,
-                                fromUserName: currentUserData?.name || currentUser.displayName || 'User',
-                                fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL || ''
-                            });
-                        }
-                    }
+            </div>
+        `).join('');
+        container.querySelectorAll('.delete-comment').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (confirm('Delete this comment?')) {
+                    await deleteComment(btn.dataset.post, btn.dataset.comment);
+                    loadComments(btn.dataset.post, container.id);
                 }
-            } catch (error) {
-                console.error('Like Error:', error);
-            }
-        }
-
-        async function checkLikeStatus(postId, btnElement) {
-            if (!currentUser) return;
-            
-            try {
-                const likeRef = ref(db, `likes/${postId}/${currentUser.uid}`);
-                const snapshot = await get(likeRef);
-                if (snapshot.exists()) {
-                    btnElement.classList.add('liked');
-                    btnElement.querySelector('i').className = 'fas fa-heart';
-                }
-            } catch (error) {
-                // Ignore
-            }
-        }
-
-        // ============================================
-        // COMMENTS
-        // ============================================
-        async function addComment(postId, content) {
-            if (!currentUser) {
-                showToast('Please login to comment');
-                return;
-            }
-            
-            if (!content.trim()) return;
-            
-            try {
-                const commentRef = ref(db, `comments/${postId}`);
-                const newCommentRef = push(commentRef);
-                
-                await set(newCommentRef, {
-                    authorId: currentUser.uid,
-                    authorName: currentUserData?.name || currentUser.displayName || 'User',
-                    authorPhoto: currentUserData?.photoURL || currentUser.photoURL || '',
-                    content: content.trim(),
-                    date: new Date().toISOString(),
-                    likes: 0
-                });
-                
-                const postRef = ref(db, `posts/${postId}`);
-                const postSnap = await get(postRef);
-                if (postSnap.exists()) {
-                    const postData = postSnap.val();
-                    await update(postRef, { comments: (postData.comments || 0) + 1 });
-                    
-                    if (postData.authorId !== currentUser.uid) {
-                        await sendNotification(postData.authorId, 'comment', {
-                            postId: postId,
-                            fromUserId: currentUser.uid,
-                            fromUserName: currentUserData?.name || currentUser.displayName || 'User',
-                            fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL || '',
-                            comment: content.trim().substring(0, 50)
-                        });
-                    }
-                }
-                
-                showToast('Comment added');
-                return true;
-            } catch (error) {
-                console.error('Add Comment Error:', error);
-                showToast('Failed to add comment');
-            }
-        }
-
-        async function deleteComment(postId, commentId) {
-            if (!currentUser) return;
-            
-            try {
-                const commentRef = ref(db, `comments/${postId}/${commentId}`);
-                const commentSnap = await get(commentRef);
-                
-                if (!commentSnap.exists()) return;
-                
-                const commentData = commentSnap.val();
-                
-                if (commentData.authorId !== currentUser.uid && !isAdmin) {
-                    showToast('You can only delete your own comments');
-                    return;
-                }
-                
-                await remove(commentRef);
-                
-                const postRef = ref(db, `posts/${postId}`);
-                const postSnap = await get(postRef);
-                if (postSnap.exists()) {
-                    const postData = postSnap.val();
-                    await update(postRef, { comments: Math.max(0, (postData.comments || 0) - 1) });
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('Delete Comment Error:', error);
-            }
-        }
-
-        function loadComments(postId, containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            if (feedListeners[`comments_${postId}`]) {
-                feedListeners[`comments_${postId}`].off();
-                delete feedListeners[`comments_${postId}`];
-            }
-            
-            const commentsRef = ref(db, `comments/${postId}`);
-            
-            feedListeners[`comments_${postId}`] = commentsRef;
-            
-            onValue(commentsRef, (snapshot) => {
-                const comments = [];
-                snapshot.forEach((childSnapshot) => {
-                    const comment = childSnapshot.val();
-                    comment.id = childSnapshot.key;
-                    comments.push(comment);
-                });
-                
-                comments.sort((a, b) => new Date(a.date) - new Date(b.date));
-                renderComments(comments, container, postId);
-            }, (error) => {
-                console.error('Load Comments Error:', error);
             });
-        }
+        });
+    }
 
-        function renderComments(comments, container, postId) {
-            if (!comments || comments.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state" style="padding:20px;">
-                        <p style="font-size:0.9rem;">No comments yet. Be the first!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const html = comments.map(comment => `
-                <div class="comment-item" data-comment="${comment.id}">
-                    <img class="comment-avatar" src="${getAvatarUrl(comment.authorName, comment.authorPhoto)}" alt="${escapeHtml(comment.authorName)}">
-                    <div class="comment-body">
-                        <span class="comment-author">${escapeHtml(comment.authorName)}</span>
-                        <div class="comment-text">${escapeHtml(comment.content)}</div>
-                        <div class="comment-actions">
-                            <span class="comment-date">${formatDate(comment.date)}</span>
-                            ${(currentUser && (comment.authorId === currentUser.uid || isAdmin)) ? `
-                                <button class="delete-comment" data-post="${postId}" data-comment="${comment.id}">Delete</button>
-                            ` : ''}
-                        </div>
-                    </div>
+    function openCommentModal(postId) {
+        openModal(`
+            <div class="modal-header"><h2>Comments</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div id="commentList" data-post="${postId}"></div>
+            <div class="comment-input-area">
+                <input type="text" id="commentInput" placeholder="Write a comment...">
+                <button id="submitComment">Post</button>
+            </div>
+        `);
+        loadComments(postId, 'commentList');
+        document.getElementById('submitComment').addEventListener('click', async () => {
+            const input = document.getElementById('commentInput');
+            if (input.value.trim()) { await addComment(postId, input.value); input.value = ''; loadComments(postId, 'commentList'); }
+        });
+        document.getElementById('commentInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('submitComment').click(); });
+    }
+
+    function openEditModal(postId, content, tags) {
+        openModal(`
+            <div class="modal-header"><h2>Edit Post</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <textarea id="editPostContent" style="width:100%;min-height:100px;padding:10px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-family:inherit;font-size:0.9rem;resize:vertical;">${escapeHtml(content)}</textarea>
+            <input type="text" id="editPostTags" value="${escapeHtml(tags)}" style="width:100%;padding:6px 12px;margin-top:8px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);">
+            <button class="btn-primary" id="saveEditPost" style="margin-top:10px;width:100%;">Save Changes</button>
+        `);
+        document.getElementById('saveEditPost').addEventListener('click', async () => {
+            const nc = document.getElementById('editPostContent').value.trim();
+            const nt = document.getElementById('editPostTags').value.split(',').map(t=>t.trim()).filter(t=>t);
+            if (nc) { await editPost(postId, nc, nt); closeModal(); loadFeed('postsContainer'); }
+        });
+    }
+
+    async function editPost(postId, newContent, newTags) {
+        if (!currentUser) return;
+        try {
+            const snap = await get(ref(db, `posts/${postId}`));
+            if (!snap.exists()) return;
+            if (snap.val().authorId !== currentUser.uid) { showToast('Not your post'); return; }
+            await update(ref(db, `posts/${postId}`), { content: newContent.trim(), tags: newTags || [], edited: true, editedDate: new Date().toISOString() });
+            showToast('Post updated');
+        } catch(e) { console.error(e); showToast('Failed to edit'); }
+    }
+
+    // ============================================
+    // NOTIFICATIONS
+    // ============================================
+    async function sendNotification(userId, type, data) {
+        try {
+            const newRef = push(ref(db, `notifications/${userId}`));
+            await set(newRef, { type, fromUserId: data.fromUserId, fromUserName: data.fromUserName, fromUserPhoto: data.fromUserPhoto || '', postId: data.postId || '', comment: data.comment || '', date: new Date().toISOString(), read: false });
+        } catch(e) { console.error(e); }
+    }
+
+    function loadNotifications(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container || !currentUser) return;
+        if (notificationListeners.notifications) { notificationListeners.notifications.off(); delete notificationListeners.notifications; }
+        const q = query(ref(db, `notifications/${currentUser.uid}`), orderByChild('date'), limitToLast(50));
+        notificationListeners.notifications = q;
+        onValue(q, (snap) => {
+            const notifs = []; let unread = 0;
+            snap.forEach(c => { const n = c.val(); n.id = c.key; notifs.push(n); if (!n.read) unread++; });
+            notifs.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderNotificationsList(notifs, container);
+            if (unread > 0) { notificationBadge.textContent = unread > 9 ? '9+' : unread; notificationBadge.classList.remove('hidden'); }
+            else { notificationBadge.classList.add('hidden'); }
+        });
+    }
+
+    function renderNotificationsList(notifs, container) {
+        if (!notifs || notifs.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-bell"></i><h3>No notifications</h3></div>`;
+            return;
+        }
+        container.innerHTML = notifs.map(n => `
+            <div class="notification-item ${n.read ? '' : 'unread'}" data-notif="${n.id}">
+                <img class="avatar" src="${getAvatar(n.fromUserName, n.fromUserPhoto)}">
+                <div class="content">
+                    <div class="text"><strong>${escapeHtml(n.fromUserName)}</strong> ${n.type === 'follow' ? 'started following you' : n.type === 'like' ? 'liked your post' : n.type === 'comment' ? `commented: "${escapeHtml(n.comment)}${n.comment?.length > 40 ? '...' : ''}"` : ''}</div>
+                    <div class="time">${formatDate(n.date)}</div>
                 </div>
-            `).join('');
-            
-            container.innerHTML = html;
-            
-            container.querySelectorAll('.delete-comment').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    if (confirm('Delete this comment?')) {
-                        const pId = btn.dataset.post;
-                        const cId = btn.dataset.comment;
-                        if (pId && cId) {
-                            await deleteComment(pId, cId);
-                            loadComments(pId, container.id);
-                        }
-                    }
-                });
-            });
-        }
-
-        function openCommentModal(postId) {
-            openModal(`
-                <div class="modal-header">
-                    <h2>Comments</h2>
-                    <button class="modal-close" onclick="closeModal()">&times;</button>
-                </div>
-                <div id="commentList" data-post="${postId}"></div>
-                <div class="comment-input-area">
-                    <input type="text" id="commentInput" placeholder="Write a comment..." maxlength="1000">
-                    <button id="submitComment">Post</button>
-                </div>
-            `);
-            
-            loadComments(postId, 'commentList');
-            
-            document.getElementById('submitComment').addEventListener('click', async () => {
-                const input = document.getElementById('commentInput');
-                const content = input.value.trim();
-                if (content) {
-                    await addComment(postId, content);
-                    input.value = '';
-                    loadComments(postId, 'commentList');
+            </div>
+        `).join('');
+        container.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', async () => {
+                const id = item.dataset.notif;
+                if (id && item.classList.contains('unread')) {
+                    try { await update(ref(db, `notifications/${currentUser.uid}/${id}`), { read: true }); item.classList.remove('unread'); } catch(e) {}
                 }
             });
-            
-            document.getElementById('commentInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    document.getElementById('submitComment').click();
-                }
-            });
-        }
+        });
+    }
 
-        function openEditModal(postId, content, tags) {
-            openModal(`
-                <div class="modal-header">
-                    <h2>Edit Post</h2>
-                    <button class="modal-close" onclick="closeModal()">&times;</button>
-                </div>
-                <textarea id="editPostContent" style="width:100%;min-height:120px;padding:12px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-family:inherit;font-size:0.95rem;resize:vertical;">${escapeHtml(content)}</textarea>
-                <input type="text" id="editPostTags" value="${escapeHtml(tags)}" style="width:100%;padding:8px 12px;margin-top:8px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);">
-                <button class="btn-primary" id="saveEditPost" style="margin-top:12px;width:100%;">Save Changes</button>
-            `);
-            
-            document.getElementById('saveEditPost').addEventListener('click', async () => {
-                const newContent = document.getElementById('editPostContent').value.trim();
-                const newTags = document.getElementById('editPostTags').value.split(',').map(t => t.trim()).filter(t => t);
-                if (newContent) {
-                    await editPost(postId, newContent, newTags);
-                    closeModal();
-                    loadFeed('postsContainer');
-                }
-            });
-        }
-
-        // ============================================
-        // NOTIFICATIONS
-        // ============================================
-        async function sendNotification(userId, type, data) {
-            try {
-                const notifRef = ref(db, `notifications/${userId}`);
-                const newNotif = push(notifRef);
-                await set(newNotif, {
-                    type: type,
-                    fromUserId: data.fromUserId,
-                    fromUserName: data.fromUserName,
-                    fromUserPhoto: data.fromUserPhoto || '',
-                    postId: data.postId || '',
-                    comment: data.comment || '',
-                    date: new Date().toISOString(),
-                    read: false
-                });
-            } catch (error) {
-                console.error('Send Notification Error:', error);
-            }
-        }
-
-        function loadNotifications(containerId) {
-            const container = document.getElementById(containerId);
-            if (!container || !currentUser) return;
-            
-            if (notificationListeners.notifications) {
-                notificationListeners.notifications.off();
-                delete notificationListeners.notifications;
-            }
-            
-            const notifRef = ref(db, `notifications/${currentUser.uid}`);
-            const notifQuery = query(notifRef, orderByChild('date'), limitToLast(50));
-            
-            notificationListeners.notifications = notifQuery;
-            
-            onValue(notifQuery, (snapshot) => {
-                const notifications = [];
-                let unreadCount = 0;
-                
-                snapshot.forEach((childSnapshot) => {
-                    const notif = childSnapshot.val();
-                    notif.id = childSnapshot.key;
-                    notifications.push(notif);
-                    if (!notif.read) unreadCount++;
-                });
-                
-                notifications.sort((a, b) => new Date(b.date) - new Date(a.date));
-                renderNotificationsList(notifications, container);
-                
-                if (unreadCount > 0) {
-                    notificationBadge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-                    notificationBadge.classList.remove('hidden');
-                } else {
-                    notificationBadge.classList.add('hidden');
-                }
-            });
-        }
-
-        function renderNotificationsList(notifications, container) {
-            if (!notifications || notifications.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-bell"></i>
-                        <h3>No notifications</h3>
-                        <p>You're all caught up!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const html = notifications.map(notif => `
-                <div class="notification-item ${notif.read ? '' : 'unread'}" data-notif="${notif.id}">
-                    <img class="avatar" src="${getAvatarUrl(notif.fromUserName, notif.fromUserPhoto)}" alt="${escapeHtml(notif.fromUserName)}">
-                    <div class="content">
-                        <div class="text">
-                            <strong>${escapeHtml(notif.fromUserName)}</strong>
-                            ${notif.type === 'follow' ? 'started following you' : ''}
-                            ${notif.type === 'like' ? 'liked your post' : ''}
-                            ${notif.type === 'comment' ? `commented: "${escapeHtml(notif.comment)}${notif.comment && notif.comment.length > 40 ? '...' : ''}"` : ''}
-                        </div>
-                        <div class="time">${formatDate(notif.date)}</div>
-                    </div>
-                </div>
-            `).join('');
-            
-            container.innerHTML = html;
-            
-            container.querySelectorAll('.notification-item').forEach(item => {
-                item.addEventListener('click', async () => {
-                    const notifId = item.dataset.notif;
-                    if (notifId && item.classList.contains('unread')) {
-                        try {
-                            const notifRef = ref(db, `notifications/${currentUser.uid}/${notifId}`);
-                            await update(notifRef, { read: true });
-                            item.classList.remove('unread');
-                        } catch (error) {
-                            console.error('Mark read error:', error);
-                        }
-                    }
-                    
-                    const notif = notifications.find(n => n.id === notifId);
-                    if (notif && notif.postId) {
-                        closeModal();
-                        showToast('Opening post...');
-                    }
-                });
-            });
-        }
-
-        // ============================================
-        // PROFILE
-        // ============================================
-        async function loadProfile(containerId, userId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            const targetId = userId || currentUser?.uid;
-            if (!targetId) {
-                container.innerHTML = '<p>User not found</p>';
-                return;
-            }
-            
-            try {
-                const userRef = ref(db, `users/${targetId}`);
-                const userSnap = await get(userRef);
-                
-                if (!userSnap.exists()) {
-                    container.innerHTML = '<p>User not found</p>';
-                    return;
-                }
-                
-                const userData = userSnap.val();
-                const isOwnProfile = currentUser && targetId === currentUser.uid;
-                const isFollowing = await checkFollowing(targetId);
-                
-                const followersSnap = await get(ref(db, `followers/${targetId}`));
-                const followingSnap = await get(ref(db, `following/${targetId}`));
-                const followersCount = followersSnap.exists() ? followersSnap.size : 0;
-                const followingCount = followingSnap.exists() ? followingSnap.size : 0;
-                
-                container.innerHTML = `
-                    <div class="profile-header">
-                        <img class="profile-avatar" src="${getAvatarUrl(userData.name, userData.photoURL)}" alt="${escapeHtml(userData.name)}">
-                        <div class="profile-name">${escapeHtml(userData.name)}</div>
-                        <div class="profile-email">${escapeHtml(userData.email || '')}</div>
-                        ${userData.bio ? `<div class="profile-bio">${escapeHtml(userData.bio)}</div>` : ''}
-                        <div class="profile-stats">
-                            <div class="profile-stat">
-                                <span class="number">${userData.posts || 0}</span>
-                                <span class="label">Posts</span>
-                            </div>
-                            <div class="profile-stat" onclick="window.showFollowers('${targetId}')">
-                                <span class="number">${followersCount}</span>
-                                <span class="label">Followers</span>
-                            </div>
-                            <div class="profile-stat" onclick="window.showFollowing('${targetId}')">
-                                <span class="number">${followingCount}</span>
-                                <span class="label">Following</span>
-                            </div>
-                        </div>
-                        <div class="profile-actions">
-                            ${isOwnProfile ? `
-                                <button class="btn-secondary" id="editProfileBtn"><i class="fas fa-edit"></i> Edit Profile</button>
-                            ` : `
-                                <button class="btn-${isFollowing ? 'secondary' : 'primary'}" id="followBtn">
-                                    ${isFollowing ? 'Unfollow' : 'Follow'}
-                                </button>
-                            `}
-                        </div>
-                    </div>
-                    <div id="userPostsContainer"></div>
-                `;
-                
-                loadUserPosts('userPostsContainer', targetId);
-                
-                if (isOwnProfile) {
-                    document.getElementById('editProfileBtn').addEventListener('click', () => {
-                        openEditProfileModal(userData);
-                    });
-                }
-                
-                if (!isOwnProfile) {
-                    document.getElementById('followBtn').addEventListener('click', async () => {
-                        if (isFollowing) {
-                            await unfollowUser(targetId);
-                        } else {
-                            await followUser(targetId);
-                        }
-                        loadProfile(containerId, targetId);
-                    });
-                }
-                
-            } catch (error) {
-                console.error('Load Profile Error:', error);
-                container.innerHTML = '<p>Error loading profile</p>';
-            }
-        }
-
-        function loadUserPosts(containerId, userId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            if (feedListeners[`userposts_${userId}`]) {
-                feedListeners[`userposts_${userId}`].off();
-                delete feedListeners[`userposts_${userId}`];
-            }
-            
-            const postsRef = ref(db, 'posts');
-            const postsQuery = query(postsRef, orderByChild('authorId'), limitToLast(100));
-            
-            feedListeners[`userposts_${userId}`] = postsQuery;
-            
-            onValue(postsQuery, (snapshot) => {
-                const posts = [];
-                snapshot.forEach((childSnapshot) => {
-                    const post = childSnapshot.val();
-                    if (post.authorId === userId) {
-                        post.id = childSnapshot.key;
-                        posts.push(post);
-                    }
-                });
-                
-                posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-                renderPosts(posts, container);
-            });
-        }
-
-        function openEditProfileModal(userData) {
-            openModal(`
-                <div class="modal-header">
-                    <h2>Edit Profile</h2>
-                    <button class="modal-close" onclick="closeModal()">&times;</button>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:12px;">
-                    <label style="font-weight:600;">Name</label>
-                    <input class="profile-edit-input" id="editName" value="${escapeHtml(userData.name || '')}">
-                    <label style="font-weight:600;">Bio</label>
-                    <textarea class="profile-edit-input" id="editBio" rows="3" style="resize:vertical;">${escapeHtml(userData.bio || '')}</textarea>
-                    <button class="btn-primary" id="saveProfileBtn">Save Changes</button>
-                </div>
-            `);
-            
-            document.getElementById('saveProfileBtn').addEventListener('click', async () => {
-                const name = document.getElementById('editName').value.trim();
-                const bio = document.getElementById('editBio').value.trim();
-                
-                if (!name) {
-                    showToast('Name is required');
-                    return;
-                }
-                
-                try {
-                    const userRef = ref(db, `users/${currentUser.uid}`);
-                    await update(userRef, {
-                        name: name,
-                        bio: bio
-                    });
-                    
-                    if (currentUserData) {
-                        currentUserData.name = name;
-                        currentUserData.bio = bio;
-                    }
-                    
-                    closeModal();
-                    showToast('Profile updated successfully!');
-                    renderProfile(currentUser.uid);
-                    loadDashboardStats();
-                } catch (error) {
-                    console.error('Update Profile Error:', error);
-                    showToast('Failed to update profile');
-                }
-            });
-        }
-
-        // ============================================
-        // FOLLOW SYSTEM
-        // ============================================
-        async function followUser(targetUserId) {
-            if (!currentUser) {
-                showToast('Please login to follow');
-                return;
-            }
-            
-            if (targetUserId === currentUser.uid) {
-                showToast('You cannot follow yourself');
-                return;
-            }
-            
-            try {
-                const followingRef = ref(db, `following/${currentUser.uid}/${targetUserId}`);
-                await set(followingRef, {
-                    userId: targetUserId,
-                    date: new Date().toISOString()
-                });
-                
-                const followersRef = ref(db, `followers/${targetUserId}/${currentUser.uid}`);
-                await set(followersRef, {
-                    userId: currentUser.uid,
-                    userName: currentUserData?.name || currentUser.displayName || 'User',
-                    userPhoto: currentUserData?.photoURL || currentUser.photoURL || '',
-                    date: new Date().toISOString()
-                });
-                
-                await updateFollowCounts(currentUser.uid, 'following', 1);
-                await updateFollowCounts(targetUserId, 'followers', 1);
-                
-                await sendNotification(targetUserId, 'follow', {
-                    fromUserId: currentUser.uid,
-                    fromUserName: currentUserData?.name || currentUser.displayName || 'User',
-                    fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL || ''
-                });
-                
-                showToast('Following!');
-                loadDashboardStats();
-                return true;
-            } catch (error) {
-                console.error('Follow Error:', error);
-                showToast('Failed to follow');
-            }
-        }
-
-        async function unfollowUser(targetUserId) {
-            if (!currentUser) return;
-            
-            try {
-                await remove(ref(db, `following/${currentUser.uid}/${targetUserId}`));
-                await remove(ref(db, `followers/${targetUserId}/${currentUser.uid}`));
-                
-                await updateFollowCounts(currentUser.uid, 'following', -1);
-                await updateFollowCounts(targetUserId, 'followers', -1);
-                
-                showToast('Unfollowed');
-                loadDashboardStats();
-                return true;
-            } catch (error) {
-                console.error('Unfollow Error:', error);
-                showToast('Failed to unfollow');
-            }
-        }
-
-        async function updateFollowCounts(userId, field, change) {
-            try {
-                const userRef = ref(db, `users/${userId}`);
-                const userSnap = await get(userRef);
-                if (userSnap.exists()) {
-                    const current = userSnap.val()[field] || 0;
-                    await update(userRef, { [field]: Math.max(0, current + change) });
-                }
-            } catch (error) {
-                console.error('Update Follow Counts Error:', error);
-            }
-        }
-
-        async function checkFollowing(targetUserId) {
-            if (!currentUser) return false;
-            
-            try {
-                const followingRef = ref(db, `following/${currentUser.uid}/${targetUserId}`);
-                const snapshot = await get(followingRef);
-                return snapshot.exists();
-            } catch (error) {
-                return false;
-            }
-        }
-
-        // ============================================
-        // SEARCH
-        // ============================================
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            const searchBtn = document.getElementById('searchBtn');
-            const searchTabs = document.querySelectorAll('.search-tab');
-            let currentTab = 'users';
-            
-            const performSearch = () => {
-                const query = searchInput.value.trim();
-                if (query.length >= 2) {
-                    if (currentTab === 'users') {
-                        searchUsers(query);
-                    } else {
-                        searchPosts(query);
-                    }
-                } else {
-                    document.getElementById('searchResults').innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-search"></i>
-                            <h3>Type at least 2 characters</h3>
-                            <p>Search for users or posts</p>
-                        </div>
-                    `;
-                }
-            };
-            
-            searchBtn.addEventListener('click', performSearch);
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') performSearch();
-            });
-            
-            searchTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    searchTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    currentTab = tab.dataset.search;
-                    if (searchInput.value.trim().length >= 2) {
-                        performSearch();
-                    }
-                });
-            });
-        }
-
-        async function searchUsers(query) {
-            const container = document.getElementById('searchResults');
-            const queryLower = query.toLowerCase();
-            
-            try {
-                const usersRef = ref(db, 'users');
-                const snapshot = await get(usersRef);
-                const results = [];
-                
-                snapshot.forEach((childSnapshot) => {
-                    const user = childSnapshot.val();
-                    user.id = childSnapshot.key;
-                    if (user.name && user.name.toLowerCase().includes(queryLower)) {
-                        results.push(user);
-                    }
-                });
-                
-                if (results.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-users"></i>
-                            <h3>No users found</h3>
-                            <p>Try a different search term</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                const html = await Promise.all(results.map(async (user) => {
-                    const isFollowing = await checkFollowing(user.id);
-                    return `
-                        <div class="user-result" onclick="window.navigateTo('profile', { userId: '${user.id}' })">
-                            <img class="avatar" src="${getAvatarUrl(user.name, user.photoURL)}" alt="${escapeHtml(user.name)}">
-                            <div class="info">
-                                <div class="name">${escapeHtml(user.name)}</div>
-                                <div class="email">${escapeHtml(user.email || '')}</div>
-                            </div>
-                            ${currentUser && user.id !== currentUser.uid ? `
-                                <button class="follow-btn ${isFollowing ? 'following' : 'not-following'}" 
-                                        onclick="event.stopPropagation(); window.toggleFollow('${user.id}')">
-                                    ${isFollowing ? 'Following' : 'Follow'}
-                                </button>
-                            ` : ''}
-                        </div>
-                    `;
-                }));
-                
-                container.innerHTML = html.join('');
-            } catch (error) {
-                console.error('Search Users Error:', error);
-                container.innerHTML = '<p>Error searching users</p>';
-            }
-        }
-
-        async function searchPosts(query) {
-            const container = document.getElementById('searchResults');
-            const queryLower = query.toLowerCase();
-            
-            try {
-                const postsRef = ref(db, 'posts');
-                const snapshot = await get(postsRef);
-                const results = [];
-                
-                snapshot.forEach((childSnapshot) => {
-                    const post = childSnapshot.val();
-                    post.id = childSnapshot.key;
-                    if (post.content && post.content.toLowerCase().includes(queryLower)) {
-                        results.push(post);
-                    }
-                });
-                
-                results.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                if (results.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-file-alt"></i>
-                            <h3>No posts found</h3>
-                            <p>Try a different search term</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                renderPosts(results, container);
-            } catch (error) {
-                console.error('Search Posts Error:', error);
-                container.innerHTML = '<p>Error searching posts</p>';
-            }
-        }
-
-        // ============================================
-        // ADMIN FUNCTIONS
-        // ============================================
-        async function loadAdminStats() {
-            try {
-                const usersSnap = await get(ref(db, 'users'));
-                const postsSnap = await get(ref(db, 'posts'));
-                const commentsSnap = await get(ref(db, 'comments'));
-                
-                document.getElementById('statUsers').textContent = usersSnap.exists() ? usersSnap.size : 0;
-                document.getElementById('statPosts').textContent = postsSnap.exists() ? postsSnap.size : 0;
-                
-                let commentCount = 0;
-                if (commentsSnap.exists()) {
-                    commentsSnap.forEach(() => commentCount++);
-                }
-                document.getElementById('statComments').textContent = commentCount;
-            } catch (error) {
-                console.error('Load Admin Stats Error:', error);
-            }
-        }
-
-        async function loadAdminUsers() {
-            const container = document.getElementById('adminContent');
-            container.innerHTML = '<div class="text-center text-muted">Loading users...</div>';
-            
-            try {
-                const usersRef = ref(db, 'users');
-                const snapshot = await get(usersRef);
-                
-                if (!snapshot.exists()) {
-                    container.innerHTML = '<div class="empty-state"><h3>No users found</h3></div>';
-                    return;
-                }
-                
-                const users = [];
-                snapshot.forEach((childSnapshot) => {
-                    const user = childSnapshot.val();
-                    user.id = childSnapshot.key;
-                    users.push(user);
-                });
-                
-                const html = users.map(user => `
-                    <div class="admin-user-item">
-                        <img class="avatar" src="${getAvatarUrl(user.name, user.photoURL)}" alt="${escapeHtml(user.name)}">
-                        <div class="info">
-                            <div class="name">${escapeHtml(user.name)}</div>
-                            <div class="email">${escapeHtml(user.email || '')}</div>
-                            <div style="font-size:0.7rem;color:var(--text-muted);">
-                                Posts: ${user.posts || 0} | Followers: ${user.followers || 0}
-                            </div>
-                        </div>
-                        <div class="actions">
-                            ${user.isAdmin ? `
-                                <button class="btn-secondary" onclick="window.toggleAdmin('${user.id}', false)" style="font-size:0.65rem;padding:2px 8px;">Remove Admin</button>
-                            ` : `
-                                <button class="btn-success" onclick="window.toggleAdmin('${user.id}', true)" style="font-size:0.65rem;padding:2px 8px;">Make Admin</button>
-                            `}
-                        </div>
-                    </div>
-                `).join('');
-                
-                container.innerHTML = html;
-            } catch (error) {
-                console.error('Load Admin Users Error:', error);
-                container.innerHTML = '<p>Error loading users</p>';
-            }
-        }
-
-        async function loadAdminPosts() {
-            const container = document.getElementById('adminContent');
-            container.innerHTML = '<div class="text-center text-muted">Loading posts...</div>';
-            
-            try {
-                const postsRef = ref(db, 'posts');
-                const snapshot = await get(postsRef);
-                
-                if (!snapshot.exists()) {
-                    container.innerHTML = '<div class="empty-state"><h3>No posts found</h3></div>';
-                    return;
-                }
-                
-                const posts = [];
-                snapshot.forEach((childSnapshot) => {
-                    const post = childSnapshot.val();
-                    post.id = childSnapshot.key;
-                    posts.push(post);
-                });
-                
-                posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                const html = posts.slice(0, 50).map(post => `
-                    <div class="admin-post-item">
-                        <div class="content">${escapeHtml(post.content.substring(0, 150))}${post.content.length > 150 ? '...' : ''}</div>
-                        <div class="meta">
-                            By: ${escapeHtml(post.authorName)} | ${formatDate(post.date)} | Likes: ${post.likes || 0} | Comments: ${post.comments || 0}
-                        </div>
-                        <div class="actions">
-                            <button class="btn-danger" onclick="window.adminDeletePost('${post.id}')" style="font-size:0.7rem;padding:2px 10px;">Delete</button>
-                            <button class="btn-secondary" onclick="window.viewPost('${post.id}')" style="font-size:0.7rem;padding:2px 10px;">View</button>
-                        </div>
-                    </div>
-                `).join('');
-                
-                container.innerHTML = html;
-            } catch (error) {
-                console.error('Load Admin Posts Error:', error);
-                container.innerHTML = '<p>Error loading posts</p>';
-            }
-        }
-
-        async function loadAdminReports() {
-            const container = document.getElementById('adminContent');
+    // ============================================
+    // PROFILE
+    // ============================================
+    async function loadProfile(containerId, userId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const targetId = userId || currentUser?.uid;
+        if (!targetId) { container.innerHTML = '<p>User not found</p>'; return; }
+        try {
+            const snap = await get(ref(db, `users/${targetId}`));
+            if (!snap.exists()) { container.innerHTML = '<p>User not found</p>'; return; }
+            const userData = snap.val();
+            const isOwn = currentUser && targetId === currentUser.uid;
+            const isFollowing = await checkFollowing(targetId);
+            const followersSnap = await get(ref(db, `followers/${targetId}`));
+            const followingSnap = await get(ref(db, `following/${targetId}`));
             container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-flag"></i>
-                    <h3>No reports yet</h3>
-                    <p>Report system will be available in the next update</p>
+                <div class="profile-header">
+                    <img class="profile-avatar" src="${getAvatar(userData.name, userData.photoURL)}">
+                    <div class="profile-name">${escapeHtml(userData.name)}</div>
+                    <div class="profile-email">${escapeHtml(userData.email || '')}</div>
+                    ${userData.bio ? `<div class="profile-bio">${escapeHtml(userData.bio)}</div>` : ''}
+                    <div class="profile-stats">
+                        <div class="profile-stat"><span class="number">${userData.posts||0}</span><span class="label">Posts</span></div>
+                        <div class="profile-stat" onclick="window.showFollowers('${targetId}')"><span class="number">${followersSnap.exists() ? followersSnap.size : 0}</span><span class="label">Followers</span></div>
+                        <div class="profile-stat" onclick="window.showFollowing('${targetId}')"><span class="number">${followingSnap.exists() ? followingSnap.size : 0}</span><span class="label">Following</span></div>
+                    </div>
+                    <div class="profile-actions">
+                        ${isOwn ? `<button class="btn-secondary" id="editProfileBtn"><i class="fas fa-edit"></i> Edit Profile</button>` :
+                        `<button class="btn-${isFollowing ? 'secondary' : 'primary'}" id="followBtn">${isFollowing ? 'Unfollow' : 'Follow'}</button>`}
+                    </div>
                 </div>
+                <div id="userPostsContainer"></div>
             `;
-        }
+            loadUserPosts('userPostsContainer', targetId);
+            if (isOwn) document.getElementById('editProfileBtn').addEventListener('click', ()=>openEditProfileModal(userData));
+            if (!isOwn) document.getElementById('followBtn').addEventListener('click', async () => {
+                if (isFollowing) await unfollowUser(targetId);
+                else await followUser(targetId);
+                loadProfile(containerId, targetId);
+            });
+        } catch(e) { console.error(e); container.innerHTML = '<p>Error loading profile</p>'; }
+    }
 
-        // ============================================
-        // GLOBAL FUNCTIONS
-        // ============================================
-        window.navigateTo = navigateTo;
-        window.closeModal = closeModal;
-        window.showToast = showToast;
+    function loadUserPosts(containerId, userId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (feedListeners[`userposts_${userId}`]) { feedListeners[`userposts_${userId}`].off(); delete feedListeners[`userposts_${userId}`]; }
+        const q = query(ref(db, 'posts'), orderByChild('authorId'), limitToLast(100));
+        feedListeners[`userposts_${userId}`] = q;
+        onValue(q, (snap) => {
+            const posts = [];
+            snap.forEach(c => { const p = c.val(); if (p.authorId === userId) { p.id = c.key; posts.push(p); } });
+            posts.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderPosts(posts, container);
+        });
+    }
 
-        window.toggleAdmin = async function(userId, makeAdmin) {
+    function openEditProfileModal(userData) {
+        openModal(`
+            <div class="modal-header"><h2>Edit Profile</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <label style="font-weight:600;">Name</label>
+                <input class="profile-edit-input" id="editName" value="${escapeHtml(userData.name || '')}">
+                <label style="font-weight:600;">Bio</label>
+                <textarea class="profile-edit-input" id="editBio" rows="3" style="resize:vertical;">${escapeHtml(userData.bio || '')}</textarea>
+                <button class="btn-primary" id="saveProfileBtn">Save Changes</button>
+            </div>
+        `);
+        document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+            const name = document.getElementById('editName').value.trim();
+            const bio = document.getElementById('editBio').value.trim();
+            if (!name) { showToast('Name is required'); return; }
             try {
-                const userRef = ref(db, `users/${userId}`);
-                await update(userRef, { isAdmin: makeAdmin });
-                showToast(`User ${makeAdmin ? 'promoted to' : 'removed from'} admin`);
-                if (currentUser && userId === currentUser.uid) {
-                    isAdmin = makeAdmin;
-                    updateAdminButton();
-                }
-                await loadAdminUsers();
-            } catch (error) {
-                console.error('Toggle Admin Error:', error);
-                showToast('Failed to update user');
-            }
-        };
+                await update(ref(db, `users/${currentUser.uid}`), { name, bio });
+                if (currentUserData) { currentUserData.name = name; currentUserData.bio = bio; }
+                closeModal(); showToast('Profile updated!'); renderProfile(currentUser.uid); loadDashboardStats();
+            } catch(e) { console.error(e); showToast('Failed to update'); }
+        });
+    }
 
-        window.adminDeletePost = async function(postId) {
-            if (confirm('Delete this post?')) {
-                await deletePost(postId);
-                await loadAdminPosts();
-                await loadAdminStats();
-                showToast('Post deleted');
-            }
-        };
+    // ============================================
+    // FOLLOW
+    // ============================================
+    async function followUser(targetId) {
+        if (!currentUser || targetId === currentUser.uid) return;
+        try {
+            await set(ref(db, `following/${currentUser.uid}/${targetId}`), { userId: targetId, date: new Date().toISOString() });
+            await set(ref(db, `followers/${targetId}/${currentUser.uid}`), { userId: currentUser.uid, userName: currentUserData?.name || currentUser.displayName, userPhoto: currentUserData?.photoURL || currentUser.photoURL, date: new Date().toISOString() });
+            await updateFollowCounts(currentUser.uid, 'following', 1);
+            await updateFollowCounts(targetId, 'followers', 1);
+            await sendNotification(targetId, 'follow', { fromUserId: currentUser.uid, fromUserName: currentUserData?.name || currentUser.displayName, fromUserPhoto: currentUserData?.photoURL || currentUser.photoURL });
+            showToast('Following!'); loadDashboardStats();
+        } catch(e) { console.error(e); showToast('Failed to follow'); }
+    }
 
-        window.viewPost = function(postId) {
-            showToast('Opening post...');
-        };
+    async function unfollowUser(targetId) {
+        if (!currentUser) return;
+        try {
+            await remove(ref(db, `following/${currentUser.uid}/${targetId}`));
+            await remove(ref(db, `followers/${targetId}/${currentUser.uid}`));
+            await updateFollowCounts(currentUser.uid, 'following', -1);
+            await updateFollowCounts(targetId, 'followers', -1);
+            showToast('Unfollowed'); loadDashboardStats();
+        } catch(e) { console.error(e); showToast('Failed to unfollow'); }
+    }
 
-        window.toggleFollow = async function(userId) {
-            const isFollowing = await checkFollowing(userId);
-            if (isFollowing) {
-                await unfollowUser(userId);
-            } else {
-                await followUser(userId);
-            }
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput && searchInput.value.trim()) {
-                setupSearch();
-                document.getElementById('searchBtn').click();
-            }
-        };
+    async function updateFollowCounts(userId, field, change) {
+        try {
+            const snap = await get(ref(db, `users/${userId}`));
+            if (snap.exists()) await update(ref(db, `users/${userId}`), { [field]: Math.max(0, (snap.val()[field]||0) + change) });
+        } catch(e) { console.error(e); }
+    }
 
-        window.showFollowers = async function(userId) {
-            try {
-                const followersRef = ref(db, `followers/${userId}`);
-                const snapshot = await get(followersRef);
-                const users = [];
-                if (snapshot.exists()) {
-                    snapshot.forEach((childSnapshot) => {
-                        users.push({ id: childSnapshot.key, ...childSnapshot.val() });
-                    });
-                }
-                
-                openModal(`
-                    <div class="modal-header">
-                        <h2>Followers</h2>
-                        <button class="modal-close" onclick="closeModal()">&times;</button>
+    async function checkFollowing(targetId) {
+        if (!currentUser) return false;
+        try { const snap = await get(ref(db, `following/${currentUser.uid}/${targetId}`)); return snap.exists(); } catch(e) { return false; }
+    }
+
+    // ============================================
+    // SEARCH
+    // ============================================
+    function setupSearch() {
+        const input = document.getElementById('searchInput');
+        const btn = document.getElementById('searchBtn');
+        const tabs = document.querySelectorAll('.search-tab');
+        let currentTab = 'users';
+        const doSearch = () => {
+            const q = input.value.trim();
+            if (q.length >= 2) { currentTab === 'users' ? searchUsers(q) : searchPosts(q); }
+            else { document.getElementById('searchResults').innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>Type at least 2 characters</h3></div>`; }
+        };
+        btn.addEventListener('click', doSearch);
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') doSearch(); });
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t=>t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab = tab.dataset.search;
+                if (input.value.trim().length >= 2) doSearch();
+            });
+        });
+    }
+
+    async function searchUsers(query) {
+        const container = document.getElementById('searchResults');
+        try {
+            const snap = await get(ref(db, 'users'));
+            const results = [];
+            snap.forEach(c => { const u = c.val(); u.id = c.key; if (u.name?.toLowerCase().includes(query.toLowerCase())) results.push(u); });
+            if (results.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><h3>No users found</h3></div>`; return; }
+            const html = await Promise.all(results.map(async u => {
+                const isFollowing = await checkFollowing(u.id);
+                return `<div class="user-result" onclick="window.navigateTo('profile',{userId:'${u.id}'})">
+                    <img class="avatar" src="${getAvatar(u.name, u.photoURL)}">
+                    <div class="info"><div class="name">${escapeHtml(u.name)}</div><div class="email">${escapeHtml(u.email||'')}</div></div>
+                    ${currentUser && u.id !== currentUser.uid ? `<button class="follow-btn ${isFollowing ? 'following' : 'not-following'}" onclick="event.stopPropagation(); window.toggleFollow('${u.id}')">${isFollowing ? 'Following' : 'Follow'}</button>` : ''}
+                </div>`;
+            }));
+            container.innerHTML = html.join('');
+        } catch(e) { console.error(e); container.innerHTML = '<p>Error searching users</p>'; }
+    }
+
+    async function searchPosts(query) {
+        const container = document.getElementById('searchResults');
+        try {
+            const snap = await get(ref(db, 'posts'));
+            const results = [];
+            snap.forEach(c => { const p = c.val(); p.id = c.key; if (p.content?.toLowerCase().includes(query.toLowerCase())) results.push(p); });
+            results.sort((a,b) => new Date(b.date) - new Date(a.date));
+            if (results.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>No posts found</h3></div>`; return; }
+            renderPosts(results, container);
+        } catch(e) { console.error(e); container.innerHTML = '<p>Error searching posts</p>'; }
+    }
+
+    // ============================================
+    // ADMIN
+    // ============================================
+    async function loadAdminStats() {
+        try {
+            const users = await get(ref(db, 'users'));
+            const posts = await get(ref(db, 'posts'));
+            const comments = await get(ref(db, 'comments'));
+            document.getElementById('statUsers').textContent = users.exists() ? users.size : 0;
+            document.getElementById('statPosts').textContent = posts.exists() ? posts.size : 0;
+            let c = 0; if (comments.exists()) comments.forEach(()=>c++);
+            document.getElementById('statComments').textContent = c;
+        } catch(e) { console.error(e); }
+    }
+
+    async function loadAdminUsers() {
+        const container = document.getElementById('adminContent');
+        container.innerHTML = '<div class="text-center text-muted">Loading...</div>';
+        try {
+            const snap = await get(ref(db, 'users'));
+            if (!snap.exists()) { container.innerHTML = '<div class="empty-state"><h3>No users</h3></div>'; return; }
+            const users = []; snap.forEach(c => { const u = c.val(); u.id = c.key; users.push(u); });
+            container.innerHTML = users.map(u => `
+                <div class="admin-user-item">
+                    <img class="avatar" src="${getAvatar(u.name, u.photoURL)}">
+                    <div class="info"><div class="name">${escapeHtml(u.name)}</div><div class="email">${escapeHtml(u.email||'')}</div></div>
+                    <div class="actions">
+                        ${u.isAdmin ? `<button class="btn-secondary" onclick="window.toggleAdmin('${u.id}',false)" style="font-size:0.65rem;padding:2px 8px;">Remove Admin</button>` :
+                        `<button class="btn-success" onclick="window.toggleAdmin('${u.id}',true)" style="font-size:0.65rem;padding:2px 8px;">Make Admin</button>`}
                     </div>
-                    ${users.length === 0 ? '<div class="empty-state"><p>No followers yet</p></div>' : 
-                        users.map(user => `
-                            <div class="user-result" onclick="closeModal(); navigateTo('profile', { userId: '${user.id}' })">
-                                <img class="avatar" src="${getAvatarUrl(user.userName, user.userPhoto)}" alt="${escapeHtml(user.userName)}">
-                                <div class="info">
-                                    <div class="name">${escapeHtml(user.userName)}</div>
-                                </div>
-                            </div>
-                        `).join('')
-                    }
-                `);
-            } catch (error) {
-                console.error('Show Followers Error:', error);
-            }
-        };
+                </div>
+            `).join('');
+        } catch(e) { console.error(e); container.innerHTML = '<p>Error loading users</p>'; }
+    }
 
-        window.showFollowing = async function(userId) {
-            try {
-                const followingRef = ref(db, `following/${userId}`);
-                const snapshot = await get(followingRef);
-                const users = [];
-                if (snapshot.exists()) {
-                    snapshot.forEach((childSnapshot) => {
-                        users.push({ id: childSnapshot.key, ...childSnapshot.val() });
-                    });
-                }
-                
-                const userPromises = users.map(async (u) => {
-                    const userSnap = await get(ref(db, `users/${u.id}`));
-                    if (userSnap.exists()) {
-                        u.userName = userSnap.val().name || 'User';
-                        u.userPhoto = userSnap.val().photoURL || '';
-                    }
-                    return u;
-                });
-                await Promise.all(userPromises);
-                
-                openModal(`
-                    <div class="modal-header">
-                        <h2>Following</h2>
-                        <button class="modal-close" onclick="closeModal()">&times;</button>
+    async function loadAdminPosts() {
+        const container = document.getElementById('adminContent');
+        container.innerHTML = '<div class="text-center text-muted">Loading...</div>';
+        try {
+            const snap = await get(ref(db, 'posts'));
+            if (!snap.exists()) { container.innerHTML = '<div class="empty-state"><h3>No posts</h3></div>'; return; }
+            const posts = []; snap.forEach(c => { const p = c.val(); p.id = c.key; posts.push(p); });
+            posts.sort((a,b) => new Date(b.date) - new Date(a.date));
+            container.innerHTML = posts.slice(0,30).map(p => `
+                <div class="admin-post-item">
+                    <div class="content">${escapeHtml(p.content.substring(0,150))}${p.content.length > 150 ? '...' : ''}</div>
+                    <div class="meta">By ${escapeHtml(p.authorName)} | ${formatDate(p.date)} | Likes: ${p.likes||0} | Comments: ${p.comments||0}</div>
+                    <div class="actions"><button class="btn-danger" onclick="window.adminDeletePost('${p.id}')" style="font-size:0.7rem;padding:2px 10px;">Delete</button></div>
+                </div>
+            `).join('');
+        } catch(e) { console.error(e); container.innerHTML = '<p>Error loading posts</p>'; }
+    }
+
+    async function loadAdminReports() {
+        document.getElementById('adminContent').innerHTML = `<div class="empty-state"><i class="fas fa-flag"></i><h3>No reports yet</h3></div>`;
+    }
+
+    // ============================================
+    // GLOBAL (for onclick)
+    // ============================================
+    window.navigateTo = navigateTo;
+    window.closeModal = closeModal;
+    window.showToast = showToast;
+
+    window.toggleAdmin = async function(userId, makeAdmin) {
+        try {
+            await update(ref(db, `users/${userId}`), { isAdmin: makeAdmin });
+            showToast(`User ${makeAdmin ? 'promoted to' : 'removed from'} admin`);
+            if (currentUser && userId === currentUser.uid) { isAdmin = makeAdmin; updateAdminButton(); }
+            await loadAdminUsers();
+        } catch(e) { console.error(e); showToast('Failed to update user'); }
+    };
+
+    window.adminDeletePost = async function(postId) {
+        if (confirm('Delete this post?')) { await deletePost(postId); await loadAdminPosts(); await loadAdminStats(); showToast('Post deleted'); }
+    };
+
+    window.toggleFollow = async function(userId) {
+        const isFollowing = await checkFollowing(userId);
+        if (isFollowing) await unfollowUser(userId);
+        else await followUser(userId);
+        const input = document.getElementById('searchInput');
+        if (input?.value.trim()) { setupSearch(); document.getElementById('searchBtn')?.click(); }
+    };
+
+    window.showFollowers = async function(userId) {
+        try {
+            const snap = await get(ref(db, `followers/${userId}`));
+            const users = [];
+            if (snap.exists()) snap.forEach(c => users.push({ id: c.key, ...c.val() }));
+            openModal(`
+                <div class="modal-header"><h2>Followers</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+                ${users.length === 0 ? '<div class="empty-state"><p>No followers</p></div>' : users.map(u => `
+                    <div class="user-result" onclick="closeModal(); navigateTo('profile',{userId:'${u.id}'})">
+                        <img class="avatar" src="${getAvatar(u.userName, u.userPhoto)}">
+                        <div class="info"><div class="name">${escapeHtml(u.userName)}</div></div>
                     </div>
-                    ${users.length === 0 ? '<div class="empty-state"><p>Not following anyone yet</p></div>' : 
-                        users.map(user => `
-                            <div class="user-result" onclick="closeModal(); navigateTo('profile', { userId: '${user.id}' })">
-                                <img class="avatar" src="${getAvatarUrl(user.userName, user.userPhoto)}" alt="${escapeHtml(user.userName)}">
-                                <div class="info">
-                                    <div class="name">${escapeHtml(user.userName)}</div>
-                                </div>
-                            </div>
-                        `).join('')
-                    }
-                `);
-            } catch (error) {
-                console.error('Show Following Error:', error);
-            }
-        };
+                `).join('')}
+            `);
+        } catch(e) { console.error(e); }
+    };
 
-        // ============================================
-        // UPDATE ADMIN BUTTON
-        // ============================================
-        function updateAdminButton() {
-            if (isAdmin) {
-                adminPanelBtn.classList.remove('hidden');
-            } else {
-                adminPanelBtn.classList.add('hidden');
-            }
-        }
+    window.showFollowing = async function(userId) {
+        try {
+            const snap = await get(ref(db, `following/${userId}`));
+            const users = [];
+            if (snap.exists()) snap.forEach(c => users.push({ id: c.key, ...c.val() }));
+            await Promise.all(users.map(async u => {
+                const s = await get(ref(db, `users/${u.id}`));
+                if (s.exists()) { u.userName = s.val().name; u.userPhoto = s.val().photoURL; }
+            }));
+            openModal(`
+                <div class="modal-header"><h2>Following</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+                ${users.length === 0 ? '<div class="empty-state"><p>Not following anyone</p></div>' : users.map(u => `
+                    <div class="user-result" onclick="closeModal(); navigateTo('profile',{userId:'${u.id}'})">
+                        <img class="avatar" src="${getAvatar(u.userName, u.userPhoto)}">
+                        <div class="info"><div class="name">${escapeHtml(u.userName)}</div></div>
+                    </div>
+                `).join('')}
+            `);
+        } catch(e) { console.error(e); }
+    };
 
-        // ============================================
-        // THEME
-        // ============================================
-        function toggleTheme() {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-            updateThemeIcon();
-        }
+    // ============================================
+    // THEME
+    // ============================================
+    function toggleTheme() {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+        localStorage.setItem('theme', dark ? 'light' : 'dark');
+        const icon = document.querySelector('#themeToggle i');
+        if (icon) icon.className = dark ? 'fas fa-moon' : 'fas fa-sun';
+    }
 
-        function updateThemeIcon() {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const icon = document.querySelector('#themeToggle i');
-            if (icon) {
-                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-            }
-        }
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.querySelector('#themeToggle i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
 
-        // Load saved theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+    // ============================================
+    // UPDATE ADMIN BUTTON
+    // ============================================
+    function updateAdminButton() {
+        if (isAdmin) adminPanelBtn.classList.remove('hidden');
+        else adminPanelBtn.classList.add('hidden');
+    }
 
-        // ============================================
-        // AUTH STATE
-        // ============================================
-        onAuthStateChanged(auth, async (user) => {
-            loadingScreen.classList.add('hidden');
-            
-            if (user) {
-                currentUser = user;
-                authContainer.classList.add('hidden');
-                appContainer.classList.remove('hidden');
-                
-                const userRef = ref(db, `users/${user.uid}`);
-                const userSnap = await get(userRef);
-                if (userSnap.exists()) {
-                    currentUserData = userSnap.val();
-                    isAdmin = currentUserData.isAdmin || false;
-                    updateAdminButton();
-                }
-                
-                setupApp();
-                navigateTo('dashboard');
-            } else {
-                currentUser = null;
-                currentUserData = null;
-                isAdmin = false;
-                authContainer.classList.remove('hidden');
-                appContainer.classList.add('hidden');
+    // ============================================
+    // AUTH
+    // ============================================
+    onAuthStateChanged(auth, async (user) => {
+        loadingScreen.classList.add('hidden');
+        if (user) {
+            currentUser = user;
+            const snap = await get(ref(db, `users/${user.uid}`));
+            if (snap.exists()) {
+                currentUserData = snap.val();
+                isAdmin = currentUserData.isAdmin || false;
                 updateAdminButton();
             }
-        });
-
-        // ============================================
-        // SETUP APP
-        // ============================================
-        function setupApp() {
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-            updateThemeIcon();
-            
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                if (confirm('Are you sure you want to logout?')) {
-                    logoutUser();
-                }
-            });
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    navigateTo(item.dataset.page);
-                });
-            });
-            
-            document.getElementById('adminPanelBtn').addEventListener('click', () => {
-                if (isAdmin) {
-                    navigateTo('admin');
-                } else {
-                    showToast('Access denied');
-                }
-            });
-            
-            document.getElementById('googleSignInBtn').addEventListener('click', signInWithGoogle);
+            setupApp();
+            navigateTo('dashboard');
+        } else {
+            currentUser = null; currentUserData = null; isAdmin = false;
+            // Redirect to login page
+            window.location.href = 'login.html';
         }
+    });
 
-        // ============================================
-        // ERROR HANDLING
-        // ============================================
-        window.addEventListener('error', (e) => {
-            console.error('App Error:', e.error || e.message);
-            showToast('An error occurred. Please try again.');
+    function setupApp() {
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Logout?')) { signOut(auth); }
         });
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => navigateTo(item.dataset.page));
+        });
+        document.getElementById('adminPanelBtn').addEventListener('click', () => {
+            if (isAdmin) navigateTo('admin');
+            else showToast('Access denied');
+        });
+    }
 
-        console.log('AGLS App Initialized');
-        console.log('Version: 1.0.0');
-        console.log('Built with ❤️ for Arabic learners');
+    console.log('🔥 AGLS App Loaded');
     </script>
 </body>
 </html>
