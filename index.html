@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>All Hadith</title>
+  <title>আল হাদিস</title>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -14,68 +14,230 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', 'Tahoma', sans-serif;
     }
+
     body {
-      background: #f5f3f0;
+      background: #f1ede8;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding: 12px 8px 80px 8px;
+      padding: 16px 10px 80px 10px;
     }
+
     .app-container {
-      max-width: 480px;
+      max-width: 430px;
       width: 100%;
       background: #ffffff;
-      border-radius: 28px 28px 20px 20px;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
-      overflow: hidden;
-      padding: 20px 16px 30px;
-      position: relative;
-      transition: all 0.2s ease;
+      border-radius: 32px 32px 24px 24px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+      padding: 22px 18px 30px;
+      transition: all 0.2s;
     }
-    /* Header */
+
+    /* ----- HEADER (আল হাদিস) ----- */
     .app-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #eae6e0;
+      margin-bottom: 12px;
     }
     .app-header h1 {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 700;
-      color: #1e3c4f;
-      letter-spacing: -0.3px;
+      color: #1d2e3b;
+      letter-spacing: -0.5px;
     }
     .app-header h1 i {
-      color: #b98b5e;
-      margin-right: 8px;
+      color: #b48a5c;
+      margin-right: 6px;
     }
     .header-icons i {
       font-size: 20px;
       color: #5e6f7e;
-      margin-left: 14px;
+      margin-left: 16px;
       opacity: 0.7;
       transition: 0.2s;
     }
-    .header-icons i:hover {
+    .header-icons i:active {
       opacity: 1;
+      transform: scale(0.92);
     }
-    /* Search & Filter */
+
+    /* ----- HADITH CARD (like screenshot) ----- */
+    .featured-hadith {
+      background: #f8f4ef;
+      border-radius: 24px;
+      padding: 22px 18px 18px 18px;
+      margin: 8px 0 20px 0;
+      border-left: 8px solid #b48a5c;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+    .featured-hadith .hadith-text {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #1c2a35;
+      font-weight: 450;
+      margin-bottom: 10px;
+    }
+    .featured-hadith .hadith-text i {
+      color: #b48a5c;
+      margin-right: 6px;
+      font-size: 16px;
+    }
+    .featured-hadith .hadith-ref {
+      font-size: 15px;
+      color: #7a6b5c;
+      font-weight: 500;
+      border-top: 1px dashed #d8cec4;
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .featured-hadith .hadith-ref i {
+      color: #b48a5c;
+      margin-right: 4px;
+    }
+    .featured-hadith .hadith-ref span:last-child {
+      background: #e9e0d8;
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-size: 13px;
+      color: #4f3f30;
+    }
+
+    /* ----- BOTTOM NAV (সবশেষ / অ্যাপস / হাদিসে যান / সদাকা) ----- */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      background: #f8f4ef;
+      border-radius: 60px;
+      padding: 6px 4px;
+      margin: 12px 0 24px 0;
+      border: 1px solid #e7dfd8;
+    }
+    .nav-item {
+      padding: 8px 0;
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: #5f5040;
+      border-radius: 40px;
+      transition: 0.15s;
+      cursor: default;
+    }
+    .nav-item i {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 2px;
+      color: #8b7a68;
+    }
+    .nav-item.active {
+      background: #1d2e3b;
+      color: white;
+    }
+    .nav-item.active i {
+      color: white;
+    }
+    .nav-item:active {
+      transform: scale(0.94);
+    }
+
+    /* ----- সব হাদিসের বই (section title) ----- */
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1d2e3b;
+      margin: 12px 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title i {
+      color: #b48a5c;
+      font-size: 18px;
+    }
+
+    /* ----- BOOK GRID (like screenshot) ----- */
+    .book-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+    .book-card {
+      display: flex;
+      align-items: center;
+      background: #fcfaf8;
+      border-radius: 20px;
+      padding: 14px 18px;
+      border: 1px solid #e7dfd8;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: 0.15s;
+    }
+    .book-card:active {
+      background: #f3eee8;
+      transform: scale(0.98);
+    }
+    .book-icon {
+      width: 50px;
+      height: 50px;
+      background: #1d2e3b;
+      color: white;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-right: 16px;
+      flex-shrink: 0;
+    }
+    .book-icon.alt {
+      background: #b48a5c;
+    }
+    .book-info {
+      flex: 1;
+    }
+    .book-info h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1c2a35;
+      margin-bottom: 2px;
+    }
+    .book-info .book-author {
+      font-size: 14px;
+      color: #7a6b5c;
+      font-weight: 400;
+    }
+    .book-stats {
+      text-align: right;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1d2e3b;
+      background: #ede8e2;
+      padding: 6px 14px;
+      border-radius: 40px;
+      white-space: nowrap;
+    }
+    .book-stats i {
+      color: #b48a5c;
+      margin-right: 4px;
+    }
+
+    /* ----- SEARCH & FILTER (additional) ----- */
     .search-section {
       display: flex;
       gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      margin-bottom: 18px;
+      margin-top: 4px;
     }
     .search-box {
       flex: 1;
       display: flex;
       align-items: center;
-      background: #f2efeb;
+      background: #f2eee9;
       border-radius: 40px;
       padding: 4px 16px 4px 18px;
       border: 1px solid #e3ddd6;
@@ -110,37 +272,26 @@
       align-items: center;
       gap: 6px;
       cursor: pointer;
-      transition: 0.2s;
       border: 1px solid #d6cdc4;
-    }
-    .filter-btn i {
-      font-size: 14px;
-      color: #6f5b4b;
+      transition: 0.15s;
     }
     .filter-btn:active {
       background: #d5cbc1;
-      transform: scale(0.96);
+      transform: scale(0.94);
     }
-    /* Category Pills */
+
+    /* Category pills (hidden but functional) */
     .category-scroll {
       display: flex;
       gap: 10px;
       overflow-x: auto;
-      padding-bottom: 16px;
+      padding-bottom: 14px;
       margin-bottom: 8px;
       scrollbar-width: thin;
       -webkit-overflow-scrolling: touch;
-      white-space: nowrap;
     }
-    .category-scroll::-webkit-scrollbar {
-      height: 3px;
-      background: #e2dbd4;
-      border-radius: 10px;
-    }
-    .category-scroll::-webkit-scrollbar-thumb {
-      background: #b7a697;
-      border-radius: 10px;
-    }
+    .category-scroll::-webkit-scrollbar { height: 3px; background: #e2dbd4; border-radius: 10px; }
+    .category-scroll::-webkit-scrollbar-thumb { background: #b7a697; border-radius: 10px; }
     .cat-pill {
       background: #ede8e2;
       padding: 8px 18px;
@@ -150,101 +301,61 @@
       color: #3c4d5a;
       border: 1px solid #ddd6ce;
       cursor: pointer;
-      transition: 0.15s;
       flex-shrink: 0;
-      letter-spacing: 0.2px;
+      transition: 0.1s;
     }
     .cat-pill.active {
-      background: #1e3c4f;
+      background: #1d2e3b;
       color: white;
-      border-color: #1e3c4f;
-      box-shadow: 0 4px 10px rgba(30, 60, 79, 0.2);
+      border-color: #1d2e3b;
     }
     .cat-pill:active {
       transform: scale(0.94);
     }
-    /* Hadith Cards */
+
+    /* Hadith list (dynamic) */
     .hadith-list {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       margin-top: 6px;
     }
     .hadith-card {
       background: #fcfaf8;
       border-radius: 20px;
-      padding: 18px 16px 16px 16px;
-      border: 1px solid #e7e0d9;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-      transition: 0.2s;
-      border-left: 6px solid #b98b5e;
+      padding: 16px 16px 14px;
+      border: 1px solid #e7dfd8;
+      border-left: 6px solid #b48a5c;
     }
-    .hadith-card:active {
-      background: #f6f1ec;
-      transform: scale(0.99);
-    }
-    .hadith-book {
+    .hadith-card .h-book {
       font-size: 12px;
       font-weight: 600;
       color: #9b866f;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
     }
-    .hadith-book span {
-      background: #ede7e0;
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 11px;
-      color: #4d3e30;
-    }
-    .hadith-text {
+    .hadith-card .h-text {
       font-size: 17px;
       line-height: 1.6;
       color: #1f2c38;
-      font-weight: 400;
-      margin: 8px 0 6px;
-      padding-right: 4px;
+      margin: 6px 0 6px;
     }
-    .hadith-text i {
-      color: #b5967a;
-      font-size: 14px;
-      margin-right: 4px;
-    }
-    .hadith-ref {
+    .hadith-card .h-ref {
       font-size: 13px;
       color: #7a6b5c;
-      margin-top: 8px;
       border-top: 1px dashed #e1d8d0;
-      padding-top: 10px;
+      padding-top: 8px;
       display: flex;
-      justify-content: flex-start;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
     }
-    .hadith-ref i {
-      margin-right: 4px;
-      color: #b18763;
-      width: 16px;
-    }
-    /* Empty state */
     .empty-state {
       text-align: center;
-      padding: 50px 20px;
+      padding: 40px 10px;
       color: #827466;
     }
-    .empty-state i {
-      font-size: 48px;
-      color: #d5c8bc;
-      margin-bottom: 16px;
-    }
-    .empty-state p {
-      font-size: 16px;
-    }
-    /* Loading shimmer */
     .loader {
       display: flex;
       justify-content: center;
@@ -252,14 +363,11 @@
     }
     .loader i {
       font-size: 28px;
-      color: #b98b5e;
+      color: #b48a5c;
       animation: spin 1s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    /* footer note */
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     .app-footer {
       margin-top: 28px;
       text-align: center;
@@ -267,30 +375,22 @@
       color: #b0a294;
       border-top: 1px solid #ece5de;
       padding-top: 18px;
-      letter-spacing: 0.3px;
     }
-    .app-footer i {
-      color: #b18763;
-      margin: 0 4px;
-    }
-    /* responsive fine-tune */
-    @media (max-width: 400px) {
-      .app-container { padding: 16px 12px; }
-      .hadith-text { font-size: 16px; }
-    }
+    .app-footer i { color: #b48a5c; margin: 0 4px; }
   </style>
 </head>
 <body>
-<div class="app-container" id="appContainer">
-  <!-- Header -->
+<div class="app-container">
+
+  <!-- HEADER -->
   <div class="app-header">
-    <h1><i class="fas fa-book-quran"></i> All Hadith</h1>
+    <h1><i class="fas fa-book-quran"></i> আল হাদিস</h1>
     <div class="header-icons">
-      <i class="fas fa-sync-alt" id="refreshBtn" title="পুনরায় লোড"></i>
+      <i class="fas fa-sync-alt" id="refreshBtn"></i>
     </div>
   </div>
 
-  <!-- Search & Filter -->
+  <!-- SEARCH -->
   <div class="search-section">
     <div class="search-box">
       <i class="fas fa-search"></i>
@@ -299,18 +399,36 @@
     <button class="filter-btn" id="filterToggleBtn"><i class="fas fa-sliders-h"></i> ফিল্টার</button>
   </div>
 
-  <!-- Category Pills -->
-  <div class="category-scroll" id="categoryContainer">
-    <span class="cat-pill active" data-cat="all">সব</span>
-    <!-- dynamic category will be injected here via JS -->
+  <!-- FEATURED HADITH (exactly like screenshot) -->
+  <div class="featured-hadith" id="featuredHadith">
+    <div class="hadith-text">
+      <i class="fas fa-quote-right"></i> "নবী (সাজ্জাজাহু 'আলাইহি ওয়া সাজ্জাম) নাওফাল (রাঃ)- কে বেলনঃ ভূমি "কুল ইয়া আয়ুহাল কাহিল্লন" সুরাদি পড়ে ঘুমাবে। কেননা তা শিক্ষক হতে মুক্তকারী।"
+    </div>
+    <div class="hadith-ref">
+      <span><i class="fas fa-scroll"></i> সুনানে আবু দাড়দ</span>
+      <span><i class="fas fa-hashtag"></i> হাদিস</span>
+    </div>
   </div>
 
-  <!-- Hadith List -->
-  <div id="hadithListContainer" class="hadith-list">
-    <!-- Loading -->
+  <!-- BOTTOM NAV (সবশেষ / অ্যাপস / হাদিসে যান / সদাকা) -->
+  <div class="bottom-nav">
+    <div class="nav-item"><i class="fas fa-clock"></i>সবশেষ</div>
+    <div class="nav-item"><i class="fas fa-th"></i>অ্যাপস</div>
+    <div class="nav-item active"><i class="fas fa-book-open"></i>হাদিসে যান</div>
+    <div class="nav-item"><i class="fas fa-hand-holding-heart"></i>সদাকা</div>
+  </div>
+
+  <!-- Category pills (hidden but functional) -->
+  <div class="category-scroll" id="categoryContainer">
+    <span class="cat-pill active" data-cat="all">সব</span>
+  </div>
+
+  <!-- DYNAMIC HADITH LIST (will show books + hadiths) -->
+  <div id="hadithListContainer">
     <div class="loader" id="loaderIndicator"><i class="fas fa-spinner"></i></div>
   </div>
 
+  <!-- FOOTER -->
   <div class="app-footer">
     <i class="fas fa-database"></i> রিয়েল টাইম ডেটাবেস · <i class="fas fa-code"></i> GitHub
   </div>
@@ -318,7 +436,7 @@
 
 <script>
   (function() {
-    // -------------------- FIREBASE CONFIG --------------------
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
       authDomain: "all-hadith-a68fa.firebaseapp.com",
@@ -329,210 +447,186 @@
       appId: "1:124928027736:web:7f0e8e0a771f244eca2e2d",
       measurementId: "G-RF51PW2PLD"
     };
-
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // -------------------- DOM refs --------------------
-    const hadithContainer = document.getElementById('hadithListContainer');
+    // DOM refs
+    const container = document.getElementById('hadithListContainer');
     const loader = document.getElementById('loaderIndicator');
     const searchInput = document.getElementById('searchInput');
     const categoryContainer = document.getElementById('categoryContainer');
-    const filterToggleBtn = document.getElementById('filterToggleBtn');
+    const filterBtn = document.getElementById('filterToggleBtn');
     const refreshBtn = document.getElementById('refreshBtn');
+    const featuredDiv = document.getElementById('featuredHadith');
 
     // state
-    let allHadiths = [];          // raw data from firebase
+    let allHadiths = [];
     let currentCategory = 'all';
     let searchQuery = '';
 
-    // -------------------- Helper Functions --------------------
+    // helpers
     function showLoader(show) {
-      if (show) {
-        loader.style.display = 'flex';
-      } else {
-        loader.style.display = 'none';
-      }
+      loader.style.display = show ? 'flex' : 'none';
     }
 
-    // render hadith cards based on current filter + search
-    function renderHadiths() {
-      // filter by category & search
+    // render: books + hadiths combined (like screenshot)
+    function renderAll() {
       let filtered = allHadiths;
-
-      // category filter
       if (currentCategory !== 'all') {
         filtered = filtered.filter(h => h.category === currentCategory);
       }
-
-      // search filter (book name or text)
       if (searchQuery.trim() !== '') {
         const q = searchQuery.trim().toLowerCase();
         filtered = filtered.filter(h => 
-          (h.book && h.book.toLowerCase().includes(q)) || 
+          (h.book && h.book.toLowerCase().includes(q)) ||
           (h.text && h.text.toLowerCase().includes(q)) ||
           (h.reference && h.reference.toLowerCase().includes(q))
         );
       }
 
-      // if empty -> show empty state
       if (filtered.length === 0) {
-        hadithContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-book-open"></i>
-            <p>কোন হাদিস খুঁজে পাওয়া যায়নি</p>
-            <p style="font-size:14px; margin-top:6px; color:#b09b8a;">অন্য কিওয়ার্ড দিয়ে চেষ্টা করুন</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><p>কোন হাদিস খুঁজে পাওয়া যায়নি</p></div>`;
         return;
       }
 
-      // build cards
-      let html = '';
-      filtered.forEach((hadith, index) => {
-        // fallback values
-        const book = hadith.book || 'গ্রন্থ';
-        const text = hadith.text || 'হাদিসের পাঠ্য';
-        const ref = hadith.reference || '';
-        const category = hadith.category || 'সাধারণ';
-        const narrator = hadith.narrator || '';
+      // Build the "সব হাদিসের বই" section + book cards
+      // We'll group by book to show book cards, then list hadiths.
+      const bookMap = new Map();
+      filtered.forEach(h => {
+        const key = h.book || 'অজানা গ্রন্থ';
+        if (!bookMap.has(key)) {
+          bookMap.set(key, { count: 0, author: h.author || 'ইমাম', icon: h.book?.charAt(0) || 'ব' });
+        }
+        bookMap.get(key).count += 1;
+      });
 
+      let html = `<div class="section-title"><i class="fas fa-book"></i> সব হাদিসের বই</div>`;
+      html += `<div class="book-grid">`;
+      let index = 0;
+      for (let [bookName, info] of bookMap.entries()) {
+        const iconLetter = bookName.charAt(0).toUpperCase();
+        const altClass = (index % 2 === 0) ? '' : 'alt';
         html += `
-          <div class="hadith-card" data-index="${index}">
-            <div class="hadith-book">
-              <span><i class="fas fa-scroll"></i> ${book}</span>
-              <span>${category}</span>
+          <div class="book-card" data-book="${bookName}">
+            <div class="book-icon ${altClass}">${iconLetter}</div>
+            <div class="book-info">
+              <h3>${bookName}</h3>
+              <div class="book-author">${info.author}</div>
             </div>
-            <div class="hadith-text">
-              <i class="fas fa-quote-right"></i> ${text}
-            </div>
-            <div class="hadith-ref">
+            <div class="book-stats"><i class="fas fa-hadith"></i> ${info.count} হাদিস</div>
+          </div>
+        `;
+        index++;
+      }
+      html += `</div>`;
+
+      // Now list individual hadith cards
+      html += `<div class="section-title" style="margin-top:18px;"><i class="fas fa-list-ul"></i> হাদিস সমূহ</div>`;
+      html += `<div class="hadith-list">`;
+      filtered.forEach(h => {
+        const book = h.book || 'গ্রন্থ';
+        const text = h.text || 'হাদিসের পাঠ্য';
+        const ref = h.reference || '';
+        const narrator = h.narrator || '';
+        html += `
+          <div class="hadith-card">
+            <div class="h-book"><span>${book}</span><span>${h.category || 'সাধারণ'}</span></div>
+            <div class="h-text"><i class="fas fa-quote-right" style="color:#b48a5c;margin-right:5px;"></i>${text}</div>
+            <div class="h-ref">
               ${ref ? `<span><i class="fas fa-hashtag"></i> ${ref}</span>` : ''}
               ${narrator ? `<span><i class="fas fa-user"></i> ${narrator}</span>` : ''}
             </div>
           </div>
         `;
       });
-
-      hadithContainer.innerHTML = html;
+      html += `</div>`;
+      container.innerHTML = html;
     }
 
-    // load categories dynamically and update pills
+    // update categories
     function updateCategories() {
       const categories = new Set();
-      allHadiths.forEach(h => {
-        if (h.category) categories.add(h.category);
-      });
-      
-      // keep "all" button, then add others
+      allHadiths.forEach(h => { if (h.category) categories.add(h.category); });
       let pillsHTML = `<span class="cat-pill active" data-cat="all">সব</span>`;
-      const sorted = Array.from(categories).sort();
-      sorted.forEach(cat => {
-        const isActive = (currentCategory === cat) ? 'active' : '';
-        pillsHTML += `<span class="cat-pill ${isActive}" data-cat="${cat}">${cat}</span>`;
+      Array.from(categories).sort().forEach(cat => {
+        const active = currentCategory === cat ? 'active' : '';
+        pillsHTML += `<span class="cat-pill ${active}" data-cat="${cat}">${cat}</span>`;
       });
-      
-      // replace child nodes but keep the container
       categoryContainer.innerHTML = pillsHTML;
-
-      // attach click listeners to pills
       document.querySelectorAll('.cat-pill').forEach(pill => {
-        pill.addEventListener('click', function(e) {
-          const cat = this.dataset.cat;
-          // update active class
+        pill.addEventListener('click', function() {
           document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
           this.classList.add('active');
-          currentCategory = cat;
-          renderHadiths();
+          currentCategory = this.dataset.cat;
+          renderAll();
         });
       });
     }
 
-    // fetch data from Firebase Realtime Database
-    function loadDataFromFirebase() {
+    // load data
+    function loadData() {
       showLoader(true);
-      const hadithRef = database.ref('hadiths');  // assuming data stored under 'hadiths' node
-
-      hadithRef.once('value').then((snapshot) => {
-        const data = snapshot.val();
+      database.ref('hadiths').once('value').then(snap => {
+        const data = snap.val();
         if (data) {
-          // convert object to array
-          const hadithArray = Object.keys(data).map(key => {
-            return { id: key, ...data[key] };
-          });
-          allHadiths = hadithArray;
+          allHadiths = Object.keys(data).map(key => ({ id: key, ...data[key] }));
         } else {
-          // if no data, use demo data (to show something meaningful)
-          allHadiths = getDemoHadiths();
+          allHadiths = getDemoData();
         }
-
-        // update categories, render
         updateCategories();
-        renderHadiths();
+        renderAll();
         showLoader(false);
-      }).catch((error) => {
-        console.error('Firebase read error:', error);
-        // fallback: use demo data
-        allHadiths = getDemoHadiths();
+        // update featured hadith with first item if exists
+        if (allHadiths.length > 0) {
+          const first = allHadiths[0];
+          featuredDiv.querySelector('.hadith-text').innerHTML = `<i class="fas fa-quote-right"></i> "${first.text || 'হাদিসের পাঠ্য'}"`;
+          featuredDiv.querySelector('.hadith-ref span:first-child').innerHTML = `<i class="fas fa-scroll"></i> ${first.book || 'গ্রন্থ'}`;
+        }
+      }).catch(() => {
+        allHadiths = getDemoData();
         updateCategories();
-        renderHadiths();
+        renderAll();
         showLoader(false);
-        // show a toast or something? we'll keep silent.
       });
     }
 
-    // -------------------- DEMO DATA (for fallback / initial) --------------------
-    function getDemoHadiths() {
+    // Demo data (including book info)
+    function getDemoData() {
       return [
-        { book: 'সহীহ বুখারী', text: 'নিশ্চয় কাজগুলো নিয়তের উপর নির্ভরশীল।', reference: 'হাদিস: ১', category: 'ঈমান', narrator: 'উমর ইবনুল খাত্তাব' },
-        { book: 'সহীহ মুসলিম', text: 'যে ব্যক্তি আল্লাহ ও শেষ দিনের প্রতি ঈমান রাখে, সে যেন তার প্রতিবেশীকে কষ্ট না দেয়।', reference: 'হাদিস: ৪৫', category: 'আখলাক', narrator: 'আবু হুরায়রা' },
-        { book: 'তিরমিজি', text: 'তোমাদের মধ্যে সেই উত্তম যে তার পরিবারের প্রতি উত্তম।', reference: 'হাদিস: ৩৮৯৫', category: 'পরিবার', narrator: 'আয়েশা (রা.)' },
-        { book: 'আবু দাউদ', text: 'যে ব্যক্তি দুনিয়াতে কারো কষ্ট দূর করে, আল্লাহ কিয়ামতের দিন তার কষ্ট দূর করবেন।', reference: 'হাদিস: ৪৯৪৬', category: 'সেবা', narrator: 'আবু হুরায়রা' },
-        { book: 'ইবনে মাজাহ', text: 'প্রত্যেকটি ভালো কাজই সদকা।', reference: 'হাদিস: ৩৯৭০', category: 'সদকা', narrator: 'জাবির (রা.)' },
-        { book: 'মুয়াত্তা মালিক', text: 'যে ব্যক্তি আল্লাহর পথে একটি দিন রোজা রাখে, আল্লাহ তাকে জাহান্নামের আগুন থেকে দূরে রাখেন।', reference: 'হাদিস: ৬৫৩', category: 'রোজা', narrator: 'আবু সাঈদ খুদরী' },
-        { book: 'মুসনাদ আহমদ', text: 'ক্ষমা করা ব্যক্তির মর্যাদা বৃদ্ধি পায়।', reference: 'হাদিস: ৭৬৩২', category: 'ক্ষমা', narrator: 'আব্দুল্লাহ ইবনে মাসউদ' },
-        { book: 'সহীহ বুখারী', text: 'তোমরা পরস্পর হিংসা করো না, ধোকা দিও না, শত্রুতা করো না।', reference: 'হাদিস: ৬০৬৪', category: 'আখলাক', narrator: 'আনাস (রা.)' },
+        { book: 'সহিহ বুখারী', author: 'ইমাম বুখারি', text: 'নিশ্চয় কাজগুলো নিয়তের উপর নির্ভরশীল।', reference: 'হাদিস: ১', category: 'ঈমান', narrator: 'উমর ইবনুল খাত্তাব' },
+        { book: 'সহিহ মুসলিম', author: 'ইমাম মুসলিম', text: 'যে ব্যক্তি আল্লাহ ও শেষ দিনের প্রতি ঈমান রাখে, সে যেন তার প্রতিবেশীকে কষ্ট না দেয়।', reference: 'হাদিস: ৪৫', category: 'আখলাক', narrator: 'আবু হুরায়রা' },
+        { book: 'তিরমিজি', author: 'ইমাম তিরমিজি', text: 'তোমাদের মধ্যে সেই উত্তম যে তার পরিবারের প্রতি উত্তম।', reference: 'হাদিস: ৩৮৯৫', category: 'পরিবার', narrator: 'আয়েশা (রা.)' },
+        { book: 'সুনানে আবু দাড়দ', author: 'ইমাম আবু দাউদ', text: 'যে ব্যক্তি দুনিয়াতে কারো কষ্ট দূর করে, আল্লাহ কিয়ামতের দিন তার কষ্ট দূর করবেন।', reference: 'হাদিস: ৪৯৪৬', category: 'সেবা', narrator: 'আবু হুরায়রা' },
+        { book: 'ইবনে মাজাহ', author: 'ইমাম ইবনে মাজাহ', text: 'প্রত্যেকটি ভালো কাজই সদকা।', reference: 'হাদিস: ৩৯৭০', category: 'সদকা', narrator: 'জাবির (রা.)' },
+        { book: 'মুয়াত্তা মালিক', author: 'ইমাম মালিক', text: 'যে ব্যক্তি আল্লাহর পথে একটি দিন রোজা রাখে, আল্লাহ তাকে জাহান্নামের আগুন থেকে দূরে রাখেন।', reference: 'হাদিস: ৬৫৩', category: 'রোজা', narrator: 'আবু সাঈদ খুদরী' },
+        { book: 'মুসনাদ আহমদ', author: 'ইমাম আহমদ', text: 'ক্ষমা করা ব্যক্তির মর্যাদা বৃদ্ধি পায়।', reference: 'হাদিস: ৭৬৩২', category: 'ক্ষমা', narrator: 'আব্দুল্লাহ ইবনে মাসউদ' },
       ];
     }
 
-    // -------------------- Event Listeners --------------------
-    // Search input
-    searchInput.addEventListener('input', function(e) {
+    // EVENT LISTENERS
+    searchInput.addEventListener('input', function() {
       searchQuery = this.value;
-      renderHadiths();
+      renderAll();
     });
 
-    // Filter toggle: just a dummy action for demonstration (scrolling to category)
-    filterToggleBtn.addEventListener('click', function() {
+    filterBtn.addEventListener('click', function() {
       categoryContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // subtle feedback
-      this.style.background = '#d5cbc1';
-      setTimeout(() => { this.style.background = '#e7dfd8'; }, 200);
     });
 
-    // Refresh button
     refreshBtn.addEventListener('click', function() {
-      // reset search and category
       searchInput.value = '';
       searchQuery = '';
       currentCategory = 'all';
-      // reset active pill
       document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
       const allPill = document.querySelector('.cat-pill[data-cat="all"]');
       if (allPill) allPill.classList.add('active');
-      
-      // reload data from firebase
-      loadDataFromFirebase();
-      // feedback
+      loadData();
       this.style.transform = 'rotate(60deg)';
-      setTimeout(() => { this.style.transform = 'rotate(0deg)'; }, 300);
+      setTimeout(() => this.style.transform = 'rotate(0deg)', 300);
     });
 
-    // -------------------- INITIAL LOAD --------------------
-    loadDataFromFirebase();
-
-    // optional: if any error, but we already handle
+    // INIT
+    loadData();
   })();
 </script>
 </body>
