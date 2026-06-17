@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>AGLS - Admin Panel</title>
+    <title>AGLS - এডমিন প্যানেল</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
@@ -186,18 +186,18 @@
 
     <main class="main-content" id="mainContent">
         <div class="admin-panel">
-            <h2 style="margin-bottom:12px;">Admin Panel</h2>
+            <h2 style="margin-bottom:12px;">🔐 এডমিন প্যানেল</h2>
 
             <div class="admin-stats" id="adminStats">
-                <div class="admin-stat-card"><span class="number" id="statUsers">0</span><span class="label">Users</span></div>
-                <div class="admin-stat-card"><span class="number" id="statPosts">0</span><span class="label">Posts</span></div>
-                <div class="admin-stat-card"><span class="number" id="statComments">0</span><span class="label">Comments</span></div>
+                <div class="admin-stat-card"><span class="number" id="statUsers">০</span><span class="label">মোট ব্যবহারকারী</span></div>
+                <div class="admin-stat-card"><span class="number" id="statPosts">০</span><span class="label">মোট পোস্ট</span></div>
+                <div class="admin-stat-card"><span class="number" id="statComments">০</span><span class="label">মোট মন্তব্য</span></div>
             </div>
 
             <div class="admin-tabs">
-                <button class="admin-tab active" data-admin="users">Users</button>
-                <button class="admin-tab" data-admin="posts">Posts</button>
-                <button class="admin-tab" data-admin="reports">Reports</button>
+                <button class="admin-tab active" data-admin="users">👥 ব্যবহারকারী</button>
+                <button class="admin-tab" data-admin="posts">📝 পোস্ট</button>
+                <button class="admin-tab" data-admin="reports">🚩 রিপোর্ট</button>
             </div>
 
             <div id="adminContent"></div>
@@ -205,13 +205,13 @@
     </main>
 
     <nav class="bottom-nav">
-        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-home"></i><span>Home</span></button>
-        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-compass"></i><span>Explore</span></button>
-        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-search"></i><span>Search</span></button>
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-home"></i><span>হোম</span></button>
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-compass"></i><span>এক্সপ্লোর</span></button>
+        <button class="nav-item" onclick="window.location.href='index.html'"><i class="fas fa-search"></i><span>খুঁজুন</span></button>
         <button class="nav-item" onclick="window.location.href='index.html'">
-            <i class="fas fa-bell"></i><span>Alerts</span>
+            <i class="fas fa-bell"></i><span>সতর্কতা</span>
         </button>
-        <button class="nav-item active"><i class="fas fa-user-shield"></i><span>Admin</span></button>
+        <button class="nav-item active"><i class="fas fa-user-shield"></i><span>এডমিন</span></button>
     </nav>
 
     <div id="toast" class="toast hidden"></div>
@@ -274,64 +274,66 @@
     }
 
     async function loadAdminUsers() {
-        adminContent.innerHTML = '<div class="text-center text-muted">Loading...</div>';
+        adminContent.innerHTML = '<div class="text-center text-muted">লোড হচ্ছে...</div>';
         try {
             const snap = await get(ref(db, 'users'));
-            if (!snap.exists()) { adminContent.innerHTML = '<div class="empty-state"><h3>No users</h3></div>'; return; }
+            if (!snap.exists()) { adminContent.innerHTML = '<div class="empty-state"><h3>কোন ব্যবহারকারী নেই</h3></div>'; return; }
             const users = []; snap.forEach(c => { const u = c.val(); u.id = c.key; users.push(u); });
             adminContent.innerHTML = users.map(u => `
                 <div class="admin-user-item">
                     <img class="avatar" src="${getAvatar(u.name, u.photoURL)}">
                     <div class="info"><div class="name">${escapeHtml(u.name)}</div><div class="email">${escapeHtml(u.email||'')}</div></div>
                     <div class="actions">
-                        ${u.isAdmin ? `<button class="btn-secondary" onclick="window.toggleAdmin('${u.id}',false)" style="font-size:0.65rem;padding:2px 8px;">Remove Admin</button>` :
-                        `<button class="btn-success" onclick="window.toggleAdmin('${u.id}',true)" style="font-size:0.65rem;padding:2px 8px;">Make Admin</button>`}
+                        ${u.isAdmin ? `<button class="btn-secondary" onclick="window.toggleAdmin('${u.id}',false)" style="font-size:0.65rem;padding:2px 8px;">এডমিন সরান</button>` :
+                        `<button class="btn-success" onclick="window.toggleAdmin('${u.id}',true)" style="font-size:0.65rem;padding:2px 8px;">এডমিন বানান</button>`}
                     </div>
                 </div>
             `).join('');
-        } catch(e) { console.error(e); adminContent.innerHTML = '<p>Error loading users</p>'; }
+        } catch(e) { console.error(e); adminContent.innerHTML = '<p>ব্যবহারকারী লোড করতে সমস্যা</p>'; }
     }
 
     async function loadAdminPosts() {
-        adminContent.innerHTML = '<div class="text-center text-muted">Loading...</div>';
+        adminContent.innerHTML = '<div class="text-center text-muted">লোড হচ্ছে...</div>';
         try {
             const snap = await get(ref(db, 'posts'));
-            if (!snap.exists()) { adminContent.innerHTML = '<div class="empty-state"><h3>No posts</h3></div>'; return; }
+            if (!snap.exists()) { adminContent.innerHTML = '<div class="empty-state"><h3>কোন পোস্ট নেই</h3></div>'; return; }
             const posts = []; snap.forEach(c => { const p = c.val(); p.id = c.key; posts.push(p); });
             posts.sort((a,b) => new Date(b.date) - new Date(a.date));
-            adminContent.innerHTML = posts.slice(0,30).map(p => `
+            adminContent.innerHTML = posts.slice(0,30).map(p => {
+                const privacyLabel = p.privacy === 'public' ? '🌍 পাবলিক' : p.privacy === 'followers' ? '👥 ফলোয়ার' : '🔒 শুধু আমি';
+                return `
                 <div class="admin-post-item">
                     <div class="content">${escapeHtml(p.content.substring(0,150))}${p.content.length > 150 ? '...' : ''}</div>
-                    <div class="meta">By ${escapeHtml(p.authorName)} | ${new Date(p.date).toLocaleDateString()} | Likes: ${p.likes||0} | Comments: ${p.comments||0}</div>
-                    <div class="actions"><button class="btn-danger" onclick="window.adminDeletePost('${p.id}')" style="font-size:0.7rem;padding:2px 10px;">Delete</button></div>
+                    <div class="meta">লিখেছেন: ${escapeHtml(p.authorName)} | ${new Date(p.date).toLocaleDateString('bn-BD')} | ${privacyLabel} | লাইক: ${p.likes||0} | মন্তব্য: ${p.comments||0}</div>
+                    <div class="actions"><button class="btn-danger" onclick="window.adminDeletePost('${p.id}')" style="font-size:0.7rem;padding:2px 10px;">মুছুন</button></div>
                 </div>
-            `).join('');
-        } catch(e) { console.error(e); adminContent.innerHTML = '<p>Error loading posts</p>'; }
+            `}).join('');
+        } catch(e) { console.error(e); adminContent.innerHTML = '<p>পোস্ট লোড করতে সমস্যা</p>'; }
     }
 
     async function loadAdminReports() {
-        adminContent.innerHTML = `<div class="empty-state"><i class="fas fa-flag"></i><h3>No reports yet</h3></div>`;
+        adminContent.innerHTML = `<div class="empty-state"><i class="fas fa-flag"></i><h3>কোন রিপোর্ট নেই</h3><p>রিপোর্ট সিস্টেম শীঘ্রই আসছে</p></div>`;
     }
 
     // ===== GLOBAL ADMIN FUNCTIONS =====
     window.toggleAdmin = async function(userId, makeAdmin) {
         try {
             await update(ref(db, `users/${userId}`), { isAdmin: makeAdmin });
-            showToast(`User ${makeAdmin ? 'promoted to' : 'removed from'} admin`);
+            showToast(`ব্যবহারকারী ${makeAdmin ? 'এডমিন করা হয়েছে' : 'এডমিন থেকে সরানো হয়েছে'}`);
             await loadAdminUsers();
-        } catch(e) { console.error(e); showToast('Failed to update user'); }
+        } catch(e) { console.error(e); showToast('আপডেট করতে ব্যর্থ'); }
     };
 
     window.adminDeletePost = async function(postId) {
-        if (confirm('Delete this post?')) {
+        if (confirm('পোস্টটি মুছবেন?')) {
             try {
                 await remove(ref(db, `posts/${postId}`));
                 await remove(ref(db, `comments/${postId}`));
                 await remove(ref(db, `likes/${postId}`));
-                showToast('Post deleted');
+                showToast('পোস্ট মুছে ফেলা হয়েছে');
                 await loadAdminPosts();
                 await loadAdminStats();
-            } catch(e) { console.error(e); showToast('Failed to delete'); }
+            } catch(e) { console.error(e); showToast('মুছতে ব্যর্থ'); }
         }
     };
 
@@ -357,7 +359,7 @@
             if (snap.exists()) {
                 isAdmin = snap.val().isAdmin || false;
                 if (!isAdmin) {
-                    showToast('Access denied. Admin only.');
+                    showToast('অ্যাক্সেস অস্বীকৃত। শুধুমাত্র এডমিনদের জন্য।');
                     setTimeout(() => window.location.href = 'index.html', 1500);
                     return;
                 }
@@ -365,10 +367,9 @@
 
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             document.getElementById('logoutBtn').addEventListener('click', () => {
-                if (confirm('Logout?')) { signOut(auth); }
+                if (confirm('লগআউট করবেন?')) { signOut(auth); }
             });
 
-            // Setup admin
             await loadAdminStats();
             await loadAdminUsers();
 
@@ -388,7 +389,7 @@
         }
     });
 
-    console.log('🔥 AGLS Admin Loaded');
+    console.log('🔥 AGLS এডমিন প্যানেল লোড হয়েছে');
     </script>
 </body>
 </html>
