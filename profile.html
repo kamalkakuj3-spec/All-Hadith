@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>AGLS - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2d7d46;
+            --primary-dark: #1e5a32;
+            --bg-primary: #f5f3f0;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #888888;
+            --border-color: #e0ddd8;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.3s ease;
+            --nav-height: 64px;
+            --header-height: 56px;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-card: #2a2a2a;
+            --text-primary: #e8e6e3;
+            --text-secondary: #b0b0b0;
+            --text-muted: #777777;
+            --border-color: #333333;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background var(--transition), color var(--transition);
+            padding-bottom: 80px;
+        }
+        .app-header {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--bg-secondary);
+            padding: 8px 16px;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .header-left h1 { font-size: 1.3rem; color: var(--primary); font-weight: 700; cursor: pointer; }
+        .header-right { display: flex; gap: 8px; }
+        .icon-btn {
+            width: 40px; height: 40px;
+            border: none; border-radius: 50%;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .icon-btn:hover { background: var(--border-color); }
+        .icon-btn:active { transform: scale(0.92); }
+        .main-content {
+            max-width: 480px; margin: 0 auto;
+            padding: 16px; padding-bottom: calc(var(--nav-height) + 20px);
+        }
+        .profile-header {
+            text-align: center; padding: 16px 0;
+        }
+        .profile-avatar {
+            width: 80px; height: 80px;
+            border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--primary);
+            margin-bottom: 8px;
+        }
+        .profile-name { font-size: 1.2rem; font-weight: 700; }
+        .profile-email { color: var(--text-muted); font-size: 0.8rem; }
+        .profile-bio { color: var(--text-secondary); font-size: 0.85rem; margin: 4px 0; }
+        .profile-stats {
+            display: flex; justify-content: center; gap: 24px;
+            margin: 10px 0 14px;
+        }
+        .profile-stat { text-align: center; cursor: pointer; }
+        .profile-stat .number { font-weight: 700; font-size: 1rem; display: block; }
+        .profile-stat .label { font-size: 0.7rem; color: var(--text-muted); }
+        .profile-actions {
+            display: flex; gap: 8px; justify-content: center;
+            flex-wrap: wrap; margin-bottom: 12px;
+        }
+        .btn-primary {
+            padding: 8px 18px; background: var(--primary); color: white;
+            border: none; border-radius: var(--radius-sm);
+            font-weight: 600; cursor: pointer; font-size: 0.85rem;
+            white-space: nowrap; transition: all var(--transition);
+        }
+        .btn-primary:active { transform: scale(0.96); }
+        .btn-secondary {
+            padding: 6px 14px; background: transparent;
+            color: var(--text-secondary); border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm); cursor: pointer; font-size: 0.8rem;
+        }
+        .btn-danger {
+            padding: 6px 14px; background: #e74c3c; color: white;
+            border: none; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.8rem;
+        }
+        .post-card {
+            background: var(--bg-card); border-radius: var(--radius);
+            padding: 14px; margin-bottom: 12px;
+            box-shadow: var(--shadow); border: 1px solid var(--border-color);
+        }
+        .post-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+        }
+        .post-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            object-fit: cover; cursor: pointer;
+        }
+        .post-author { font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+        .post-author:hover { color: var(--primary); }
+        .post-date { color: var(--text-muted); font-size: 0.7rem; }
+        .post-content {
+            color: var(--text-secondary); font-size: 0.9rem;
+            margin-bottom: 8px; word-wrap: break-word; white-space: pre-wrap;
+        }
+        .post-tags {
+            display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;
+        }
+        .post-tag {
+            background: var(--border-color); padding: 2px 10px;
+            border-radius: 12px; font-size: 0.65rem; color: var(--text-secondary);
+        }
+        .post-actions {
+            display: flex; gap: 12px; padding-top: 8px;
+            border-top: 1px solid var(--border-color); flex-wrap: wrap;
+        }
+        .post-action-btn {
+            background: none; border: none; color: var(--text-muted);
+            font-size: 0.8rem; cursor: pointer; display: flex;
+            align-items: center; gap: 4px; padding: 4px 8px;
+            border-radius: var(--radius-sm); transition: all var(--transition);
+        }
+        .post-action-btn:hover { background: var(--border-color); }
+        .post-action-btn.liked { color: #e74c3c; }
+        .modal-container {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1000; display: flex; align-items: center;
+            justify-content: center; padding: 20px;
+        }
+        .modal-container.hidden { display: none; }
+        .modal-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            position: relative; background: var(--bg-secondary);
+            border-radius: var(--radius); padding: 20px;
+            max-width: 460px; width: 100%; max-height: 90vh;
+            overflow-y: auto; z-index: 1; animation: modalSlideUp 0.3s ease;
+        }
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 12px;
+        }
+        .modal-close {
+            background: none; border: none; font-size: 1.5rem;
+            color: var(--text-muted); cursor: pointer; padding: 0 6px;
+        }
+        .profile-edit-input {
+            width: 100%; max-width: 280px;
+            padding: 6px 12px; border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm); background: var(--bg-primary);
+            color: var(--text-primary); margin: 4px auto; font-size: 0.85rem;
+        }
+        .toast {
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+            background: var(--bg-card); color: var(--text-primary);
+            padding: 10px 20px; border-radius: var(--radius-sm);
+            box-shadow: var(--shadow); border: 1px solid var(--border-color);
+            z-index: 999; max-width: 90%; text-align: center;
+            font-size: 0.85rem; animation: slideUp 0.3s ease;
+        }
+        .toast.hidden { display: none; }
+        .empty-state {
+            text-align: center; padding: 30px 20px; color: var(--text-muted);
+        }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 8px; opacity: 0.5; }
+        .empty-state h3 { color: var(--text-secondary); font-size: 1rem; }
+        .hidden { display: none !important; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 480px; height: var(--nav-height);
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-around;
+            z-index: 100; backdrop-filter: blur(10px);
+        }
+        .nav-item {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 2px;
+            background: none; border: none;
+            color: var(--text-muted); font-size: 0.6rem;
+            padding: 4px 0; cursor: pointer; transition: all var(--transition);
+        }
+        .nav-item i { font-size: 1.2rem; }
+        .nav-item.active { color: var(--primary); }
+        .badge {
+            position: absolute; top: 2px; right: 50%;
+            transform: translateX(calc(50% + 12px));
+            background: #e74c3c; color: white; font-size: 0.5rem;
+            padding: 1px 6px; border-radius: 10px; min-width: 16px;
+            text-align: center; font-weight: 600;
+        }
+        .badge.hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-left"><h1 onclick="window.location.href='index.html'">AGLS</h1></div>
+        <div class="header-right">
+            <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
+            <button id="logoutBtn" class="icon-btn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </header>
+
+    <main class="main-content" id="mainContent">
+        <div id="profileContainer"></div>
+        <div id="userPostsContainer" style="margin-top:16px;"></div>
+    </main>
+
+    <nav class="bottom-nav">
+        <button class="nav-item" data-page="index" onclick="window.location.href='index.html'"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="nav-item" data-page="explore" onclick="window.location.href='index.html'"><i class="fas fa-compass"></i><span>Explore</span></button>
+        <button class="nav-item" data-page="search" onclick="window.location.href='index.html'"><i class="fas fa-search"></i><span>Search</span></button>
+        <button class="nav-item" data-page="notifications" onclick="window.location.href='index.html'">
+            <i class="fas fa-bell"></i><span>Alerts</span>
+            <span id="notificationBadge" class="badge hidden">0</span>
+        </button>
+        <button class="nav-item active" data-page="profile"><i class="fas fa-user"></i><span>Profile</span></button>
+    </nav>
+
+    <div id="modalContainer" class="modal-container hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
+            "firebase/database": "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import { initializeApp } from 'firebase/app';
+    import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+    import { getDatabase, ref, get, update, onValue, query, orderByChild, limitToLast, remove, set } from 'firebase/database';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDaSwj73DW4EpA2XIkL2cMTF_fBzDzPjg4",
+        authDomain: "all-hadith-a68fa.firebaseapp.com",
+        databaseURL: "https://all-hadith-a68fa-default-rtdb.firebaseio.com",
+        projectId: "all-hadith-a68fa",
+        storageBucket: "all-hadith-a68fa.firebasestorage.app",
+        messagingSenderId: "124928027736",
+        appId: "1:124928027736:web:7f0e8e0a771f244eca2e2d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    let currentUser = null;
+    let currentUserData = null;
+    let feedListeners = {};
+
+    const modalContainer = document.getElementById('modalContainer');
+    const modalContent = document.getElementById('modalContent');
+    const toast = document.getElementById('toast');
+    const profileContainer = document.getElementById('profileContainer');
+    const userPostsContainer = document.getElementById('userPostsContainer');
+
+    function showToast(msg, duration = 3000) {
+        toast.textContent = msg;
+        toast.classList.remove('hidden');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => toast.classList.add('hidden'), duration);
+    }
+
+    function openModal(html) { modalContent.innerHTML = html; modalContainer.classList.remove('hidden'); }
+    function closeModal() { modalContainer.classList.add('hidden'); }
+    document.querySelector('.modal-overlay')?.addEventListener('click', closeModal);
+
+    function formatDate(d) {
+        const date = new Date(d);
+        const now = new Date();
+        const diff = now - date;
+        if (diff < 60000) return 'Just now';
+        if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+        if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+        if (diff < 604800000) return Math.floor(diff/86400000) + 'd ago';
+        return date.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    }
+
+    function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function getAvatar(name, photo) { return photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2d7d46&color=fff&size=100`; }
+
+    // ===== LOAD PROFILE =====
+    async function loadProfile(userId) {
+        const targetId = userId || currentUser?.uid;
+        if (!targetId) { profileContainer.innerHTML = '<p>User not found</p>'; return; }
+
+        try {
+            const snap = await get(ref(db, `users/${targetId}`));
+            if (!snap.exists()) { profileContainer.innerHTML = '<p>User not found</p>'; return; }
+
+            const userData = snap.val();
+            const isOwn = currentUser && targetId === currentUser.uid;
+            const isFollowing = await checkFollowing(targetId);
+            const followersSnap = await get(ref(db, `followers/${targetId}`));
+            const followingSnap = await get(ref(db, `following/${targetId}`));
+
+            profileContainer.innerHTML = `
+                <div class="profile-header">
+                    <img class="profile-avatar" src="${getAvatar(userData.name, userData.photoURL)}">
+                    <div class="profile-name">${escapeHtml(userData.name)}</div>
+                    <div class="profile-email">${escapeHtml(userData.email || '')}</div>
+                    ${userData.bio ? `<div class="profile-bio">${escapeHtml(userData.bio)}</div>` : ''}
+                    <div class="profile-stats">
+                        <div class="profile-stat"><span class="number">${userData.posts||0}</span><span class="label">Posts</span></div>
+                        <div class="profile-stat" onclick="window.showFollowers('${targetId}')"><span class="number">${followersSnap.exists() ? followersSnap.size : 0}</span><span class="label">Followers</span></div>
+                        <div class="profile-stat" onclick="window.showFollowing('${targetId}')"><span class="number">${followingSnap.exists() ? followingSnap.size : 0}</span><span class="label">Following</span></div>
+                    </div>
+                    <div class="profile-actions">
+                        ${isOwn ? `<button class="btn-secondary" id="editProfileBtn"><i class="fas fa-edit"></i> Edit Profile</button>` :
+                        `<button class="btn-${isFollowing ? 'secondary' : 'primary'}" id="followBtn">${isFollowing ? 'Unfollow' : 'Follow'}</button>`}
+                    </div>
+                </div>
+            `;
+
+            // Load user posts
+            loadUserPosts(targetId);
+
+            if (isOwn) document.getElementById('editProfileBtn').addEventListener('click', ()=>openEditProfileModal(userData));
+            if (!isOwn) document.getElementById('followBtn').addEventListener('click', async () => {
+                if (isFollowing) await unfollowUser(targetId);
+                else await followUser(targetId);
+                loadProfile(targetId);
+            });
+
+        } catch(e) { console.error(e); profileContainer.innerHTML = '<p>Error loading profile</p>'; }
+    }
+
+    // ===== LOAD USER POSTS =====
+    function loadUserPosts(userId) {
+        if (feedListeners[`userposts_${userId}`]) { feedListeners[`userposts_${userId}`].off(); delete feedListeners[`userposts_${userId}`]; }
+        const q = query(ref(db, 'posts'), orderByChild('authorId'), limitToLast(100));
+        feedListeners[`userposts_${userId}`] = q;
+        onValue(q, (snap) => {
+            const posts = [];
+            snap.forEach(c => { const p = c.val(); if (p.authorId === userId) { p.id = c.key; posts.push(p); } });
+            posts.sort((a,b) => new Date(b.date) - new Date(a.date));
+            renderPosts(posts);
+        });
+    }
+
+    // ===== RENDER POSTS =====
+    function renderPosts(posts) {
+        if (!posts || posts.length === 0) {
+            userPostsContainer.innerHTML = `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>No posts yet</h3></div>`;
+            return;
+        }
+        userPostsContainer.innerHTML = posts.map(p => `
+            <div class="post-card" data-post-id="${p.id}">
+                <div class="post-header">
+                    <img class="post-avatar" src="${getAvatar(p.authorName, p.authorPhoto)}" alt="${escapeHtml(p.authorName)}">
+                    <div><div class="post-author">${escapeHtml(p.authorName)}</div><span class="post-date">${formatDate(p.date)}${p.edited?' (edited)':''}</span></div>
+                </div>
+                <div class="post-content">${escapeHtml(p.content)}</div>
+                ${p.tags?.length ? `<div class="post-tags">${p.tags.map(t=>`<span class="post-tag">#${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+                <div class="post-actions">
+                    <button class="post-action-btn"><i class="far fa-heart"></i> ${p.likes||0}</button>
+                    <button class="post-action-btn"><i class="far fa-comment"></i> ${p.comments||0}</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ===== FOLLOW =====
+    async function followUser(targetId) {
+        if (!currentUser || targetId === currentUser.uid) return;
+        try {
+            await set(ref(db, `following/${currentUser.uid}/${targetId}`), { userId: targetId, date: new Date().toISOString() });
+            await set(ref(db, `followers/${targetId}/${currentUser.uid}`), { userId: currentUser.uid, userName: currentUserData?.name || currentUser.displayName, userPhoto: currentUserData?.photoURL || currentUser.photoURL, date: new Date().toISOString() });
+            await updateFollowCounts(currentUser.uid, 'following', 1);
+            await updateFollowCounts(targetId, 'followers', 1);
+            showToast('Following!');
+        } catch(e) { console.error(e); showToast('Failed to follow'); }
+    }
+
+    async function unfollowUser(targetId) {
+        if (!currentUser) return;
+        try {
+            await remove(ref(db, `following/${currentUser.uid}/${targetId}`));
+            await remove(ref(db, `followers/${targetId}/${currentUser.uid}`));
+            await updateFollowCounts(currentUser.uid, 'following', -1);
+            await updateFollowCounts(targetId, 'followers', -1);
+            showToast('Unfollowed');
+        } catch(e) { console.error(e); showToast('Failed to unfollow'); }
+    }
+
+    async function updateFollowCounts(userId, field, change) {
+        try {
+            const snap = await get(ref(db, `users/${userId}`));
+            if (snap.exists()) await update(ref(db, `users/${userId}`), { [field]: Math.max(0, (snap.val()[field]||0) + change) });
+        } catch(e) { console.error(e); }
+    }
+
+    async function checkFollowing(targetId) {
+        if (!currentUser) return false;
+        try { const snap = await get(ref(db, `following/${currentUser.uid}/${targetId}`)); return snap.exists(); } catch(e) { return false; }
+    }
+
+    // ===== EDIT PROFILE =====
+    function openEditProfileModal(userData) {
+        openModal(`
+            <div class="modal-header"><h2>Edit Profile</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <label style="font-weight:600;">Name</label>
+                <input class="profile-edit-input" id="editName" value="${escapeHtml(userData.name || '')}">
+                <label style="font-weight:600;">Bio</label>
+                <textarea class="profile-edit-input" id="editBio" rows="3" style="resize:vertical;">${escapeHtml(userData.bio || '')}</textarea>
+                <button class="btn-primary" id="saveProfileBtn">Save Changes</button>
+            </div>
+        `);
+        document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+            const name = document.getElementById('editName').value.trim();
+            const bio = document.getElementById('editBio').value.trim();
+            if (!name) { showToast('Name is required'); return; }
+            try {
+                await update(ref(db, `users/${currentUser.uid}`), { name, bio });
+                if (currentUserData) { currentUserData.name = name; currentUserData.bio = bio; }
+                closeModal(); showToast('Profile updated!'); loadProfile(currentUser.uid);
+            } catch(e) { console.error(e); showToast('Failed to update'); }
+        });
+    }
+
+    // ===== SHOW FOLLOWERS/FOLLOWING =====
+    window.showFollowers = async function(userId) {
+        try {
+            const snap = await get(ref(db, `followers/${userId}`));
+            const users = [];
+            if (snap.exists()) snap.forEach(c => users.push({ id: c.key, ...c.val() }));
+            openModal(`
+                <div class="modal-header"><h2>Followers</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+                ${users.length === 0 ? '<div class="empty-state"><p>No followers</p></div>' : users.map(u => `
+                    <div class="user-result" onclick="closeModal(); window.location.href='profile.html?uid=${u.id}'" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border-color);cursor:pointer;">
+                        <img class="avatar" src="${getAvatar(u.userName, u.userPhoto)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                        <div class="info"><div class="name" style="font-weight:600;">${escapeHtml(u.userName)}</div></div>
+                    </div>
+                `).join('')}
+            `);
+        } catch(e) { console.error(e); }
+    };
+
+    window.showFollowing = async function(userId) {
+        try {
+            const snap = await get(ref(db, `following/${userId}`));
+            const users = [];
+            if (snap.exists()) snap.forEach(c => users.push({ id: c.key, ...c.val() }));
+            await Promise.all(users.map(async u => {
+                const s = await get(ref(db, `users/${u.id}`));
+                if (s.exists()) { u.userName = s.val().name; u.userPhoto = s.val().photoURL; }
+            }));
+            openModal(`
+                <div class="modal-header"><h2>Following</h2><button class="modal-close" onclick="closeModal()">&times;</button></div>
+                ${users.length === 0 ? '<div class="empty-state"><p>Not following anyone</p></div>' : users.map(u => `
+                    <div class="user-result" onclick="closeModal(); window.location.href='profile.html?uid=${u.id}'" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border-color);cursor:pointer;">
+                        <img class="avatar" src="${getAvatar(u.userName, u.userPhoto)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                        <div class="info"><div class="name" style="font-weight:600;">${escapeHtml(u.userName)}</div></div>
+                    </div>
+                `).join('')}
+            `);
+        } catch(e) { console.error(e); }
+    };
+
+    // ===== THEME =====
+    function toggleTheme() {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+        localStorage.setItem('theme', dark ? 'light' : 'dark');
+        const icon = document.querySelector('#themeToggle i');
+        if (icon) icon.className = dark ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeIcon = document.querySelector('#themeToggle i');
+    if (themeIcon) themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    // ===== AUTH =====
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            const snap = await get(ref(db, `users/${user.uid}`));
+            if (snap.exists()) currentUserData = snap.val();
+
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                if (confirm('Logout?')) { signOut(auth); }
+            });
+
+            // Get userId from URL
+            const params = new URLSearchParams(window.location.search);
+            const uid = params.get('uid');
+            loadProfile(uid || user.uid);
+
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+
+    console.log('🔥 AGLS Profile Loaded');
+    </script>
+</body>
+</html>
